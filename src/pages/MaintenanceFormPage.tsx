@@ -13,7 +13,7 @@ export function MaintenanceFormPage() {
   const navigate = useNavigate();
   const isEdit = !!id;
 
-  const vehicles = useQuery(api.vehicles.list);
+  const vehicles = useQuery(api.vehicles.list, {});
   const maintenance = useQuery(
     api.maintenanceRecords.get,
     id ? { id: id as Id<"maintenanceRecords"> } : "skip"

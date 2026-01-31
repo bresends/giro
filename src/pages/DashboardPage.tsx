@@ -12,7 +12,7 @@ import { Truck, CheckCircle, Wrench, Briefcase, AlertTriangle, ShieldCheck, Exte
 export function DashboardPage() {
   const navigate = useNavigate();
   const stats = useQuery(api.vehicles.getStats);
-  const allVehicles = useQuery(api.vehicles.list);
+  const allVehicles = useQuery(api.vehicles.list, {});
   const alerts = useQuery(api.alerts.getMaintenanceAlerts);
   const alertsSummary = useQuery(api.alerts.getAlertsSummary);
 
@@ -118,7 +118,7 @@ export function DashboardPage() {
           <CardTitle>Todas as Viaturas</CardTitle>
         </CardHeader>
         <CardContent>
-          <VehicleList vehicles={allVehicles} />
+          <VehicleList vehicles={allVehicles as any} />
         </CardContent>
       </Card>
     </div>
