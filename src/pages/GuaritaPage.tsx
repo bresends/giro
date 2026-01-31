@@ -38,6 +38,7 @@ import { ArrivalModal } from "../components/guarita/ArrivalModal";
 import { DepartureModal } from "../components/guarita/DepartureModal";
 import { EditMovementModal } from "../components/guarita/EditMovementModal";
 import { PersonnelQuickAddModal } from "../components/guarita/PersonnelQuickAddModal";
+import { getVehicleTypeColor } from "@/lib/utils";
 
 interface Movement {
   _id: Id<"vehicleMovements">;
@@ -56,6 +57,7 @@ interface Movement {
     operationalPrefix: string;
     plate: string;
     color?: string;
+    type?: string;
   } | null;
   personnel: {
     _id: Id<"personnel">;
@@ -333,7 +335,7 @@ export function GuaritaPage() {
                     <CardContent className="p-4 space-y-3">
                       <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-2">
-                          <Badge variant="default" className="w-fit">
+                          <Badge className={getVehicleTypeColor(movement.vehicle?.type)}>
                             {movement.vehicle?.operationalPrefix}
                           </Badge>
                           <p className="text-sm text-muted-foreground">
@@ -485,7 +487,7 @@ export function GuaritaPage() {
                       >
                         <TableCell className="font-medium">{dateStr}</TableCell>
                         <TableCell>
-                          <Badge variant="secondary">
+                          <Badge className={getVehicleTypeColor(movement.vehicle?.type)}>
                             {movement.vehicle?.operationalPrefix}
                             {movement.vehicle?.color && (
                               <span className="text-xs text-muted-foreground ml-1">
@@ -614,7 +616,7 @@ export function GuaritaPage() {
         open={deleteConfirm.open}
         onOpenChange={(open) => setDeleteConfirm({ open, movementId: null })}
       >
-        <DialogContent>
+        <DialogContent className="light text-foreground">
           <DialogHeader>
             <DialogTitle>Confirmar Exclusão</DialogTitle>
             <DialogDescription>

@@ -102,12 +102,15 @@ export function MaintenanceForm({
     try {
       // Convert dates to timestamps
       const submitData: any = {
-        vehicleId: formData.vehicleId,
         type: formData.type,
         status: formData.status,
         kmAtMaintenance: formData.kmAtMaintenance,
         description: formData.description,
       };
+
+      if (!isEdit) {
+        submitData.vehicleId = formData.vehicleId;
+      }
 
       if (formData.seiProcessNumber) {
         submitData.seiProcessNumber = formData.seiProcessNumber;

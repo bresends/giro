@@ -27,6 +27,8 @@ export default function App() {
     <BrowserRouter>
       <Authenticated>
         <Routes>
+          <Route path="/" element={<Navigate to="/guarita" replace />} />
+
           {/* Rotas do Guarita - Sistema separado sem sidebar */}
           <Route path="/guarita" element={
             <GuaritaLayout>
@@ -38,8 +40,8 @@ export default function App() {
           <Route path="/*" element={
             <Layout>
               <Routes>
-                <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/" element={<Navigate to="/admin" replace />} />
+                <Route path="/admin" element={<DashboardPage />} />
 
                 {/* Rotas de Viaturas */}
                 <Route path="/vehicles" element={<VehiclesPage />} />
@@ -61,7 +63,7 @@ export default function App() {
 
                 <Route path="/settings" element={<div className="text-2xl font-bold">Configurações - Em construção</div>} />
 
-                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                <Route path="*" element={<Navigate to="/admin" replace />} />
               </Routes>
             </Layout>
           } />

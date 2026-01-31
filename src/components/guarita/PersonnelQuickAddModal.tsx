@@ -72,7 +72,7 @@ export function PersonnelQuickAddModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md light text-foreground">
         <DialogHeader>
           <DialogTitle>Cadastrar Novo Militar</DialogTitle>
           <DialogDescription>
