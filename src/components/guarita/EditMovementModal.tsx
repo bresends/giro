@@ -141,7 +141,7 @@ export function EditMovementModal({
 
   return (
     <Dialog open={open && movement !== null} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl light text-foreground">
         <DialogHeader>
           <DialogTitle>Editar Movimentação</DialogTitle>
           <DialogDescription>

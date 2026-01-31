@@ -103,7 +103,7 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl light text-foreground">
         <DialogHeader>
           <DialogTitle>Registrar Saída de Viatura</DialogTitle>
           <DialogDescription>

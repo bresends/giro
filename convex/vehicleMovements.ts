@@ -22,6 +22,11 @@ export const listToday = query({
         const vehicle = await ctx.db.get(movement.vehicleId);
         const personnel = await ctx.db.get(movement.personnelId);
 
+        let vehicleType = null;
+        if (vehicle) {
+          vehicleType = await ctx.db.get(vehicle.typeId);
+        }
+
         return {
           ...movement,
           vehicle: vehicle
@@ -30,6 +35,7 @@ export const listToday = query({
                 operationalPrefix: vehicle.operationalPrefix,
                 plate: vehicle.plate,
                 color: vehicle.color,
+                type: vehicleType ? vehicleType.name : "N/A",
               }
             : null,
           personnel: personnel
@@ -62,6 +68,11 @@ export const listRecent = query({
         const vehicle = await ctx.db.get(movement.vehicleId);
         const personnel = await ctx.db.get(movement.personnelId);
 
+        let vehicleType = null;
+        if (vehicle) {
+          vehicleType = await ctx.db.get(vehicle.typeId);
+        }
+
         return {
           ...movement,
           vehicle: vehicle
@@ -70,6 +81,7 @@ export const listRecent = query({
                 operationalPrefix: vehicle.operationalPrefix,
                 plate: vehicle.plate,
                 color: vehicle.color,
+                type: vehicleType ? vehicleType.name : "N/A",
               }
             : null,
           personnel: personnel
@@ -99,6 +111,11 @@ export const listInTransit = query({
       movements.map(async (movement) => {
         const vehicle = await ctx.db.get(movement.vehicleId);
         const personnel = await ctx.db.get(movement.personnelId);
+        
+        let vehicleType = null;
+        if (vehicle) {
+          vehicleType = await ctx.db.get(vehicle.typeId);
+        }
 
         return {
           ...movement,
@@ -108,6 +125,7 @@ export const listInTransit = query({
                 operationalPrefix: vehicle.operationalPrefix,
                 plate: vehicle.plate,
                 color: vehicle.color,
+                type: vehicleType ? vehicleType.name : "N/A",
               }
             : null,
           personnel: personnel
@@ -175,6 +193,11 @@ export const listShiftMovements = query({
         const vehicle = await ctx.db.get(movement.vehicleId);
         const personnel = await ctx.db.get(movement.personnelId);
 
+        let vehicleType = null;
+        if (vehicle) {
+          vehicleType = await ctx.db.get(vehicle.typeId);
+        }
+
         return {
           ...movement,
           vehicle: vehicle
@@ -183,6 +206,7 @@ export const listShiftMovements = query({
                 operationalPrefix: vehicle.operationalPrefix,
                 plate: vehicle.plate,
                 color: vehicle.color,
+                type: vehicleType ? vehicleType.name : "N/A",
               }
             : null,
           personnel: personnel

@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, Truck, Wrench, AlertTriangle, Settings } from "lucide-react";
 
 const navigation = [
-  { name: "Dashboard", path: "/dashboard", Icon: LayoutDashboard },
+  { name: "Dashboard", path: "/admin", Icon: LayoutDashboard },
   { name: "Viaturas", path: "/vehicles", Icon: Truck },
   { name: "Manutenções", path: "/maintenance", Icon: Wrench },
   { name: "Problemas", path: "/issues", Icon: AlertTriangle },
