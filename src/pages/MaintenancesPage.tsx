@@ -18,7 +18,7 @@ export function MaintenancesPage() {
     "all" | "preventive" | "corrective"
   >("all");
 
-  const allMaintenances = useQuery(api.maintenanceRecords.list);
+  const allMaintenances = useQuery(api.maintenanceRecords.list, {});
 
   if (allMaintenances === undefined) {
     return <Loading text="Carregando manutenções..." />;

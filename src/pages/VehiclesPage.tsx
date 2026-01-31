@@ -169,7 +169,7 @@ export function VehiclesPage() {
       </div>
 
       {/* Lista de Viaturas */}
-      <VehicleList vehicles={vehicles} />
+      <VehicleList vehicles={vehicles as any} />
     </div>
   );
 }

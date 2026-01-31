@@ -9,7 +9,7 @@ import { Id } from "../../../convex/_generated/dataModel";
 interface MaintenanceFormData {
   vehicleId: Id<"vehicles"> | "";
   type: "preventive" | "corrective";
-  status: "awaiting_ceman" | "in_progress" | "completed" | "cancelled";
+  status: "awaiting_ceman" | "in_progress" | "completed" | "cancelled" | "scheduled";
   seiProcessNumber?: string;
   sentDate?: Date;
   returnDate?: Date;
@@ -44,7 +44,7 @@ export function MaintenanceForm({
       ? {
           vehicleId: initialData.vehicleId || "",
           type: initialData.type || "preventive",
-          status: initialData.status || "scheduled",
+          status: initialData.status || "awaiting_ceman",
           seiProcessNumber: initialData.seiProcessNumber || "",
           sentDate: initialData.sentDate,
           returnDate: initialData.returnDate,

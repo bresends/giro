@@ -23,8 +23,22 @@ interface Movement {
   destinationType?: string;
   departureKm: number;
   departureTime: number;
+  arrivalKm?: number;
+  arrivalTime?: number;
   status: string;
   notes?: string;
+  vehicle?: {
+    _id: Id<"vehicles">;
+    operationalPrefix: string;
+    plate: string;
+    color?: string;
+  } | null;
+  personnel?: {
+    _id: Id<"personnel">;
+    rank: string;
+    rg: string;
+    name: string;
+  } | null;
 }
 
 interface EditMovementModalProps {
