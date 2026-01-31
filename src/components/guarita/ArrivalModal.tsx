@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -110,6 +111,9 @@ export function ArrivalModal({
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Registrar Chegada de Viatura</DialogTitle>
+          <DialogDescription>
+            Registre a chegada da viatura informando a quilometragem atual.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">

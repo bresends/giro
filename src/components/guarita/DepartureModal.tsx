@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -105,6 +106,9 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Registrar Saída de Viatura</DialogTitle>
+          <DialogDescription>
+            Registre a saída de uma viatura informando a viatura, o motorista e o destino.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
