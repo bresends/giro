@@ -124,6 +124,81 @@ export const listInTransit = query({
   },
 });
 
+// Query: List shift movements (7am yesterday to 7am today OR 7am today to now)
+export const listShiftMovements = query({
+  args: {},
+  handler: async (ctx) => {
+    const now = new Date();
+    const currentHour = now.getHours();
+
+    // Calculate 7am today
+    const today7am = new Date();
+    today7am.setHours(7, 0, 0, 0);
+
+    // Calculate 7am yesterday
+    const yesterday7am = new Date(today7am);
+    yesterday7am.setDate(yesterday7am.getDate() - 1);
+
+    // Calculate 7am tomorrow
+    const tomorrow7am = new Date(today7am);
+    tomorrow7am.setDate(tomorrow7am.getDate() + 1);
+
+    let startTimestamp: number;
+    let endTimestamp: number;
+
+    // If current time is before 7am, get movements from yesterday 7am to today 7am
+    // If current time is after 7am, get movements from today 7am to tomorrow 7am
+    if (currentHour < 7) {
+      startTimestamp = yesterday7am.getTime();
+      endTimestamp = today7am.getTime();
+    } else {
+      startTimestamp = today7am.getTime();
+      endTimestamp = tomorrow7am.getTime();
+    }
+
+    // Query with range filter
+    const movements = await ctx.db
+      .query("vehicleMovements")
+      .withIndex("by_date")
+      .filter((q) =>
+        q.and(
+          q.gte(q.field("departureTime"), startTimestamp),
+          q.lt(q.field("departureTime"), endTimestamp)
+        )
+      )
+      .order("asc") // Chronological order
+      .collect();
+
+    // Get vehicle and personnel info
+    return await Promise.all(
+      movements.map(async (movement) => {
+        const vehicle = await ctx.db.get(movement.vehicleId);
+        const personnel = await ctx.db.get(movement.personnelId);
+
+        return {
+          ...movement,
+          vehicle: vehicle
+            ? {
+                _id: vehicle._id,
+                operationalPrefix: vehicle.operationalPrefix,
+                plate: vehicle.plate,
+                color: vehicle.color,
+              }
+            : null,
+          personnel: personnel
+            ? {
+                _id: personnel._id,
+                rank: personnel.rank,
+                rg: personnel.rg,
+                name: personnel.name,
+              }
+            : null,
+        };
+      })
+    );
+  },
+});
+
 // Query: List movements by vehicle
 export const listByVehicle = query({
   args: {
@@ -336,10 +411,77 @@ export const registerArrival = mutation({
   },
 });
 
+// Mutation: Update movement
+export const update = mutation({
+  args: {
+    id: v.id("vehicleMovements"),
+    vehicleId: v.optional(v.id("vehicles")),
+    personnelId: v.optional(v.id("personnel")),
+    destination: v.optional(v.string()),
+    destinationType: v.optional(
+      v.union(
+        v.literal("ocorrencia"),
+        v.literal("qrf"),
+        v.literal("ceman"),
+        v.literal("cal"),
+        v.literal("outro")
+      )
+    ),
+    departureKm: v.optional(v.number()),
+    departureTime: v.optional(v.number()),
+    notes: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...updateData } = args;
+
+    const movement = await ctx.db.get(id);
+    if (!movement) {
+      throw new Error("Movimento não encontrado");
+    }
+
+    // Allow editing all movements (including completed ones)
+
+    // Validate vehicle if changed
+    if (updateData.vehicleId) {
+      const vehicle = await ctx.db.get(updateData.vehicleId);
+      if (!vehicle) {
+        throw new Error("Viatura não encontrada");
+      }
+    }
+
+    // Validate personnel if changed
+    if (updateData.personnelId) {
+      const personnel = await ctx.db.get(updateData.personnelId);
+      if (!personnel) {
+        throw new Error("Militar não encontrado");
+      }
+    }
+
+    // Validate KM if changed
+    if (updateData.departureKm !== undefined && updateData.departureKm < 0) {
+      throw new Error("Quilometragem não pode ser negativa");
+    }
+
+    const now = Date.now();
+    await ctx.db.patch(id, {
+      ...updateData,
+      updatedAt: now,
+    });
+
+    return id;
+  },
+});
+
 // Mutation: Delete movement
 export const remove = mutation({
   args: { id: v.id("vehicleMovements") },
   handler: async (ctx, args) => {
+    const movement = await ctx.db.get(args.id);
+    if (!movement) {
+      throw new Error("Movimento não encontrado");
+    }
+
+    // Allow deleting all movements (including completed ones)
     await ctx.db.delete(args.id);
     return args.id;
   },
