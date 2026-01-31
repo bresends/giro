@@ -429,6 +429,8 @@ export const update = mutation({
     ),
     departureKm: v.optional(v.number()),
     departureTime: v.optional(v.number()),
+    arrivalKm: v.optional(v.number()),
+    arrivalTime: v.optional(v.number()),
     notes: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -459,7 +461,19 @@ export const update = mutation({
 
     // Validate KM if changed
     if (updateData.departureKm !== undefined && updateData.departureKm < 0) {
-      throw new Error("Quilometragem não pode ser negativa");
+      throw new Error("Quilometragem de saída não pode ser negativa");
+    }
+
+    if (updateData.arrivalKm !== undefined && updateData.arrivalKm < 0) {
+      throw new Error("Quilometragem de chegada não pode ser negativa");
+    }
+
+    // Validate arrival KM is greater than departure KM
+    const finalDepartureKm = updateData.departureKm ?? movement.departureKm;
+    if (updateData.arrivalKm !== undefined && updateData.arrivalKm < finalDepartureKm) {
+      throw new Error(
+        `KM de chegada (${updateData.arrivalKm}) não pode ser menor que KM de saída (${finalDepartureKm})`
+      );
     }
 
     const now = Date.now();

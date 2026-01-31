@@ -48,6 +48,12 @@ export function EditMovementModal({
     destination: "",
     destinationType: "" as "ocorrencia" | "qrf" | "ceman" | "cal" | "outro" | "",
     notes: "",
+    departureKm: 0,
+    arrivalKm: 0,
+    departureDate: "",
+    departureTime: "",
+    arrivalDate: "",
+    arrivalTime: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,12 +62,26 @@ export function EditMovementModal({
   // Load movement data when dialog opens
   useEffect(() => {
     if (open && movement) {
+      const departureDate = new Date(movement.departureTime);
+      const departureDateStr = departureDate.toISOString().split("T")[0];
+      const departureTimeStr = departureDate.toTimeString().slice(0, 5);
+
+      const arrivalDate = movement.arrivalTime ? new Date(movement.arrivalTime) : null;
+      const arrivalDateStr = arrivalDate ? arrivalDate.toISOString().split("T")[0] : "";
+      const arrivalTimeStr = arrivalDate ? arrivalDate.toTimeString().slice(0, 5) : "";
+
       setFormData({
         vehicleId: movement.vehicleId,
         personnelId: movement.personnelId,
         destination: movement.destination,
         destinationType: (movement.destinationType as any) || "",
         notes: movement.notes || "",
+        departureKm: movement.departureKm,
+        arrivalKm: movement.arrivalKm || 0,
+        departureDate: departureDateStr,
+        departureTime: departureTimeStr,
+        arrivalDate: arrivalDateStr,
+        arrivalTime: arrivalTimeStr,
       });
       setError(null);
     }
@@ -86,6 +106,18 @@ export function EditMovementModal({
     setIsSubmitting(true);
 
     try {
+      // Converter data/hora para timestamp
+      const departureTimestamp = new Date(
+        `${formData.departureDate}T${formData.departureTime}`
+      ).getTime();
+
+      let arrivalTimestamp: number | undefined = undefined;
+      if (formData.arrivalDate && formData.arrivalTime) {
+        arrivalTimestamp = new Date(
+          `${formData.arrivalDate}T${formData.arrivalTime}`
+        ).getTime();
+      }
+
       await updateMovement({
         id: movement._id,
         vehicleId: formData.vehicleId,
@@ -93,6 +125,10 @@ export function EditMovementModal({
         destination: formData.destination,
         destinationType: formData.destinationType || undefined,
         notes: formData.notes || undefined,
+        departureKm: formData.departureKm,
+        departureTime: departureTimestamp,
+        arrivalKm: formData.arrivalKm || undefined,
+        arrivalTime: arrivalTimestamp,
       });
 
       onOpenChange(false);
@@ -195,6 +231,96 @@ export function EditMovementModal({
                 }
                 placeholder="Ex: Av. Goiás, 123"
                 required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="departureKm">
+                KM Saída <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="departureKm"
+                type="number"
+                value={formData.departureKm}
+                onChange={(e) =>
+                  setFormData({ ...formData, departureKm: Number(e.target.value) })
+                }
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="arrivalKm">KM Chegada</Label>
+              <Input
+                id="arrivalKm"
+                type="number"
+                value={formData.arrivalKm || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, arrivalKm: Number(e.target.value) || 0 })
+                }
+                placeholder="Opcional"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="departureDate">
+                Data Saída <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="departureDate"
+                type="date"
+                value={formData.departureDate}
+                onChange={(e) =>
+                  setFormData({ ...formData, departureDate: e.target.value })
+                }
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="departureTime">
+                Horário Saída <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="departureTime"
+                type="time"
+                value={formData.departureTime}
+                onChange={(e) =>
+                  setFormData({ ...formData, departureTime: e.target.value })
+                }
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="arrivalDate">Data Chegada</Label>
+              <Input
+                id="arrivalDate"
+                type="date"
+                value={formData.arrivalDate}
+                onChange={(e) =>
+                  setFormData({ ...formData, arrivalDate: e.target.value })
+                }
+                placeholder="Opcional"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="arrivalTime">Horário Chegada</Label>
+              <Input
+                id="arrivalTime"
+                type="time"
+                value={formData.arrivalTime}
+                onChange={(e) =>
+                  setFormData({ ...formData, arrivalTime: e.target.value })
+                }
+                placeholder="Opcional"
               />
             </div>
           </div>
