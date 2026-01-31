@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -74,6 +75,9 @@ export function PersonnelQuickAddModal({
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Cadastrar Novo Militar</DialogTitle>
+          <DialogDescription>
+            Adicione um novo militar ao sistema para registrar saídas de viaturas.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
