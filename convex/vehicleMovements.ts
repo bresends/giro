@@ -299,7 +299,6 @@ export const get = query({
             _id: vehicle._id,
             operationalPrefix: vehicle.operationalPrefix,
             plate: vehicle.plate,
-            color: vehicle.color,
           }
         : null,
       personnel: personnel
