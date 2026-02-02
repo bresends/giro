@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
+import { getAuthUserId } from "@convex-dev/auth/server";
 
 // Query: List today's movements (for guarita)
 export const listToday = query({
@@ -333,6 +334,9 @@ export const create = mutation({
     notes: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    // Get logged in user
+    const userId = await getAuthUserId(ctx);
+
     // Check if vehicle exists
     const vehicle = await ctx.db.get(args.vehicleId);
     if (!vehicle) {
@@ -374,6 +378,7 @@ export const create = mutation({
       departureTime: args.departureTime || now,
       status: "em_transito",
       notes: args.notes,
+      registeredByDeparture: userId ?? undefined,
       createdAt: now,
       updatedAt: now,
     });
@@ -388,6 +393,9 @@ export const registerArrival = mutation({
     arrivalTime: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    // Get logged in user
+    const userId = await getAuthUserId(ctx);
+
     const movement = await ctx.db.get(args.id);
     if (!movement) {
       throw new Error("Movimento não encontrado");
@@ -412,6 +420,7 @@ export const registerArrival = mutation({
       arrivalKm: args.arrivalKm,
       arrivalTime,
       status: "concluido",
+      registeredByArrival: userId ?? undefined,
       updatedAt: now,
     });
 
