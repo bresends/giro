@@ -1,5 +1,6 @@
 import { useMutation } from "convex/react";
 import { useEffect, useState } from "react";
+import { ConvexError } from "convex/values";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -72,9 +73,13 @@ export function PersonnelQuickAddModal({
 
       onOpenChange(false);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Erro ao cadastrar militar",
-      );
+      const errorMessage =
+        err instanceof ConvexError
+          ? (err.data as string)
+          : err instanceof Error
+            ? err.message
+            : "Erro ao cadastrar militar";
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
