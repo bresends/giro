@@ -75,6 +75,8 @@ export default defineSchema({
     arrivalTime: v.optional(v.number()),
     status: v.union(v.literal("em_transito"), v.literal("concluido")),
     notes: v.optional(v.string()),
+    registeredByDeparture: v.optional(v.id("users")),
+    registeredByArrival: v.optional(v.id("users")),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
