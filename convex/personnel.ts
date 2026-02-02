@@ -68,7 +68,9 @@ export const create = mutation({
       .first();
 
     if (existing) {
-      throw new Error(`Já existe um militar com o RG "${args.rg}"`);
+      throw new Error(
+        `RG ${args.rg} já cadastrado para ${existing.rank} ${existing.name}`
+      );
     }
 
     const now = Date.now();
@@ -100,7 +102,9 @@ export const update = mutation({
       .first();
 
     if (existing && existing._id !== id) {
-      throw new Error(`Já existe um militar com o RG "${data.rg}"`);
+      throw new Error(
+        `RG ${data.rg} já cadastrado para ${existing.rank} ${existing.name}`
+      );
     }
 
     await ctx.db.patch(id, {
