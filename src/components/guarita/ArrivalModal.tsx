@@ -33,7 +33,7 @@ interface Movement {
   personnel: {
     _id: Id<"personnel">;
     rank: string;
-    rg: string;
+    rg: number;
     name: string;
   } | null;
 }

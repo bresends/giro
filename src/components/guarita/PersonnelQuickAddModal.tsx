@@ -53,12 +53,18 @@ export function PersonnelQuickAddModal({
       return;
     }
 
+    const rgNumber = parseInt(formData.rg, 10);
+    if (isNaN(rgNumber)) {
+      setError("RG deve conter apenas números");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       await createPersonnel({
         rank: formData.rank,
-        rg: formData.rg,
+        rg: rgNumber,
         name: formData.name,
       });
 
