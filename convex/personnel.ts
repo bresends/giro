@@ -27,7 +27,7 @@ export const get = query({
 
 // Query: Get personnel by RG
 export const getByRG = query({
-  args: { rg: v.string() },
+  args: { rg: v.number() },
   handler: async (ctx, args) => {
     return await ctx.db
       .query("personnel")
@@ -47,7 +47,7 @@ export const searchByName = query({
       .filter(
         (p) =>
           p.name.toLowerCase().includes(searchLower) ||
-          p.rg.includes(args.query)
+          p.rg.toString().includes(args.query)
       )
       .slice(0, 20);
   },
@@ -57,7 +57,7 @@ export const searchByName = query({
 export const create = mutation({
   args: {
     rank: v.string(),
-    rg: v.string(),
+    rg: v.number(),
     name: v.string(),
   },
   handler: async (ctx, args) => {
@@ -86,7 +86,7 @@ export const update = mutation({
   args: {
     id: v.id("personnel"),
     rank: v.string(),
-    rg: v.string(),
+    rg: v.number(),
     name: v.string(),
     active: v.boolean(),
   },
