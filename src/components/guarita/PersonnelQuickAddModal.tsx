@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
 import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { api } from "../../../convex/_generated/api";
 
 interface PersonnelQuickAddModalProps {
   open: boolean;
@@ -26,7 +26,7 @@ export function PersonnelQuickAddModal({
 
   const [formData, setFormData] = useState({
     rank: "",
-    rg: "",
+    rg: 0,
     name: "",
   });
 
@@ -37,7 +37,7 @@ export function PersonnelQuickAddModal({
     if (open) {
       setFormData({
         rank: "",
-        rg: "",
+        rg: 0,
         name: "",
       });
       setError(null);
@@ -48,14 +48,13 @@ export function PersonnelQuickAddModal({
     e.preventDefault();
     setError(null);
 
-    if (!formData.rank.trim() || !formData.rg.trim() || !formData.name.trim()) {
+    if (
+      !formData.rank.trim() ||
+      !formData.rg ||
+      formData.rg <= 0 ||
+      !formData.name.trim()
+    ) {
       setError("Preencha todos os campos");
-      return;
-    }
-
-    const rgNumber = parseInt(formData.rg, 10);
-    if (isNaN(rgNumber)) {
-      setError("RG deve conter apenas números");
       return;
     }
 
@@ -63,14 +62,16 @@ export function PersonnelQuickAddModal({
 
     try {
       await createPersonnel({
-        rank: formData.rank,
-        rg: rgNumber,
-        name: formData.name,
+        rank: formData.rank.trim(),
+        rg: formData.rg,
+        name: formData.name.trim(),
       });
 
       onOpenChange(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao cadastrar militar");
+      setError(
+        err instanceof Error ? err.message : "Erro ao cadastrar militar",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -82,7 +83,8 @@ export function PersonnelQuickAddModal({
         <DialogHeader>
           <DialogTitle>Cadastrar Novo Militar</DialogTitle>
           <DialogDescription>
-            Adicione um novo militar ao sistema para registrar saídas de viaturas.
+            Adicione um novo militar ao sistema para registrar saídas de
+            viaturas.
           </DialogDescription>
         </DialogHeader>
 
@@ -114,12 +116,14 @@ export function PersonnelQuickAddModal({
             </Label>
             <Input
               id="rg"
-              value={formData.rg}
+              type="number"
+              value={formData.rg || ""}
               onChange={(e) =>
-                setFormData({ ...formData, rg: e.target.value })
+                setFormData({ ...formData, rg: parseInt(e.target.value) || 0 })
               }
-              placeholder="Ex: 123456"
+              placeholder="Ex: 3892"
               required
+              min={1000}
             />
           </div>
 
