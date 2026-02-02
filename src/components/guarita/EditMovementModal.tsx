@@ -31,7 +31,6 @@ interface Movement {
     _id: Id<"vehicles">;
     operationalPrefix: string;
     plate: string;
-    color?: string;
   } | null;
   personnel?: {
     _id: Id<"personnel">;
@@ -186,7 +185,7 @@ export function EditMovementModal({
               options={
                 vehicles?.map((v) => ({
                   value: v._id,
-                  label: `${v.operationalPrefix} - ${v.plate}${v.color ? ` (${v.color})` : ""}`,
+                  label: `${v.operationalPrefix} - ${v.plate}`,
                 })) || []
               }
               placeholder="Selecione a viatura"

@@ -15,7 +15,6 @@ interface VehicleFormData {
   operationalPrefix: string;
   typeId: Id<"vehicleTypes"> | "";
   nextMaintenanceKm?: number;
-  color?: string;
   ownershipType: "propria" | "locada";
   serviceType: "operational" | "backup";
 }
@@ -50,7 +49,6 @@ export function VehicleForm({
       operationalPrefix: "",
       typeId: "",
       nextMaintenanceKm: undefined,
-      color: undefined,
       ownershipType: "propria",
       serviceType: "operational",
     },
@@ -264,25 +262,6 @@ export function VehicleForm({
           </p>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="color">
-            Cor
-          </Label>
-          <Input
-            id="color"
-            value={formData.color || ""}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                color: e.target.value || undefined,
-              })
-            }
-            placeholder="Ex: Vermelho, Branco"
-          />
-          <p className="text-xs text-muted-foreground">
-            Opcional - Cor da viatura
-          </p>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

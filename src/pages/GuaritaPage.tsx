@@ -56,7 +56,6 @@ interface Movement {
     _id: Id<"vehicles">;
     operationalPrefix: string;
     plate: string;
-    color?: string;
     type?: string;
   } | null;
   personnel: {
@@ -340,8 +339,6 @@ export function GuaritaPage() {
                           </Badge>
                           <p className="text-sm text-muted-foreground">
                             {movement.vehicle?.plate}
-                            {movement.vehicle?.color &&
-                              ` • ${movement.vehicle.color}`}
                           </p>
                         </div>
                         <div className="flex items-center gap-1 text-orange-600">
@@ -489,11 +486,6 @@ export function GuaritaPage() {
                         <TableCell>
                           <Badge className={getVehicleTypeColor(movement.vehicle?.type)}>
                             {movement.vehicle?.operationalPrefix}
-                            {movement.vehicle?.color && (
-                              <span className="text-xs text-muted-foreground ml-1">
-                                ({movement.vehicle.color})
-                              </span>
-                            )}
                           </Badge>
                         </TableCell>
                         <TableCell>{movement.personnel?.rank}</TableCell>

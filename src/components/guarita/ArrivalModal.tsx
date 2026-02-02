@@ -29,7 +29,6 @@ interface Movement {
     _id: Id<"vehicles">;
     operationalPrefix: string;
     plate: string;
-    color?: string;
   } | null;
   personnel: {
     _id: Id<"personnel">;
@@ -135,7 +134,6 @@ export function ArrivalModal({
                 <p className="text-xs text-muted-foreground">Viatura</p>
                 <p className="font-semibold">
                   {movement.vehicle?.operationalPrefix} - {movement.vehicle?.plate}
-                  {movement.vehicle?.color && ` (${movement.vehicle.color})`}
                 </p>
               </div>
 

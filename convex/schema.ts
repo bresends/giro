@@ -28,7 +28,6 @@ export default defineSchema({
     operationalPrefix: v.string(),
     typeId: v.id("vehicleTypes"),
     nextMaintenanceKm: v.optional(v.number()),
-    color: v.optional(v.string()),
     ownershipType: v.union(
       v.literal("propria"),
       v.literal("locada")
