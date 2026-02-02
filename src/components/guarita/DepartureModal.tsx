@@ -14,14 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SimpleSelect } from "../common/SimpleSelect";
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox";
 
 interface DepartureModalProps {
   open: boolean;
@@ -59,8 +51,8 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
   }, [open]);
 
   // Get selected vehicle's current KM
-  const selectedVehicle = vehicles?.find((v) => v._id === formData.vehicleId);
-  const selectedPerson = personnel?.find((p) => p._id === formData.personnelId);
+  const selectedVehicle = vehicles?.find((v) => v._id === formData.vehicleId) || undefined;
+  const selectedPerson = personnel?.find((p) => p._id === formData.personnelId) || undefined;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -128,69 +120,37 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
           )}
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="vehicle">
-                Viatura <span className="text-red-500">*</span>
-              </Label>
-              <Combobox
-                items={vehicles || []}
-                value={selectedVehicle || null}
-                onValueChange={(vehicle) =>
-                  setFormData({
-                    ...formData,
-                    vehicleId: vehicle?._id || "",
-                  })
-                }
-                itemToStringLabel={(vehicle) =>
-                  vehicle ? `${vehicle.operationalPrefix} - ${vehicle.plate}` : ""
-                }
-                itemToStringValue={(vehicle) => vehicle._id}
-              >
-                <ComboboxInput placeholder="Buscar viatura..." />
-                <ComboboxContent>
-                  <ComboboxEmpty>Nenhuma viatura encontrada.</ComboboxEmpty>
-                  <ComboboxList>
-                    {(vehicle) => (
-                      <ComboboxItem key={vehicle._id} value={vehicle}>
-                        {vehicle.operationalPrefix} - {vehicle.plate}
-                      </ComboboxItem>
-                    )}
-                  </ComboboxList>
-                </ComboboxContent>
-              </Combobox>
-            </div>
+            <SimpleSelect
+              label="Viatura"
+              value={formData.vehicleId}
+              onChange={(e) =>
+                setFormData({ ...formData, vehicleId: e.target.value as Id<"vehicles"> })
+              }
+              options={
+                vehicles?.map((v) => ({
+                  value: v._id,
+                  label: `${v.operationalPrefix} - ${v.plate}`,
+                })) || []
+              }
+              placeholder="Selecione a viatura"
+              required
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="personnel">
-                Motorista <span className="text-red-500">*</span>
-              </Label>
-              <Combobox
-                items={personnel || []}
-                value={selectedPerson || null}
-                onValueChange={(person) =>
-                  setFormData({
-                    ...formData,
-                    personnelId: person?._id || "",
-                  })
-                }
-                itemToStringLabel={(person) =>
-                  person ? `${person.rank} ${person.name} - RG ${person.rg}` : ""
-                }
-                itemToStringValue={(person) => person._id}
-              >
-                <ComboboxInput placeholder="Buscar motorista..." />
-                <ComboboxContent>
-                  <ComboboxEmpty>Nenhum motorista encontrado.</ComboboxEmpty>
-                  <ComboboxList>
-                    {(person) => (
-                      <ComboboxItem key={person._id} value={person}>
-                        {person.rank} {person.name} - RG {person.rg}
-                      </ComboboxItem>
-                    )}
-                  </ComboboxList>
-                </ComboboxContent>
-              </Combobox>
-            </div>
+            <SimpleSelect
+              label="Motorista"
+              value={formData.personnelId}
+              onChange={(e) =>
+                setFormData({ ...formData, personnelId: e.target.value as Id<"personnel"> })
+              }
+              options={
+                personnel?.map((p) => ({
+                  value: p._id,
+                  label: `${p.rank} ${p.name} - RG ${p.rg}`,
+                })) || []
+              }
+              placeholder="Selecione o motorista"
+              required
+            />
           </div>
 
           {selectedVehicle && (
