@@ -47,7 +47,7 @@ export default defineSchema({
 
   personnel: defineTable({
     rank: v.string(),
-    rg: v.string(),
+    rg: v.number(),
     name: v.string(),
     active: v.boolean(),
     createdAt: v.number(),
