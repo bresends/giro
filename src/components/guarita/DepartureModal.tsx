@@ -60,6 +60,7 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
 
   // Get selected vehicle's current KM
   const selectedVehicle = vehicles?.find((v) => v._id === formData.vehicleId);
+  const selectedPerson = personnel?.find((p) => p._id === formData.personnelId);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,20 +134,24 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
               </Label>
               <Combobox
                 items={vehicles || []}
-                value={formData.vehicleId || undefined}
-                onValueChange={(value) =>
+                value={selectedVehicle || null}
+                onValueChange={(vehicle) =>
                   setFormData({
                     ...formData,
-                    vehicleId: value as Id<"vehicles">,
+                    vehicleId: vehicle?._id || "",
                   })
                 }
+                itemToStringLabel={(vehicle) =>
+                  vehicle ? `${vehicle.operationalPrefix} - ${vehicle.plate}` : ""
+                }
+                itemToStringValue={(vehicle) => vehicle._id}
               >
                 <ComboboxInput placeholder="Buscar viatura..." />
                 <ComboboxContent>
                   <ComboboxEmpty>Nenhuma viatura encontrada.</ComboboxEmpty>
                   <ComboboxList>
                     {(vehicle) => (
-                      <ComboboxItem key={vehicle._id} value={vehicle._id}>
+                      <ComboboxItem key={vehicle._id} value={vehicle}>
                         {vehicle.operationalPrefix} - {vehicle.plate}
                       </ComboboxItem>
                     )}
@@ -161,20 +166,24 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
               </Label>
               <Combobox
                 items={personnel || []}
-                value={formData.personnelId || undefined}
-                onValueChange={(value) =>
+                value={selectedPerson || null}
+                onValueChange={(person) =>
                   setFormData({
                     ...formData,
-                    personnelId: value as Id<"personnel">,
+                    personnelId: person?._id || "",
                   })
                 }
+                itemToStringLabel={(person) =>
+                  person ? `${person.rank} ${person.name} - RG ${person.rg}` : ""
+                }
+                itemToStringValue={(person) => person._id}
               >
                 <ComboboxInput placeholder="Buscar motorista..." />
                 <ComboboxContent>
                   <ComboboxEmpty>Nenhum motorista encontrado.</ComboboxEmpty>
                   <ComboboxList>
                     {(person) => (
-                      <ComboboxItem key={person._id} value={person._id}>
+                      <ComboboxItem key={person._id} value={person}>
                         {person.rank} {person.name} - RG {person.rg}
                       </ComboboxItem>
                     )}
