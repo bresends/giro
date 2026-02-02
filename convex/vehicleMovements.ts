@@ -33,7 +33,6 @@ export const listToday = query({
                 _id: vehicle._id,
                 operationalPrefix: vehicle.operationalPrefix,
                 plate: vehicle.plate,
-                color: vehicle.color,
                 type: vehicleType ? vehicleType.name : "N/A",
               }
             : null,
@@ -79,7 +78,6 @@ export const listRecent = query({
                 _id: vehicle._id,
                 operationalPrefix: vehicle.operationalPrefix,
                 plate: vehicle.plate,
-                color: vehicle.color,
                 type: vehicleType ? vehicleType.name : "N/A",
               }
             : null,
@@ -123,7 +121,6 @@ export const listInTransit = query({
                 _id: vehicle._id,
                 operationalPrefix: vehicle.operationalPrefix,
                 plate: vehicle.plate,
-                color: vehicle.color,
                 type: vehicleType ? vehicleType.name : "N/A",
               }
             : null,
@@ -204,7 +201,6 @@ export const listShiftMovements = query({
                 _id: vehicle._id,
                 operationalPrefix: vehicle.operationalPrefix,
                 plate: vehicle.plate,
-                color: vehicle.color,
                 type: vehicleType ? vehicleType.name : "N/A",
               }
             : null,

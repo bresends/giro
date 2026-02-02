@@ -133,7 +133,7 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
               </Label>
               <Combobox
                 items={vehicles || []}
-                value={formData.vehicleId}
+                value={formData.vehicleId || undefined}
                 onValueChange={(value) =>
                   setFormData({
                     ...formData,
@@ -161,7 +161,7 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
               </Label>
               <Combobox
                 items={personnel || []}
-                value={formData.personnelId}
+                value={formData.personnelId || undefined}
                 onValueChange={(value) =>
                   setFormData({
                     ...formData,
