@@ -1,4 +1,4 @@
-import { v } from "convex/values";
+import { v, ConvexError } from "convex/values";
 import { query, mutation } from "./_generated/server";
 
 // Query: List all personnel
@@ -68,7 +68,7 @@ export const create = mutation({
       .first();
 
     if (existing) {
-      throw new Error(
+      throw new ConvexError(
         `RG ${args.rg} já cadastrado para ${existing.rank} ${existing.name}`
       );
     }
@@ -102,7 +102,7 @@ export const update = mutation({
       .first();
 
     if (existing && existing._id !== id) {
-      throw new Error(
+      throw new ConvexError(
         `RG ${data.rg} já cadastrado para ${existing.rank} ${existing.name}`
       );
     }
@@ -127,7 +127,7 @@ export const remove = mutation({
       .first();
 
     if (movements) {
-      throw new Error(
+      throw new ConvexError(
         "Não é possível deletar este militar pois existem movimentos associados"
       );
     }
