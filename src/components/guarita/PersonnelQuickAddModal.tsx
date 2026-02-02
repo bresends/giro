@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 import { api } from "../../../convex/_generated/api";
 
 interface PersonnelQuickAddModalProps {
@@ -66,6 +67,8 @@ export function PersonnelQuickAddModal({
         rg: formData.rg,
         name: formData.name.trim(),
       });
+
+      toast.success("Militar cadastrado com sucesso!");
 
       onOpenChange(false);
     } catch (err) {

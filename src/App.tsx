@@ -24,10 +24,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Truck } from "lucide-react";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Toaster />
       <Authenticated>
         <Routes>
           <Route path="/" element={<Navigate to="/guarita" replace />} />
