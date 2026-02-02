@@ -101,7 +101,6 @@ export function VehicleFormPage() {
                     operationalPrefix: vehicle.operationalPrefix,
                     typeId: vehicle.typeId,
                     nextMaintenanceKm: vehicle.nextMaintenanceKm,
-                    color: vehicle.color,
                     ownershipType: vehicle.ownershipType,
                     serviceType: vehicle.serviceType,
                   }
