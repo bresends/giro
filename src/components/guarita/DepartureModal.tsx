@@ -51,8 +51,7 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
   }, [open]);
 
   // Get selected vehicle's current KM
-  const selectedVehicle = vehicles?.find((v) => v._id === formData.vehicleId) || undefined;
-  const selectedPerson = personnel?.find((p) => p._id === formData.personnelId) || undefined;
+  const selectedVehicle = vehicles?.find((v) => v._id === formData.vehicleId);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
