@@ -21,9 +21,17 @@ interface DepartureModalProps {
 }
 
 export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
-  const vehicles = useQuery(api.vehicles.list, { inMaintenance: false });
+  const allVehicles = useQuery(api.vehicles.list, { inMaintenance: false });
+  const inTransitMovements = useQuery(api.vehicleMovements.listInTransit);
   const personnel = useQuery(api.personnel.list, { activeOnly: true });
   const createMovement = useMutation(api.vehicleMovements.create);
+
+  // Filter out vehicles that are currently in transit
+  const vehicles = allVehicles?.filter((vehicle) => {
+    return !inTransitMovements?.some(
+      (movement) => movement.vehicleId === vehicle._id
+    );
+  });
 
   const [formData, setFormData] = useState({
     vehicleId: "" as Id<"vehicles"> | "",
