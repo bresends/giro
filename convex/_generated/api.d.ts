@@ -12,6 +12,7 @@ import type * as alerts from "../alerts.js";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
 import type * as maintenanceRecords from "../maintenanceRecords.js";
+import type * as migrations_convertRgToNumber from "../migrations/convertRgToNumber.js";
 import type * as migrations_removeColorField from "../migrations/removeColorField.js";
 import type * as myFunctions from "../myFunctions.js";
 import type * as personnel from "../personnel.js";
@@ -33,6 +34,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
   maintenanceRecords: typeof maintenanceRecords;
+  "migrations/convertRgToNumber": typeof migrations_convertRgToNumber;
   "migrations/removeColorField": typeof migrations_removeColorField;
   myFunctions: typeof myFunctions;
   personnel: typeof personnel;
