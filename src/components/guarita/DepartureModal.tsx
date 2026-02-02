@@ -61,6 +61,22 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
   // Get selected vehicle's current KM
   const selectedVehicle = vehicles?.find((v) => v._id === formData.vehicleId);
 
+  // Get latest movement for the selected vehicle to prefill the driver
+  const latestMovement = useQuery(
+    api.vehicleMovements.getLatest,
+    formData.vehicleId ? { vehicleId: formData.vehicleId } : "skip"
+  );
+
+  // Prefill driver when vehicle is selected and latest movement is loaded
+  useEffect(() => {
+    if (latestMovement?.personnelId && formData.vehicleId && !formData.personnelId) {
+      setFormData((prev) => ({
+        ...prev,
+        personnelId: latestMovement.personnelId,
+      }));
+    }
+  }, [latestMovement, formData.vehicleId]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
