@@ -3,16 +3,13 @@ import { query, mutation, QueryCtx } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
 
 // Helper function to check if vehicle has active maintenance
+// Only vehicles "in_progress" are considered unavailable
+// Vehicles "awaiting_ceman" are still available for use
 async function hasActiveMaintenance(ctx: QueryCtx, vehicleId: Id<"vehicles">) {
   const activeMaintenance = await ctx.db
     .query("maintenanceRecords")
     .withIndex("by_vehicle", (q: any) => q.eq("vehicleId", vehicleId))
-    .filter((q: any) =>
-      q.or(
-        q.eq(q.field("status"), "awaiting_ceman"),
-        q.eq(q.field("status"), "in_progress")
-      )
-    )
+    .filter((q: any) => q.eq(q.field("status"), "in_progress"))
     .first();
 
   return activeMaintenance !== null;
@@ -23,12 +20,7 @@ async function getActiveMaintenance(ctx: QueryCtx, vehicleId: Id<"vehicles">) {
   return await ctx.db
     .query("maintenanceRecords")
     .withIndex("by_vehicle", (q: any) => q.eq("vehicleId", vehicleId))
-    .filter((q: any) =>
-      q.or(
-        q.eq(q.field("status"), "awaiting_ceman"),
-        q.eq(q.field("status"), "in_progress")
-      )
-    )
+    .filter((q: any) => q.eq(q.field("status"), "in_progress"))
     .first();
 }
 
