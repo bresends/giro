@@ -1,7 +1,4 @@
 import { FormEvent, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Id } from "../../../convex/_generated/dataModel";
 import { SimpleSelect } from "../common/SimpleSelect";
 
@@ -31,6 +28,60 @@ interface VehicleFormProps {
   isEdit?: boolean;
 }
 
+const velInput: React.CSSProperties = {
+  width: "100%",
+  padding: "8px 12px",
+  border: "1px solid #e5e5e5",
+  background: "#fff",
+  color: "#1a1a1a",
+  fontSize: 14,
+  fontFamily: "'Barlow', sans-serif",
+  clipPath:
+    "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+  outline: "none",
+};
+
+const velLabel: React.CSSProperties = {
+  display: "block",
+  fontSize: 10,
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontWeight: 600,
+  letterSpacing: "0.15em",
+  textTransform: "uppercase",
+  color: "#999",
+  marginBottom: 6,
+};
+
+const velBtnPrimary: React.CSSProperties = {
+  background: "#dc2626",
+  color: "#fff",
+  padding: "8px 20px",
+  border: "none",
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontWeight: 600,
+  fontSize: 13,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  clipPath:
+    "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+  cursor: "pointer",
+};
+
+const velBtnOutline: React.CSSProperties = {
+  background: "transparent",
+  color: "#999",
+  padding: "8px 20px",
+  border: "1px solid rgba(0,0,0,0.1)",
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontWeight: 600,
+  fontSize: 13,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  clipPath:
+    "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+  cursor: "pointer",
+};
+
 export function VehicleForm({
   initialData,
   vehicleTypes,
@@ -59,18 +110,32 @@ export function VehicleForm({
 
   if (vehicleTypes.length === 0) {
     return (
-      <div className="text-center p-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-        <h3 className="text-lg font-medium text-yellow-800 dark:text-yellow-200">
+      <div
+        className="text-center p-6"
+        style={{
+          borderLeft: "3px solid #ca8a04",
+          background: "rgba(234,179,8,0.04)",
+        }}
+      >
+        <h3
+          className="text-sm"
+          style={{
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontWeight: 600,
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            color: "#ca8a04",
+          }}
+        >
           Nenhum tipo de viatura cadastrado
         </h3>
-        <p className="mt-2 text-yellow-700 dark:text-yellow-300">
-          É necessário cadastrar tipos de viatura antes de criar uma nova
-          viatura. Entre em contato com o administrador do sistema.
+        <p className="mt-2 text-xs text-[#999]" style={{ fontFamily: "'Barlow', sans-serif" }}>
+          É necessário cadastrar tipos de viatura antes de criar uma nova viatura.
         </p>
         <div className="mt-4">
-          <Button variant="secondary" onClick={onCancel}>
+          <button type="button" style={velBtnOutline} onClick={onCancel}>
             Voltar
-          </Button>
+          </button>
         </div>
       </div>
     );
@@ -99,18 +164,24 @@ export function VehicleForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-md p-3">
-          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        <div
+          className="p-3"
+          style={{
+            borderLeft: "2px solid #dc2626",
+            background: "rgba(220,38,38,0.04)",
+          }}
+        >
+          <p className="text-sm" style={{ color: "#dc2626", fontFamily: "'Barlow', sans-serif" }}>{error}</p>
         </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="operationalPrefix">
-            Prefixo Operacional <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="operationalPrefix"
+        <div>
+          <label style={velLabel}>
+            Prefixo Operacional <span style={{ color: "#dc2626" }}>*</span>
+          </label>
+          <input
+            style={velInput}
             value={formData.operationalPrefix}
             onChange={(e) =>
               setFormData({ ...formData, operationalPrefix: e.target.value })
@@ -120,12 +191,12 @@ export function VehicleForm({
           />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="plate">
-            Placa <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="plate"
+        <div>
+          <label style={velLabel}>
+            Placa <span style={{ color: "#dc2626" }}>*</span>
+          </label>
+          <input
+            style={velInput}
             value={formData.plate}
             onChange={(e) =>
               setFormData({ ...formData, plate: e.target.value.toUpperCase() })
@@ -154,12 +225,12 @@ export function VehicleForm({
           required
         />
 
-        <div className="space-y-2">
-          <Label htmlFor="brand">
-            Marca <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="brand"
+        <div>
+          <label style={velLabel}>
+            Marca <span style={{ color: "#dc2626" }}>*</span>
+          </label>
+          <input
+            style={velInput}
             value={formData.brand}
             onChange={(e) =>
               setFormData({ ...formData, brand: e.target.value })
@@ -171,12 +242,12 @@ export function VehicleForm({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="model">
-            Modelo <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="model"
+        <div>
+          <label style={velLabel}>
+            Modelo <span style={{ color: "#dc2626" }}>*</span>
+          </label>
+          <input
+            style={velInput}
             value={formData.model}
             onChange={(e) =>
               setFormData({ ...formData, model: e.target.value })
@@ -186,13 +257,13 @@ export function VehicleForm({
           />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="year">
-            Ano <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="year"
+        <div>
+          <label style={velLabel}>
+            Ano <span style={{ color: "#dc2626" }}>*</span>
+          </label>
+          <input
             type="number"
+            style={velInput}
             value={formData.year}
             onChange={(e) =>
               setFormData({ ...formData, year: parseInt(e.target.value) })
@@ -205,12 +276,12 @@ export function VehicleForm({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="chassisNumber">
-            N° Chassi <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="chassisNumber"
+        <div>
+          <label style={velLabel}>
+            N° Chassi <span style={{ color: "#dc2626" }}>*</span>
+          </label>
+          <input
+            style={velInput}
             value={formData.chassisNumber}
             onChange={(e) =>
               setFormData({
@@ -223,12 +294,12 @@ export function VehicleForm({
           />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="renavam">
-            Renavam <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="renavam"
+        <div>
+          <label style={velLabel}>
+            Renavam <span style={{ color: "#dc2626" }}>*</span>
+          </label>
+          <input
+            style={velInput}
             value={formData.renavam}
             onChange={(e) =>
               setFormData({ ...formData, renavam: e.target.value })
@@ -240,13 +311,11 @@ export function VehicleForm({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="nextMaintenanceKm">
-            Próxima Revisão (km)
-          </Label>
-          <Input
-            id="nextMaintenanceKm"
+        <div>
+          <label style={velLabel}>Próxima Revisão (km)</label>
+          <input
             type="number"
+            style={velInput}
             value={formData.nextMaintenanceKm || ""}
             onChange={(e) =>
               setFormData({
@@ -257,11 +326,10 @@ export function VehicleForm({
             min={0}
             placeholder="Ex: 15000"
           />
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[10px] text-[#999] mt-1" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
             Opcional - KM da próxima manutenção preventiva
           </p>
         </div>
-
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -299,12 +367,12 @@ export function VehicleForm({
       </div>
 
       <div className="flex gap-3 pt-4">
-        <Button type="submit" disabled={isSubmitting}>
+        <button type="submit" disabled={isSubmitting} style={{ ...velBtnPrimary, opacity: isSubmitting ? 0.6 : 1 }}>
           {isSubmitting ? "Salvando..." : isEdit ? "Atualizar" : "Cadastrar"}
-        </Button>
-        <Button type="button" variant="secondary" onClick={onCancel}>
+        </button>
+        <button type="button" style={velBtnOutline} onClick={onCancel}>
           Cancelar
-        </Button>
+        </button>
       </div>
     </form>
   );

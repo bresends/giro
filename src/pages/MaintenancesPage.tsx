@@ -2,12 +2,45 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { SimpleSelect } from "../components/common/SimpleSelect";
 import { MaintenanceTable } from "../components/maintenance/MaintenanceTable";
 import { Loading } from "../components/common/Loading";
 import { Plus, Wrench, Calendar, CheckCircle } from "lucide-react";
+
+const velPanel: React.CSSProperties = {
+  background: "#fff",
+  border: "1px solid rgba(0,0,0,0.06)",
+  padding: "24px",
+  clipPath:
+    "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))",
+};
+
+const velBtnPrimary: React.CSSProperties = {
+  background: "#dc2626",
+  color: "#fff",
+  padding: "8px 20px",
+  border: "none",
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontWeight: 600,
+  fontSize: 13,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  clipPath:
+    "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+  cursor: "pointer",
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 8,
+};
+
+const velSectionLabel: React.CSSProperties = {
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontWeight: 600,
+  fontSize: 10,
+  letterSpacing: "0.15em",
+  textTransform: "uppercase",
+  color: "#999",
+};
 
 export function MaintenancesPage() {
   const navigate = useNavigate();
@@ -21,7 +54,7 @@ export function MaintenancesPage() {
   const allMaintenances = useQuery(api.maintenanceRecords.list, {});
 
   if (allMaintenances === undefined) {
-    return <Loading text="Carregando manutenções..." />;
+    return <Loading text="Carregando manutencoes..." />;
   }
 
   // Apply filters
@@ -39,148 +72,142 @@ export function MaintenancesPage() {
     completed: allMaintenances.filter((m) => m.status === "completed").length,
   };
 
+  const statCards = [
+    { label: "Total", value: stats.total, icon: Wrench, color: "#999", accent: "rgba(0,0,0,0.04)" },
+    { label: "Aguardando CEMAN", value: stats.awaitingCeman, icon: Calendar, color: "#2563eb", accent: "rgba(37,99,235,0.06)" },
+    { label: "Em Andamento", value: stats.inProgress, icon: Wrench, color: "#ea580c", accent: "rgba(234,88,12,0.06)" },
+    { label: "Concluidas", value: stats.completed, icon: CheckCircle, color: "#16a34a", accent: "rgba(22,163,74,0.06)" },
+  ];
+
+  const tableTitle =
+    statusFilter === "all"
+      ? "Todas as Manutencoes"
+      : statusFilter === "awaiting_ceman"
+      ? "Aguardando CEMAN"
+      : statusFilter === "in_progress"
+      ? "Manutencoes em Andamento"
+      : statusFilter === "completed"
+      ? "Manutencoes Concluidas"
+      : "Manutencoes Canceladas";
+
   return (
-    <div className="space-y-6">
-      {/* Cabeçalho */}
-      <div className="flex items-center justify-between">
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
         <div>
-          <h1 className="text-3xl font-bold">Manutenções</h1>
-          <p className="text-muted-foreground">
-            Gerencie o histórico de manutenções da frota
+          <h1
+            style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: 28,
+              color: "#1a1a1a",
+              letterSpacing: "0.04em",
+              margin: 0,
+            }}
+          >
+            Manutencoes
+          </h1>
+          <p style={{ color: "#999", fontFamily: "'Barlow', sans-serif", fontSize: 14, marginTop: 4 }}>
+            Gerencie o historico de manutencoes da frota
           </p>
         </div>
-        <Button onClick={() => navigate("/maintenance/new")}>
-          <Plus className="w-4 h-4 mr-2" />
-          Nova Manutenção
-        </Button>
+        <button onClick={() => navigate("/maintenance/new")} style={velBtnPrimary}>
+          <Plus size={16} />
+          Nova Manutencao
+        </button>
       </div>
 
-      {/* Estatísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
+      {/* Stat Cards */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16 }}>
+        {statCards.map((s) => (
+          <div
+            key={s.label}
+            style={{
+              ...velPanel,
+              borderLeft: `3px solid ${s.color}`,
+              padding: "16px 20px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Total
+                <p style={{ ...velSectionLabel, margin: 0 }}>{s.label}</p>
+                <p
+                  style={{
+                    fontFamily: "'Bebas Neue', sans-serif",
+                    fontSize: 28,
+                    color: s.color,
+                    margin: "4px 0 0 0",
+                    lineHeight: 1,
+                  }}
+                >
+                  {s.value}
                 </p>
-                <p className="text-2xl font-bold mt-1">{stats.total}</p>
               </div>
-              <div className="p-3 rounded-lg bg-secondary">
-                <Wrench className="w-5 h-5 text-muted-foreground" />
+              <div
+                style={{
+                  width: 36,
+                  height: 36,
+                  background: s.accent,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  clipPath:
+                    "polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px))",
+                }}
+              >
+                <s.icon size={18} color={s.color} />
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Aguardando CEMAN
-                </p>
-                <p className="text-2xl font-bold mt-1">{stats.awaitingCeman}</p>
-              </div>
-              <div className="p-3 rounded-lg bg-secondary">
-                <Calendar className="w-5 h-5 text-blue-500" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Em Andamento
-                </p>
-                <p className="text-2xl font-bold mt-1">{stats.inProgress}</p>
-              </div>
-              <div className="p-3 rounded-lg bg-secondary">
-                <Wrench className="w-5 h-5 text-yellow-500" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Concluídas
-                </p>
-                <p className="text-2xl font-bold mt-1">{stats.completed}</p>
-              </div>
-              <div className="p-3 rounded-lg bg-secondary">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Filtros */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Filtros</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <SimpleSelect
-              label="Status"
-              value={statusFilter}
-              onChange={(e) =>
-                setStatusFilter(
-                  e.target.value as typeof statusFilter
-                )
-              }
-              options={[
-                { value: "all", label: "Todos" },
-                { value: "awaiting_ceman", label: "Aguardando CEMAN" },
-                { value: "in_progress", label: "Em Andamento" },
-                { value: "completed", label: "Concluídas" },
-                { value: "cancelled", label: "Canceladas" },
-              ]}
-            />
-
-            <SimpleSelect
-              label="Tipo"
-              value={typeFilter}
-              onChange={(e) =>
-                setTypeFilter(e.target.value as typeof typeFilter)
-              }
-              options={[
-                { value: "all", label: "Todos" },
-                { value: "preventive", label: "Preventiva" },
-                { value: "corrective", label: "Corretiva" },
-              ]}
-            />
           </div>
-        </CardContent>
-      </Card>
+        ))}
+      </div>
 
-      {/* Lista de Manutenções */}
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            {statusFilter === "all"
-              ? "Todas as Manutenções"
-              : statusFilter === "awaiting_ceman"
-              ? "Aguardando CEMAN"
-              : statusFilter === "in_progress"
-              ? "Manutenções em Andamento"
-              : statusFilter === "completed"
-              ? "Manutenções Concluídas"
-              : "Manutenções Canceladas"}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <MaintenanceTable maintenances={filteredMaintenances} />
-        </CardContent>
-      </Card>
+      {/* Filters */}
+      <div style={velPanel}>
+        <div style={{ marginBottom: 12 }}>
+          <span style={velSectionLabel}>Filtros</span>
+          <div style={{ width: 24, height: 2, background: "#dc2626", marginTop: 6 }} />
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
+          <SimpleSelect
+            label="Status"
+            value={statusFilter}
+            onChange={(e) =>
+              setStatusFilter(
+                e.target.value as typeof statusFilter
+              )
+            }
+            options={[
+              { value: "all", label: "Todos" },
+              { value: "awaiting_ceman", label: "Aguardando CEMAN" },
+              { value: "in_progress", label: "Em Andamento" },
+              { value: "completed", label: "Concluidas" },
+              { value: "cancelled", label: "Canceladas" },
+            ]}
+          />
+
+          <SimpleSelect
+            label="Tipo"
+            value={typeFilter}
+            onChange={(e) =>
+              setTypeFilter(e.target.value as typeof typeFilter)
+            }
+            options={[
+              { value: "all", label: "Todos" },
+              { value: "preventive", label: "Preventiva" },
+              { value: "corrective", label: "Corretiva" },
+            ]}
+          />
+        </div>
+      </div>
+
+      {/* Maintenance Table */}
+      <div style={velPanel}>
+        <div style={{ marginBottom: 16 }}>
+          <span style={velSectionLabel}>{tableTitle}</span>
+          <div style={{ width: 24, height: 2, background: "#dc2626", marginTop: 6 }} />
+        </div>
+        <MaintenanceTable maintenances={filteredMaintenances} />
+      </div>
     </div>
   );
 }

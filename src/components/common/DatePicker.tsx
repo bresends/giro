@@ -2,8 +2,6 @@ import { useState } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -18,6 +16,23 @@ interface DatePickerProps {
   disabled?: boolean;
 }
 
+const velBtn: React.CSSProperties = {
+  width: "100%",
+  display: "flex",
+  alignItems: "center",
+  gap: 8,
+  padding: "8px 12px",
+  border: "1px solid #e5e5e5",
+  background: "#fff",
+  color: "#1a1a1a",
+  fontSize: 14,
+  fontFamily: "'Barlow', sans-serif",
+  clipPath:
+    "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+  cursor: "pointer",
+  textAlign: "left" as const,
+};
+
 export function DatePicker({
   value,
   onChange,
@@ -29,17 +44,18 @@ export function DatePicker({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            "w-full justify-start text-left font-normal",
-            !value && "text-muted-foreground"
-          )}
+        <button
+          type="button"
           disabled={disabled}
+          style={{
+            ...velBtn,
+            color: value ? "#1a1a1a" : "#999",
+            opacity: disabled ? 0.5 : 1,
+          }}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <CalendarIcon size={16} style={{ color: "#999" }} />
           {value ? format(value, "PPP", { locale: ptBR }) : placeholder}
-        </Button>
+        </button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar

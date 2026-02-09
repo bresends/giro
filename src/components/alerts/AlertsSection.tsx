@@ -17,15 +17,39 @@ interface AlertsSectionProps {
   }>;
 }
 
+const sectionLabel: React.CSSProperties = {
+  fontSize: 11,
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontWeight: 700,
+  letterSpacing: "0.15em",
+  textTransform: "uppercase",
+  marginBottom: 12,
+};
+
 export function AlertsSection({ alerts }: AlertsSectionProps) {
   if (alerts.length === 0) {
     return (
-      <div className="text-center py-12 bg-green-50 dark:bg-green-950/10 rounded-lg border border-green-200 dark:border-green-800">
-        <CheckCircle className="w-16 h-16 mx-auto mb-4 text-green-500" />
-        <h3 className="text-lg font-medium text-green-800 dark:text-green-200 mb-2">
+      <div
+        className="text-center py-12"
+        style={{
+          background: "rgba(22,163,74,0.04)",
+          borderLeft: "3px solid #16a34a",
+        }}
+      >
+        <CheckCircle size={48} className="mx-auto mb-4" style={{ color: "#16a34a" }} />
+        <h3
+          className="text-sm mb-1"
+          style={{
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontWeight: 600,
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            color: "#16a34a",
+          }}
+        >
           Nenhum alerta ativo
         </h3>
-        <p className="text-green-700 dark:text-green-300">
+        <p className="text-xs text-[#999]" style={{ fontFamily: "'Barlow', sans-serif" }}>
           Todas as viaturas estão em dia com as manutenções
         </p>
       </div>
@@ -42,7 +66,7 @@ export function AlertsSection({ alerts }: AlertsSectionProps) {
     <div className="space-y-6">
       {critical.length > 0 && (
         <div>
-          <h3 className="text-sm font-semibold text-red-600 dark:text-red-400 mb-3">
+          <h3 style={{ ...sectionLabel, color: "#dc2626" }}>
             Críticos ({critical.length})
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -55,7 +79,7 @@ export function AlertsSection({ alerts }: AlertsSectionProps) {
 
       {high.length > 0 && (
         <div>
-          <h3 className="text-sm font-semibold text-orange-600 dark:text-orange-400 mb-3">
+          <h3 style={{ ...sectionLabel, color: "#ea580c" }}>
             Alta Prioridade ({high.length})
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -68,7 +92,7 @@ export function AlertsSection({ alerts }: AlertsSectionProps) {
 
       {medium.length > 0 && (
         <div>
-          <h3 className="text-sm font-semibold text-yellow-600 dark:text-yellow-400 mb-3">
+          <h3 style={{ ...sectionLabel, color: "#ca8a04" }}>
             Média Prioridade ({medium.length})
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -81,7 +105,7 @@ export function AlertsSection({ alerts }: AlertsSectionProps) {
 
       {low.length > 0 && (
         <div>
-          <h3 className="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-3">
+          <h3 style={{ ...sectionLabel, color: "#2563eb" }}>
             Baixa Prioridade ({low.length})
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

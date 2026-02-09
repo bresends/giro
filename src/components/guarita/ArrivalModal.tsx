@@ -5,14 +5,8 @@ import { Id } from "../../../convex/_generated/dataModel";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Car } from "lucide-react";
 
 interface Movement {
@@ -43,6 +37,19 @@ interface ArrivalModalProps {
   onOpenChange: (open: boolean) => void;
   movement: Movement | null;
 }
+
+const velInput: React.CSSProperties = {
+  background: "#fff",
+  border: "1.5px solid #e5e5e5",
+  color: "#1a1a1a",
+  fontFamily: "'Barlow', sans-serif",
+  fontSize: "14px",
+  fontWeight: 400,
+  padding: "11px 14px",
+  width: "100%",
+  outline: "none",
+  clipPath: "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+};
 
 export function ArrivalModal({
   open,
@@ -108,50 +115,75 @@ export function ArrivalModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl light text-foreground">
-        <DialogHeader>
-          <DialogTitle>Registrar Chegada de Viatura</DialogTitle>
-          <DialogDescription>
-            Registre a chegada da viatura informando a quilometragem atual.
-          </DialogDescription>
-        </DialogHeader>
+        <div>
+          <h2
+            className="text-xl text-[#1a1a1a] tracking-[0.05em] uppercase"
+            style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600 }}
+          >
+            Registrar Chegada de Viatura
+          </h2>
+          <div className="flex items-center gap-2 mt-1">
+            <div className="h-0.5 w-6" style={{ background: "#dc2626" }} />
+            <p className="text-[11px] text-[#999] tracking-wide">
+              Informe a quilometragem atual
+            </p>
+          </div>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-2">
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-md p-3">
-              <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+            <div
+              className="px-4 py-3"
+              style={{
+                background: "rgba(220,38,38,0.04)",
+                borderLeft: "2px solid #dc2626",
+              }}
+            >
+              <p className="text-sm text-[#dc2626]">{error}</p>
             </div>
           )}
 
           {/* Departure Info Card */}
-          <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-            <div className="flex items-center gap-2 pb-2 border-b">
-              <Car className="w-5 h-5" />
-              <h3 className="font-semibold">Informações da Saída</h3>
+          <div
+            className="p-4 space-y-3"
+            style={{
+              background: "rgba(0,0,0,0.015)",
+              border: "1px solid rgba(0,0,0,0.04)",
+            }}
+          >
+            <div className="flex items-center gap-2 pb-2" style={{ borderBottom: "1px solid rgba(0,0,0,0.04)" }}>
+              <Car size={16} className="text-[#1a1a1a]" />
+              <h3
+                className="text-sm text-[#1a1a1a] tracking-[0.05em] uppercase font-semibold"
+                style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
+              >
+                Informações da Saída
+              </h3>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-muted-foreground">Viatura</p>
-                <p className="font-semibold">
+                <p className="text-[10px] text-[#999] tracking-[0.15em] uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Viatura</p>
+                <p className="text-sm text-[#1a1a1a] font-medium mt-0.5">
                   {movement.vehicle?.operationalPrefix} - {movement.vehicle?.plate}
                 </p>
               </div>
 
               <div>
-                <p className="text-xs text-muted-foreground">Motorista</p>
-                <p className="font-semibold">
+                <p className="text-[10px] text-[#999] tracking-[0.15em] uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Motorista</p>
+                <p className="text-sm text-[#1a1a1a] font-medium mt-0.5">
                   {movement.personnel?.rank} {movement.personnel?.name}
                 </p>
               </div>
 
               <div>
-                <p className="text-xs text-muted-foreground">Destino</p>
-                <p className="font-semibold">{movement.destination}</p>
+                <p className="text-[10px] text-[#999] tracking-[0.15em] uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Destino</p>
+                <p className="text-sm text-[#1a1a1a] font-medium mt-0.5">{movement.destination}</p>
               </div>
 
               <div>
-                <p className="text-xs text-muted-foreground">Horário de Saída</p>
-                <p className="font-semibold">
+                <p className="text-[10px] text-[#999] tracking-[0.15em] uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Horário de Saída</p>
+                <p className="text-sm text-[#1a1a1a] font-medium mt-0.5">
                   {new Date(movement.departureTime).toLocaleTimeString("pt-BR", {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -160,20 +192,22 @@ export function ArrivalModal({
               </div>
 
               <div>
-                <p className="text-xs text-muted-foreground">KM de Saída</p>
-                <p className="font-semibold">
+                <p className="text-[10px] text-[#999] tracking-[0.15em] uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>KM de Saída</p>
+                <p className="text-sm text-[#1a1a1a] font-medium mt-0.5 tabular-nums">
                   {new Intl.NumberFormat("pt-BR").format(movement.departureKm)} km
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="arrivalKm">
-              KM de Chegada <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              id="arrivalKm"
+          <div className="space-y-1.5">
+            <label
+              className="block text-[10px] text-[#999] tracking-[0.15em] uppercase font-semibold"
+              style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
+            >
+              KM de Chegada <span className="text-[#dc2626]">*</span>
+            </label>
+            <input
               type="number"
               value={formData.arrivalKm}
               onChange={(e) =>
@@ -184,40 +218,54 @@ export function ArrivalModal({
               }
               min={movement.departureKm}
               required
-              className={`text-2xl font-bold h-16 ${
-                formData.arrivalKm < movement.departureKm
-                  ? "border-red-500 focus-visible:ring-red-500"
-                  : ""
-              }`}
               autoFocus
+              style={{
+                ...velInput,
+                fontSize: "24px",
+                fontWeight: 700,
+                padding: "16px 14px",
+                borderColor: formData.arrivalKm < movement.departureKm ? "#dc2626" : "#e5e5e5",
+              }}
             />
             {formData.arrivalKm < movement.departureKm ? (
-              <p className="text-xs text-red-600 font-medium">
-                ⚠️ KM de chegada deve ser maior ou igual ao KM de saída ({new Intl.NumberFormat("pt-BR").format(movement.departureKm)} km)
+              <p className="text-[11px] text-[#dc2626] font-medium">
+                KM de chegada deve ser maior ou igual ao KM de saída ({new Intl.NumberFormat("pt-BR").format(movement.departureKm)} km)
               </p>
             ) : (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[10px] text-[#999]">
                 Valor mínimo: {new Intl.NumberFormat("pt-BR").format(movement.departureKm)} km
               </p>
             )}
           </div>
 
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-4 rounded-md">
-            <p className="text-sm text-muted-foreground mb-1">Horário de Chegada:</p>
-            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+          <div
+            className="p-4"
+            style={{
+              background: "rgba(37,99,235,0.04)",
+              borderLeft: "2px solid #2563eb",
+            }}
+          >
+            <p className="text-[10px] text-[#999] tracking-[0.15em] uppercase mb-1" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Horário de Chegada</p>
+            <p className="text-2xl font-bold text-[#2563eb] tabular-nums" style={{ fontFamily: "'Barlow', sans-serif" }}>
               {new Date().toLocaleTimeString("pt-BR", {
                 hour: "2-digit",
                 minute: "2-digit",
               })}
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-[10px] text-[#999] mt-1">
               Horário será registrado automaticamente
             </p>
           </div>
 
           {kmTraveled >= 0 && (
-            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-3 rounded-md">
-              <p className="text-sm text-green-800 dark:text-green-200">
+            <div
+              className="p-3"
+              style={{
+                background: "rgba(22,163,106,0.04)",
+                borderLeft: "2px solid #16a34a",
+              }}
+            >
+              <p className="text-sm text-[#16a34a] font-medium">
                 <strong>Distância percorrida:</strong>{" "}
                 {new Intl.NumberFormat("pt-BR").format(kmTraveled)} km
               </p>
@@ -225,20 +273,34 @@ export function ArrivalModal({
           )}
 
           <DialogFooter>
-            <Button
+            <button
               type="button"
-              variant="secondary"
               onClick={() => onOpenChange(false)}
               disabled={isSubmitting}
+              className="px-5 py-2.5 text-xs text-[#999] tracking-wider uppercase hover:text-[#1a1a1a] transition-colors cursor-pointer disabled:opacity-40"
+              style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 600,
+                border: "1px solid rgba(0,0,0,0.08)",
+                clipPath: "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+              }}
             >
               Cancelar
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
               disabled={isSubmitting || formData.arrivalKm < movement.departureKm}
+              className="px-5 py-2.5 text-xs text-white tracking-wider uppercase transition-all hover:brightness-110 cursor-pointer disabled:opacity-40"
+              style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 600,
+                background: "#dc2626",
+                border: "none",
+                clipPath: "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+              }}
             >
               {isSubmitting ? "Registrando..." : "Registrar Chegada"}
-            </Button>
+            </button>
           </DialogFooter>
         </form>
       </DialogContent>

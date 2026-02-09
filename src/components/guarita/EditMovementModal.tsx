@@ -5,14 +5,8 @@ import { Id } from "../../../convex/_generated/dataModel";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { SimpleSelect } from "../common/SimpleSelect";
 
 interface Movement {
@@ -45,6 +39,19 @@ interface EditMovementModalProps {
   onOpenChange: (open: boolean) => void;
   movement: Movement | null;
 }
+
+const velInput: React.CSSProperties = {
+  background: "#fff",
+  border: "1.5px solid #e5e5e5",
+  color: "#1a1a1a",
+  fontFamily: "'Barlow', sans-serif",
+  fontSize: "14px",
+  fontWeight: 400,
+  padding: "11px 14px",
+  width: "100%",
+  outline: "none",
+  clipPath: "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+};
 
 export function EditMovementModal({
   open,
@@ -152,23 +159,40 @@ export function EditMovementModal({
     }
   };
 
+  const velLabel = "block text-[10px] text-[#999] tracking-[0.15em] uppercase font-semibold mb-1.5";
+  const velLabelStyle: React.CSSProperties = { fontFamily: "'Barlow Condensed', sans-serif" };
+
   return (
     <Dialog open={open && movement !== null} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl light text-foreground">
-        <DialogHeader>
-          <DialogTitle>Editar Movimentação</DialogTitle>
-          <DialogDescription>
-            Atualize as informações da saída da viatura.
-          </DialogDescription>
-        </DialogHeader>
+        <div>
+          <h2
+            className="text-xl text-[#1a1a1a] tracking-[0.05em] uppercase"
+            style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600 }}
+          >
+            Editar Movimentação
+          </h2>
+          <div className="flex items-center gap-2 mt-1">
+            <div className="h-0.5 w-6" style={{ background: "#dc2626" }} />
+            <p className="text-[11px] text-[#999] tracking-wide">
+              Atualize as informações da saída
+            </p>
+          </div>
+        </div>
 
         {!movement ? (
-          <p>Carregando...</p>
+          <p className="text-[#999] text-sm">Carregando...</p>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 mt-2">
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-md p-3">
-              <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+            <div
+              className="px-4 py-3"
+              style={{
+                background: "rgba(220,38,38,0.04)",
+                borderLeft: "2px solid #dc2626",
+              }}
+            >
+              <p className="text-sm text-[#dc2626]">{error}</p>
             </div>
           )}
 
@@ -232,136 +256,159 @@ export function EditMovementModal({
               placeholder="Selecione o tipo"
             />
 
-            <div className="space-y-2">
-              <Label htmlFor="destination">
-                Destino <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="destination"
+            <div className="space-y-1.5">
+              <label className={velLabel} style={velLabelStyle}>
+                Destino <span className="text-[#dc2626]">*</span>
+              </label>
+              <input
                 value={formData.destination}
                 onChange={(e) =>
                   setFormData({ ...formData, destination: e.target.value })
                 }
                 placeholder="Ex: Av. Goiás, 123"
                 required
+                style={velInput}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="departureKm">
-                KM Saída <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="departureKm"
+            <div className="space-y-1.5">
+              <label className={velLabel} style={velLabelStyle}>
+                KM Saída <span className="text-[#dc2626]">*</span>
+              </label>
+              <input
                 type="number"
                 value={formData.departureKm}
                 onChange={(e) =>
                   setFormData({ ...formData, departureKm: Number(e.target.value) })
                 }
                 required
+                style={velInput}
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="arrivalKm">KM Chegada</Label>
-              <Input
-                id="arrivalKm"
+            <div className="space-y-1.5">
+              <label className={velLabel} style={velLabelStyle}>
+                KM Chegada
+              </label>
+              <input
                 type="number"
                 value={formData.arrivalKm || ""}
                 onChange={(e) =>
                   setFormData({ ...formData, arrivalKm: Number(e.target.value) || 0 })
                 }
                 placeholder="Opcional"
+                style={velInput}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="departureDate">
-                Data Saída <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="departureDate"
+            <div className="space-y-1.5">
+              <label className={velLabel} style={velLabelStyle}>
+                Data Saída <span className="text-[#dc2626]">*</span>
+              </label>
+              <input
                 type="date"
                 value={formData.departureDate}
                 onChange={(e) =>
                   setFormData({ ...formData, departureDate: e.target.value })
                 }
                 required
+                style={velInput}
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="departureTime">
-                Horário Saída <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="departureTime"
+            <div className="space-y-1.5">
+              <label className={velLabel} style={velLabelStyle}>
+                Horário Saída <span className="text-[#dc2626]">*</span>
+              </label>
+              <input
                 type="time"
                 value={formData.departureTime}
                 onChange={(e) =>
                   setFormData({ ...formData, departureTime: e.target.value })
                 }
                 required
+                style={velInput}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="arrivalDate">Data Chegada</Label>
-              <Input
-                id="arrivalDate"
+            <div className="space-y-1.5">
+              <label className={velLabel} style={velLabelStyle}>
+                Data Chegada
+              </label>
+              <input
                 type="date"
                 value={formData.arrivalDate}
                 onChange={(e) =>
                   setFormData({ ...formData, arrivalDate: e.target.value })
                 }
-                placeholder="Opcional"
+                style={velInput}
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="arrivalTime">Horário Chegada</Label>
-              <Input
-                id="arrivalTime"
+            <div className="space-y-1.5">
+              <label className={velLabel} style={velLabelStyle}>
+                Horário Chegada
+              </label>
+              <input
                 type="time"
                 value={formData.arrivalTime}
                 onChange={(e) =>
                   setFormData({ ...formData, arrivalTime: e.target.value })
                 }
-                placeholder="Opcional"
+                style={velInput}
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="notes">Observações</Label>
-            <Input
-              id="notes"
+          <div className="space-y-1.5">
+            <label className={velLabel} style={velLabelStyle}>
+              Observações
+            </label>
+            <input
               value={formData.notes}
               onChange={(e) =>
                 setFormData({ ...formData, notes: e.target.value })
               }
               placeholder="Observações adicionais (opcional)"
+              style={velInput}
             />
           </div>
 
           <DialogFooter>
-            <Button
+            <button
               type="button"
-              variant="secondary"
               onClick={() => onOpenChange(false)}
               disabled={isSubmitting}
+              className="px-5 py-2.5 text-xs text-[#999] tracking-wider uppercase hover:text-[#1a1a1a] transition-colors cursor-pointer disabled:opacity-40"
+              style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 600,
+                border: "1px solid rgba(0,0,0,0.08)",
+                clipPath: "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+              }}
             >
               Cancelar
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-5 py-2.5 text-xs text-white tracking-wider uppercase transition-all hover:brightness-110 cursor-pointer disabled:opacity-40"
+              style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 600,
+                background: "#dc2626",
+                border: "none",
+                clipPath: "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+              }}
+            >
               {isSubmitting ? "Atualizando..." : "Atualizar"}
-            </Button>
+            </button>
           </DialogFooter>
           </form>
         )}

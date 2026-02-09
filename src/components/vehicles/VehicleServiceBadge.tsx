@@ -1,26 +1,39 @@
-import { Badge } from "@/components/ui/badge";
-
 interface VehicleServiceBadgeProps {
   serviceType: "operational" | "backup";
 }
+
+const velBadge: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  padding: "2px 10px",
+  fontSize: 10,
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontWeight: 600,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  clipPath:
+    "polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px))",
+};
 
 export function VehicleServiceBadge({ serviceType }: VehicleServiceBadgeProps) {
   const config = {
     operational: {
       label: "Operacional",
-      className: "bg-blue-500/10 text-blue-600 border-blue-200",
+      bg: "rgba(37,99,235,0.08)",
+      color: "#2563eb",
     },
     backup: {
       label: "Backup",
-      className: "bg-gray-500/10 text-gray-600 border-gray-200",
+      bg: "rgba(0,0,0,0.04)",
+      color: "#999",
     },
   };
 
-  const { label, className } = config[serviceType];
+  const { label, bg, color } = config[serviceType];
 
   return (
-    <Badge variant="outline" className={className}>
+    <span style={{ ...velBadge, background: bg, color }}>
       {label}
-    </Badge>
+    </span>
   );
 }

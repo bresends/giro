@@ -12,25 +12,6 @@ import {
   UserPlus,
 } from "lucide-react";
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { Loading } from "../components/common/Loading";
@@ -38,7 +19,6 @@ import { ArrivalModal } from "../components/guarita/ArrivalModal";
 import { DepartureModal } from "../components/guarita/DepartureModal";
 import { EditMovementModal } from "../components/guarita/EditMovementModal";
 import { PersonnelQuickAddModal } from "../components/guarita/PersonnelQuickAddModal";
-import { getVehicleTypeColor } from "@/lib/utils";
 
 interface Movement {
   _id: Id<"vehicleMovements">;
@@ -180,6 +160,48 @@ function generateShiftReportHTML(movements: Movement[]): string {
   `.trim();
 }
 
+/* Velocity Light button styles */
+const velBtnPrimary: React.CSSProperties = {
+  background: "#dc2626",
+  border: "none",
+  color: "white",
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontSize: "13px",
+  fontWeight: 600,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  padding: "10px 20px",
+  cursor: "pointer",
+  clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
+};
+
+const velBtnOutline: React.CSSProperties = {
+  background: "transparent",
+  border: "1px solid rgba(0,0,0,0.08)",
+  color: "#666",
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontSize: "13px",
+  fontWeight: 600,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  padding: "10px 20px",
+  cursor: "pointer",
+  clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
+};
+
+const velPanel: React.CSSProperties = {
+  background: "linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.6) 100%)",
+  border: "1px solid rgba(0,0,0,0.06)",
+  clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))",
+  backdropFilter: "blur(12px)",
+};
+
+const velPanelSquare: React.CSSProperties = {
+  background: "linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.6) 100%)",
+  border: "1px solid rgba(0,0,0,0.06)",
+  backdropFilter: "blur(12px)",
+};
+
 export function GuaritaPage() {
   const inTransit = useQuery(api.vehicleMovements.listInTransit);
   const recentMovements = useQuery(api.vehicleMovements.listRecent);
@@ -256,14 +278,26 @@ export function GuaritaPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold">
-                Guarita - Controle de Viaturas
-              </h1>
-              <p className="text-muted-foreground">
+      <div className="relative p-6" style={velPanel}>
+        {/* Corner mark */}
+        <div
+          className="absolute top-0 right-0 w-3 h-3"
+          style={{ background: "linear-gradient(225deg, rgba(220,38,38,0.4) 50%, transparent 50%)" }}
+        />
+        <div className="flex items-center justify-between">
+          <div>
+            <h1
+              className="text-3xl text-[#1a1a1a] tracking-[0.08em] uppercase"
+              style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700 }}
+            >
+              Guarita — Controle de Viaturas
+            </h1>
+            <div className="flex items-center gap-3 mt-1">
+              <div className="h-0.5 w-8" style={{ background: "#dc2626" }} />
+              <p
+                className="text-[11px] text-[#999] tracking-[0.15em] uppercase"
+                style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
+              >
                 {new Date().toLocaleDateString("pt-BR", {
                   weekday: "long",
                   year: "numeric",
@@ -272,316 +306,401 @@ export function GuaritaPage() {
                 })}
               </p>
             </div>
-            <div className="flex gap-3">
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={handleCopyShiftReport}
-                disabled={shiftMovements === undefined}
-                title="Copiar movimentações do turno"
-              >
-                {copied ? (
-                  <Check className="w-5 h-5 mr-2 text-green-600" />
-                ) : (
-                  <Copy className="w-5 h-5 mr-2" />
-                )}
-                Copiar
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => setPersonnelModalOpen(true)}
-              >
-                <UserPlus className="w-5 h-5 mr-2" />
-                Cadastrar Militar
-              </Button>
-              <Button
-                size="lg"
-                variant="default"
-                onClick={() => setDepartureModalOpen(true)}
-              >
-                <LogOut className="w-5 h-5 mr-2" />
-                Registrar Saída
-              </Button>
-            </div>
           </div>
-        </CardContent>
-      </Card>
+          <div className="flex gap-2">
+            <button
+              onClick={handleCopyShiftReport}
+              disabled={shiftMovements === undefined}
+              className="flex items-center gap-2 transition-colors hover:text-[#1a1a1a] disabled:opacity-40"
+              style={velBtnOutline}
+              title="Copiar movimentações do turno"
+            >
+              {copied ? (
+                <Check size={14} className="text-green-600" />
+              ) : (
+                <Copy size={14} />
+              )}
+              Copiar
+            </button>
+            <button
+              onClick={() => setPersonnelModalOpen(true)}
+              className="flex items-center gap-2 transition-colors hover:text-[#1a1a1a]"
+              style={velBtnOutline}
+            >
+              <UserPlus size={14} />
+              Cadastrar Militar
+            </button>
+            <button
+              onClick={() => setDepartureModalOpen(true)}
+              className="flex items-center gap-2 transition-all hover:brightness-110"
+              style={velBtnPrimary}
+            >
+              <LogOut size={14} />
+              Registrar Saída
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* In-Transit Vehicles */}
       {inTransit.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Car className="w-5 h-5" />
-              Viaturas em Trânsito ({inTransit.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {inTransit.map((movement) => {
-                const timeElapsed = Math.floor(
-                  (Date.now() - movement.departureTime) / (1000 * 60),
-                );
-                const hours = Math.floor(timeElapsed / 60);
-                const minutes = timeElapsed % 60;
+        <div>
+          <div className="flex items-center gap-3 mb-4">
+            <Car size={16} className="text-[#1a1a1a]" />
+            <h2
+              className="text-lg text-[#1a1a1a] tracking-[0.08em] uppercase"
+              style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600 }}
+            >
+              Viaturas em Trânsito
+            </h2>
+            <span
+              className="text-[10px] text-white tracking-wider uppercase px-2 py-0.5 font-semibold"
+              style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                background: "#dc2626",
+                clipPath: "polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px))",
+              }}
+            >
+              {inTransit.length}
+            </span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {inTransit.map((movement) => {
+              const timeElapsed = Math.floor(
+                (Date.now() - movement.departureTime) / (1000 * 60),
+              );
+              const hours = Math.floor(timeElapsed / 60);
+              const minutes = timeElapsed % 60;
 
-                return (
-                  <Card
-                    key={movement._id}
-                    className="border-l-4 border-l-orange-500 bg-orange-50/50 dark:bg-orange-950/20"
-                  >
-                    <CardContent className="p-4 space-y-3">
-                      <div className="flex items-start justify-between">
-                        <div className="flex flex-col gap-2">
-                          <Badge className={getVehicleTypeColor(movement.vehicle?.type)}>
-                            {movement.vehicle?.operationalPrefix}
-                          </Badge>
-                          <p className="text-sm text-muted-foreground">
-                            {movement.vehicle?.plate}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-1 text-orange-600">
-                          <Clock className="w-4 h-4" />
-                          <span className="text-sm font-medium">
-                            {hours > 0 ? `${hours}h ` : ""}
-                            {minutes}min
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            Motorista:
-                          </span>
-                          <span className="font-medium">
-                            {movement.personnel?.rank}{" "}
-                            {movement.personnel?.name}
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            Destino:
-                          </span>
-                          <span className="font-medium">
-                            {movement.destination}
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Saída:</span>
-                          <span className="font-medium">
-                            {new Date(
-                              movement.departureTime,
-                            ).toLocaleTimeString("pt-BR", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}{" "}
-                            •{" "}
-                            {new Intl.NumberFormat("pt-BR").format(
-                              movement.departureKm,
-                            )}{" "}
-                            km
-                          </span>
-                        </div>
-                      </div>
-
-                      <Button
-                        className="w-full"
-                        size="sm"
-                        onClick={() => handleArrivalClick(movement)}
+              return (
+                <div
+                  key={movement._id}
+                  className="relative p-4 space-y-3"
+                  style={{
+                    ...velPanelSquare,
+                    borderLeft: "3px solid #dc2626",
+                  }}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex flex-col gap-1">
+                      <span
+                        className="text-xs font-semibold tracking-wider uppercase px-2 py-0.5 inline-block w-fit"
+                        style={{
+                          fontFamily: "'Barlow Condensed', sans-serif",
+                          background: "rgba(220,38,38,0.08)",
+                          color: "#dc2626",
+                          clipPath: "polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px))",
+                        }}
                       >
-                        <LogIn className="w-4 h-4 mr-2" />
-                        Registrar Chegada
-                      </Button>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
+                        {movement.vehicle?.operationalPrefix}
+                      </span>
+                      <span className="text-[11px] text-[#999]">
+                        {movement.vehicle?.plate}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[#dc2626]">
+                      <Clock size={13} />
+                      <span
+                        className="text-sm font-semibold tabular-nums"
+                        style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
+                      >
+                        {hours > 0 ? `${hours}h ` : ""}
+                        {minutes}min
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-[11px] text-[#999] tracking-wide uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+                        Motorista
+                      </span>
+                      <span className="text-[13px] text-[#1a1a1a] font-medium">
+                        {movement.personnel?.rank}{" "}
+                        {movement.personnel?.name}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-[11px] text-[#999] tracking-wide uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+                        Destino
+                      </span>
+                      <span className="text-[13px] text-[#1a1a1a] font-medium">
+                        {movement.destination}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-[11px] text-[#999] tracking-wide uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+                        Saída
+                      </span>
+                      <span className="text-[13px] text-[#1a1a1a] font-medium tabular-nums">
+                        {new Date(
+                          movement.departureTime,
+                        ).toLocaleTimeString("pt-BR", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}{" "}
+                        ·{" "}
+                        {new Intl.NumberFormat("pt-BR").format(
+                          movement.departureKm,
+                        )}{" "}
+                        km
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    className="w-full flex items-center justify-center gap-2 transition-all hover:brightness-110"
+                    style={{
+                      ...velBtnPrimary,
+                      padding: "8px 16px",
+                      fontSize: "12px",
+                    }}
+                    onClick={() => handleArrivalClick(movement)}
+                  >
+                    <LogIn size={13} />
+                    Registrar Chegada
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       )}
 
       {inTransit.length === 0 && (
-        <Card className="border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-950/20">
-          <CardContent className="p-6 text-center">
-            <Car className="w-12 h-12 mx-auto mb-2 text-green-600" />
-            <p className="text-green-800 dark:text-green-200 font-medium">
-              Todas as viaturas na unidade
-            </p>
-            <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-              Nenhuma viatura em trânsito no momento
-            </p>
-          </CardContent>
-        </Card>
+        <div
+          className="p-6 text-center"
+          style={{
+            ...velPanelSquare,
+            borderLeft: "3px solid #16a34a",
+          }}
+        >
+          <Car size={32} className="mx-auto mb-2 text-green-600" />
+          <p
+            className="text-green-700 tracking-[0.05em] uppercase font-semibold"
+            style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
+          >
+            Todas as viaturas na unidade
+          </p>
+          <p className="text-[12px] text-[#999] mt-1">
+            Nenhuma viatura em trânsito no momento
+          </p>
+        </div>
       )}
 
       {/* Recent Movements History */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Últimas Saídas</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {recentMovements.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <AlertCircle className="w-12 h-12 mx-auto mb-2" />
-              <p>Nenhuma movimentação registrada</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Data</TableHead>
-                    <TableHead>Viatura</TableHead>
-                    <TableHead>Posto/Grad</TableHead>
-                    <TableHead>RG</TableHead>
-                    <TableHead>Motorista</TableHead>
-                    <TableHead>Destino</TableHead>
-                    <TableHead className="text-right">KM Saída</TableHead>
-                    <TableHead className="text-right">KM Chegada</TableHead>
-                    <TableHead>Horário Saída</TableHead>
-                    <TableHead>Horário Chegada</TableHead>
-                    <TableHead className="text-right">Tempo</TableHead>
-                    <TableHead className="text-right">Distância</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {recentMovements.map((movement) => {
-                    const distance = movement.arrivalKm
-                      ? movement.arrivalKm - movement.departureKm
-                      : null;
+      <div>
+        <div className="flex items-center gap-3 mb-4">
+          <h2
+            className="text-lg text-[#1a1a1a] tracking-[0.08em] uppercase"
+            style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600 }}
+          >
+            Últimas Saídas
+          </h2>
+          <div className="h-0.5 flex-1" style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.06), transparent)" }} />
+        </div>
 
-                    const departureDate = new Date(movement.departureTime);
-                    const dateStr = departureDate.toLocaleDateString("pt-BR", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "2-digit",
-                    });
+        {recentMovements.length === 0 ? (
+          <div className="text-center py-12" style={velPanelSquare}>
+            <AlertCircle size={32} className="mx-auto mb-2 text-[#ccc]" />
+            <p className="text-[#999] text-sm">Nenhuma movimentação registrada</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto" style={velPanelSquare}>
+            <table className="w-full text-sm">
+              <thead>
+                <tr style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+                  {["Data", "Viatura", "Posto/Grad", "RG", "Motorista", "Destino"].map((h) => (
+                    <th
+                      key={h}
+                      className="text-left px-3 py-2.5 text-[10px] text-[#999] tracking-[0.15em] uppercase font-semibold"
+                      style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                  {["KM Saída", "KM Chegada"].map((h) => (
+                    <th
+                      key={h}
+                      className="text-right px-3 py-2.5 text-[10px] text-[#999] tracking-[0.15em] uppercase font-semibold"
+                      style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                  {["Saída", "Chegada"].map((h) => (
+                    <th
+                      key={h}
+                      className="text-left px-3 py-2.5 text-[10px] text-[#999] tracking-[0.15em] uppercase font-semibold"
+                      style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                  {["Tempo", "Distância"].map((h) => (
+                    <th
+                      key={h}
+                      className="text-right px-3 py-2.5 text-[10px] text-[#999] tracking-[0.15em] uppercase font-semibold"
+                      style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                  <th
+                    className="text-right px-3 py-2.5 text-[10px] text-[#999] tracking-[0.15em] uppercase font-semibold"
+                    style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
+                  >
+                    Ações
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentMovements.map((movement) => {
+                  const distance = movement.arrivalKm
+                    ? movement.arrivalKm - movement.departureKm
+                    : null;
 
-                    // Calcular tempo fora
-                    let timeOutStr = "—";
-                    if (movement.arrivalTime) {
-                      const timeOutMinutes = Math.floor(
-                        (movement.arrivalTime - movement.departureTime) /
-                          (1000 * 60),
-                      );
-                      const hours = Math.floor(timeOutMinutes / 60);
-                      const minutes = timeOutMinutes % 60;
-                      timeOutStr = `${hours}h ${minutes.toString().padStart(2, "0")}min`;
-                    }
+                  const departureDate = new Date(movement.departureTime);
+                  const dateStr = departureDate.toLocaleDateString("pt-BR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "2-digit",
+                  });
 
-                    return (
-                      <TableRow
-                        key={movement._id}
-                        className={
-                          movement.status === "em_transito"
-                            ? "bg-orange-50 dark:bg-orange-950/20"
-                            : ""
-                        }
-                      >
-                        <TableCell className="font-medium">{dateStr}</TableCell>
-                        <TableCell>
-                          <Badge className={getVehicleTypeColor(movement.vehicle?.type)}>
-                            {movement.vehicle?.operationalPrefix}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{movement.personnel?.rank}</TableCell>
-                        <TableCell>{movement.personnel?.rg}</TableCell>
-                        <TableCell>{movement.personnel?.name}</TableCell>
-                        <TableCell>{movement.destination}</TableCell>
-                        <TableCell className="text-right font-mono">
-                          {new Intl.NumberFormat("pt-BR").format(
-                            movement.departureKm,
-                          )}
-                        </TableCell>
-                        <TableCell className="text-right font-mono">
-                          {movement.arrivalKm ? (
-                            new Intl.NumberFormat("pt-BR").format(
+                  // Calcular tempo fora
+                  let timeOutStr = "—";
+                  if (movement.arrivalTime) {
+                    const timeOutMinutes = Math.floor(
+                      (movement.arrivalTime - movement.departureTime) /
+                        (1000 * 60),
+                    );
+                    const hours = Math.floor(timeOutMinutes / 60);
+                    const minutes = timeOutMinutes % 60;
+                    timeOutStr = `${hours}h ${minutes.toString().padStart(2, "0")}min`;
+                  }
+
+                  const isInTransit = movement.status === "em_transito";
+
+                  return (
+                    <tr
+                      key={movement._id}
+                      className="transition-colors hover:bg-black/[0.015]"
+                      style={{
+                        borderBottom: "1px solid rgba(0,0,0,0.04)",
+                        background: isInTransit ? "rgba(220,38,38,0.02)" : undefined,
+                      }}
+                    >
+                      <td className="px-3 py-2.5 text-[#1a1a1a] font-medium tabular-nums">{dateStr}</td>
+                      <td className="px-3 py-2.5">
+                        <span
+                          className="text-[11px] font-semibold tracking-wider uppercase px-2 py-0.5 inline-block"
+                          style={{
+                            fontFamily: "'Barlow Condensed', sans-serif",
+                            background: "rgba(220,38,38,0.06)",
+                            color: "#b91c1c",
+                            clipPath: "polygon(0 0, calc(100% - 3px) 0, 100% 3px, 100% 100%, 3px 100%, 0 calc(100% - 3px))",
+                          }}
+                        >
+                          {movement.vehicle?.operationalPrefix}
+                        </span>
+                      </td>
+                      <td className="px-3 py-2.5 text-[#666]">{movement.personnel?.rank}</td>
+                      <td className="px-3 py-2.5 text-[#666] tabular-nums">{movement.personnel?.rg}</td>
+                      <td className="px-3 py-2.5 text-[#1a1a1a]">{movement.personnel?.name}</td>
+                      <td className="px-3 py-2.5 text-[#1a1a1a]">{movement.destination}</td>
+                      <td className="px-3 py-2.5 text-right text-[#1a1a1a] tabular-nums" style={{ fontFamily: "'Barlow', sans-serif" }}>
+                        {new Intl.NumberFormat("pt-BR").format(
+                          movement.departureKm,
+                        )}
+                      </td>
+                      <td className="px-3 py-2.5 text-right tabular-nums" style={{ fontFamily: "'Barlow', sans-serif" }}>
+                        {movement.arrivalKm ? (
+                          <span className="text-[#1a1a1a]">
+                            {new Intl.NumberFormat("pt-BR").format(
                               movement.arrivalKm,
-                            )
-                          ) : (
-                            <span className="text-orange-600 font-bold">—</span>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {new Date(movement.departureTime).toLocaleTimeString(
-                            "pt-BR",
-                            {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            },
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {movement.arrivalTime ? (
-                            new Date(movement.arrivalTime).toLocaleTimeString(
+                            )}
+                          </span>
+                        ) : (
+                          <span className="text-[#dc2626] font-bold">—</span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2.5 text-[#1a1a1a] tabular-nums">
+                        {new Date(movement.departureTime).toLocaleTimeString(
+                          "pt-BR",
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          },
+                        )}
+                      </td>
+                      <td className="px-3 py-2.5 tabular-nums">
+                        {movement.arrivalTime ? (
+                          <span className="text-[#1a1a1a]">
+                            {new Date(movement.arrivalTime).toLocaleTimeString(
                               "pt-BR",
                               {
                                 hour: "2-digit",
                                 minute: "2-digit",
                               },
-                            )
-                          ) : (
-                            <span className="text-orange-600 font-bold">—</span>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-right font-mono">
-                          {movement.arrivalTime ? (
-                            <span className="text-blue-700 dark:text-blue-400">
-                              {timeOutStr}
-                            </span>
-                          ) : (
-                            <span className="text-orange-600 font-bold">—</span>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-right font-mono">
-                          {distance !== null ? (
-                            <span className="text-green-700 dark:text-green-400">
-                              {new Intl.NumberFormat("pt-BR").format(distance)}{" "}
-                              km
-                            </span>
-                          ) : (
-                            <span className="text-orange-600 font-bold">—</span>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex gap-1 justify-end">
-                            <button
-                              type="button"
-                              className="inline-flex items-center justify-center h-8 rounded-md px-2.5 text-sm hover:bg-accent hover:text-accent-foreground"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleEditClick(movement);
-                              }}
-                              title="Editar saída"
-                            >
-                              <Pencil className="w-4 h-4" />
-                            </button>
-                            <button
-                              type="button"
-                              className="inline-flex items-center justify-center h-8 rounded-md px-2.5 text-sm hover:bg-accent hover:text-accent-foreground"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteClick(movement._id);
-                              }}
-                              title="Deletar saída"
-                            >
-                              <Trash2 className="w-4 h-4 text-destructive" />
-                            </button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+                            )}
+                          </span>
+                        ) : (
+                          <span className="text-[#dc2626] font-bold">—</span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2.5 text-right tabular-nums" style={{ fontFamily: "'Barlow', sans-serif" }}>
+                        {movement.arrivalTime ? (
+                          <span className="text-[#2563eb]">
+                            {timeOutStr}
+                          </span>
+                        ) : (
+                          <span className="text-[#dc2626] font-bold">—</span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2.5 text-right tabular-nums" style={{ fontFamily: "'Barlow', sans-serif" }}>
+                        {distance !== null ? (
+                          <span className="text-[#16a34a]">
+                            {new Intl.NumberFormat("pt-BR").format(distance)}{" "}
+                            km
+                          </span>
+                        ) : (
+                          <span className="text-[#dc2626] font-bold">—</span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2.5 text-right">
+                        <div className="flex gap-1 justify-end">
+                          <button
+                            type="button"
+                            className="inline-flex items-center justify-center h-7 w-7 text-[#999] hover:text-[#1a1a1a] transition-colors cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditClick(movement);
+                            }}
+                            title="Editar saída"
+                          >
+                            <Pencil size={14} />
+                          </button>
+                          <button
+                            type="button"
+                            className="inline-flex items-center justify-center h-7 w-7 text-[#ccc] hover:text-[#dc2626] transition-colors cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteClick(movement._id);
+                            }}
+                            title="Deletar saída"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
 
       {/* Modals */}
       <PersonnelQuickAddModal
@@ -604,33 +723,55 @@ export function GuaritaPage() {
       />
 
       {/* Delete Confirmation Dialog */}
-      <Dialog
-        open={deleteConfirm.open}
-        onOpenChange={(open) => setDeleteConfirm({ open, movementId: null })}
-      >
-        <DialogContent className="light text-foreground">
-          <DialogHeader>
-            <DialogTitle>Confirmar Exclusão</DialogTitle>
-            <DialogDescription>
+      {deleteConfirm.open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="fixed inset-0 bg-black/40"
+            onClick={() => setDeleteConfirm({ open: false, movementId: null })}
+          />
+          <div
+            className="relative z-10 w-full max-w-md p-6"
+            style={{
+              ...velPanel,
+              background: "white",
+              boxShadow: "0 8px 40px rgba(0,0,0,0.1)",
+            }}
+          >
+            <div
+              className="absolute top-0 right-0 w-3 h-3"
+              style={{ background: "linear-gradient(225deg, rgba(220,38,38,0.4) 50%, transparent 50%)" }}
+            />
+            <h3
+              className="text-lg text-[#1a1a1a] tracking-[0.05em] uppercase mb-2"
+              style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600 }}
+            >
+              Confirmar Exclusão
+            </h3>
+            <p className="text-sm text-[#999] mb-6">
               Tem certeza que deseja deletar esta movimentação? Esta ação não
               pode ser desfeita.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                setDeleteConfirm({ open: false, movementId: null })
-              }
-            >
-              Cancelar
-            </Button>
-            <Button variant="destructive" onClick={handleConfirmDelete}>
-              Deletar
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            </p>
+            <div className="flex gap-2 justify-end">
+              <button
+                className="transition-colors hover:text-[#1a1a1a]"
+                style={velBtnOutline}
+                onClick={() =>
+                  setDeleteConfirm({ open: false, movementId: null })
+                }
+              >
+                Cancelar
+              </button>
+              <button
+                className="transition-all hover:brightness-110"
+                style={velBtnPrimary}
+                onClick={handleConfirmDelete}
+              >
+                Deletar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

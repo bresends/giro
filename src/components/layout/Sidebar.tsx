@@ -13,7 +13,13 @@ export function Sidebar() {
   const location = useLocation();
 
   return (
-    <aside className="fixed left-0 top-[73px] h-[calc(100vh-73px)] w-64 bg-background border-r overflow-y-auto">
+    <aside
+      className="fixed left-0 top-[65px] h-[calc(100vh-65px)] w-60 overflow-y-auto"
+      style={{
+        background: "#fff",
+        borderRight: "1px solid rgba(0,0,0,0.06)",
+      }}
+    >
       <nav className="p-4 space-y-1">
         {navigation.map((item) => {
           const isActive = location.pathname === item.path;
@@ -22,21 +28,40 @@ export function Sidebar() {
             <Link
               key={item.path}
               to={item.path}
-              className={`
-                flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition
-                ${
-                  isActive
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
-                }
-              `}
+              className="flex items-center gap-3 px-4 py-3 text-xs tracking-[0.1em] uppercase transition-colors"
+              style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: isActive ? 700 : 500,
+                color: isActive ? "#dc2626" : "#999",
+                background: isActive ? "rgba(220,38,38,0.04)" : "transparent",
+                borderLeft: isActive ? "2px solid #dc2626" : "2px solid transparent",
+              }}
             >
-              <Icon className="w-5 h-5" />
+              <Icon size={18} strokeWidth={isActive ? 2.5 : 1.5} />
               <span>{item.name}</span>
             </Link>
           );
         })}
       </nav>
+
+      {/* Guarita link at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 p-4">
+        <Link
+          to="/guarita"
+          className="flex items-center justify-center gap-2 w-full px-4 py-3 text-xs tracking-[0.15em] uppercase transition-colors"
+          style={{
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontWeight: 600,
+            color: "#fff",
+            background: "#dc2626",
+            clipPath:
+              "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
+          }}
+        >
+          <Truck size={16} />
+          Guarita
+        </Link>
+      </div>
     </aside>
   );
 }

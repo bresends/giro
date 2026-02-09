@@ -5,9 +5,42 @@ import { StatCard } from "../components/dashboard/StatCard";
 import { VehicleList } from "../components/vehicles/VehicleList";
 import { AlertsSection } from "../components/alerts/AlertsSection";
 import { Loading } from "../components/common/Loading";
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Truck, CheckCircle, Wrench, Briefcase, AlertTriangle, ShieldCheck, ExternalLink } from "lucide-react";
+
+const velPanel: React.CSSProperties = {
+  background: "#fff",
+  border: "1px solid rgba(0,0,0,0.06)",
+  padding: "24px",
+  clipPath:
+    "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))",
+};
+
+const velSectionLabel: React.CSSProperties = {
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontWeight: 600,
+  fontSize: 10,
+  letterSpacing: "0.15em",
+  textTransform: "uppercase",
+  color: "#999",
+};
+
+const velBtnPrimary: React.CSSProperties = {
+  background: "#dc2626",
+  color: "#fff",
+  padding: "8px 20px",
+  border: "none",
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontWeight: 600,
+  fontSize: 13,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  clipPath:
+    "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+  cursor: "pointer",
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 8,
+};
 
 export function DashboardPage() {
   const navigate = useNavigate();
@@ -21,106 +54,151 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      {/* Page Title */}
       <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Visão geral da frota
+        <h1
+          style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: 28,
+            color: "#1a1a1a",
+            letterSpacing: "0.04em",
+            margin: 0,
+          }}
+        >
+          Dashboard
+        </h1>
+        <p style={{ color: "#999", fontFamily: "'Barlow', sans-serif", fontSize: 14, marginTop: 4 }}>
+          Visao geral da frota
         </p>
       </div>
 
-      {/* Métricas principais */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      {/* Stat Cards Grid */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+          gap: 16,
+        }}
+      >
         <StatCard
           title="Total de Viaturas"
           value={stats.total}
           icon={Truck}
-          iconColor="text-blue-500"
+          iconColor="#2563eb"
         />
         <StatCard
           title="Ativas"
           value={stats.active}
           subtitle={`${stats.activePercentage}% da frota`}
           icon={CheckCircle}
-          iconColor="text-green-500"
+          iconColor="#16a34a"
         />
         <StatCard
-          title="Em Manutenção"
+          title="Em Manutencao"
           value={stats.inMaintenance}
           subtitle={`${stats.inMaintenancePercentage}% da frota`}
           icon={Wrench}
-          iconColor="text-orange-500"
+          iconColor="#ea580c"
         />
         <StatCard
           title="Operacionais"
           value={stats.operational}
           subtitle={`${stats.backup} em backup`}
           icon={Briefcase}
-          iconColor="text-blue-600"
+          iconColor="#2563eb"
         />
         <StatCard
           title="Alertas"
           value={alertsSummary.total}
-          subtitle={alertsSummary.critical > 0 ? `${alertsSummary.critical} críticos` : "Tudo em ordem"}
+          subtitle={alertsSummary.critical > 0 ? `${alertsSummary.critical} criticos` : "Tudo em ordem"}
           icon={AlertTriangle}
-          iconColor={alertsSummary.critical > 0 ? "text-red-500" : alertsSummary.high > 0 ? "text-orange-500" : "text-green-500"}
+          iconColor={alertsSummary.critical > 0 ? "#dc2626" : alertsSummary.high > 0 ? "#ea580c" : "#16a34a"}
         />
       </div>
 
-      {/* Acesso ao Sistema Guarita */}
-      <Card className="border-blue-200 dark:border-blue-800 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg">
-                <ShieldCheck className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-blue-900 dark:text-blue-100 flex items-center gap-2">
-                  Sistema Guarita
-                  <ExternalLink className="w-4 h-4" />
-                </h3>
-                <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-                  Controle de saídas e chegadas de viaturas
-                </p>
-              </div>
-            </div>
-            <Button
-              size="lg"
-              onClick={() => navigate("/guarita")}
-              className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
-            >
-              <ShieldCheck className="w-5 h-5 mr-2" />
-              Acessar Guarita
-            </Button>
+      {/* Guarita Access Panel */}
+      <div
+        style={{
+          ...velPanel,
+          borderLeft: "3px solid #2563eb",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 16,
+          flexWrap: "wrap",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <div
+            style={{
+              width: 52,
+              height: 52,
+              background: "#2563eb",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              clipPath:
+                "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
+            }}
+          >
+            <ShieldCheck size={28} color="#fff" />
           </div>
-        </CardContent>
-      </Card>
+          <div>
+            <h3
+              style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 600,
+                fontSize: 16,
+                color: "#1a1a1a",
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+                margin: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              Sistema Guarita
+              <ExternalLink size={14} color="#999" />
+            </h3>
+            <p style={{ color: "#999", fontFamily: "'Barlow', sans-serif", fontSize: 13, marginTop: 2 }}>
+              Controle de saidas e chegadas de viaturas
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={() => navigate("/guarita")}
+          style={{
+            ...velBtnPrimary,
+            background: "#2563eb",
+          }}
+        >
+          <ShieldCheck size={16} />
+          Acessar Guarita
+        </button>
+      </div>
 
-      {/* Alertas */}
+      {/* Alerts Section */}
       {alertsSummary.hasAlerts && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-orange-500" />
-              Alertas de Manutenção
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <AlertsSection alerts={alerts} />
-          </CardContent>
-        </Card>
+        <div style={velPanel}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+            <AlertTriangle size={18} color="#ea580c" />
+            <span style={velSectionLabel}>Alertas de Manutencao</span>
+          </div>
+          <div style={{ width: 24, height: 2, background: "#dc2626", marginBottom: 16 }} />
+          <AlertsSection alerts={alerts} />
+        </div>
       )}
 
-      {/* Lista de viaturas */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Todas as Viaturas</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <VehicleList vehicles={allVehicles as any} />
-        </CardContent>
-      </Card>
+      {/* Vehicles List */}
+      <div style={velPanel}>
+        <div style={{ marginBottom: 16 }}>
+          <span style={velSectionLabel}>Todas as Viaturas</span>
+          <div style={{ width: 24, height: 2, background: "#dc2626", marginTop: 8 }} />
+        </div>
+        <VehicleList vehicles={allVehicles as any} />
+      </div>
     </div>
   );
 }

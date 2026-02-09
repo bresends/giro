@@ -1,8 +1,4 @@
 import { FormEvent, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Id } from "../../../convex/_generated/dataModel";
 import { SimpleSelect } from "../common/SimpleSelect";
 
@@ -25,6 +21,66 @@ interface IssueFormProps {
   onCancel: () => void;
   isEdit?: boolean;
 }
+
+const velInput: React.CSSProperties = {
+  width: "100%",
+  padding: "8px 12px",
+  border: "1px solid #e5e5e5",
+  background: "#fff",
+  color: "#1a1a1a",
+  fontSize: 14,
+  fontFamily: "'Barlow', sans-serif",
+  clipPath:
+    "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+  outline: "none",
+};
+
+const velTextarea: React.CSSProperties = {
+  ...velInput,
+  resize: "vertical" as const,
+  minHeight: 100,
+};
+
+const velLabel: React.CSSProperties = {
+  display: "block",
+  fontSize: 10,
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontWeight: 600,
+  letterSpacing: "0.15em",
+  textTransform: "uppercase",
+  color: "#999",
+  marginBottom: 6,
+};
+
+const velBtnPrimary: React.CSSProperties = {
+  background: "#dc2626",
+  color: "#fff",
+  padding: "8px 20px",
+  border: "none",
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontWeight: 600,
+  fontSize: 13,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  clipPath:
+    "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+  cursor: "pointer",
+};
+
+const velBtnOutline: React.CSSProperties = {
+  background: "transparent",
+  color: "#999",
+  padding: "8px 20px",
+  border: "1px solid rgba(0,0,0,0.1)",
+  fontFamily: "'Barlow Condensed', sans-serif",
+  fontWeight: 600,
+  fontSize: 13,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  clipPath:
+    "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))",
+  cursor: "pointer",
+};
 
 export function IssueForm({
   initialData,
@@ -79,8 +135,14 @@ export function IssueForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-md p-3">
-          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        <div
+          className="p-3"
+          style={{
+            borderLeft: "2px solid #dc2626",
+            background: "rgba(220,38,38,0.04)",
+          }}
+        >
+          <p className="text-sm" style={{ color: "#dc2626", fontFamily: "'Barlow', sans-serif" }}>{error}</p>
         </div>
       )}
 
@@ -102,12 +164,12 @@ export function IssueForm({
         disabled={isEdit}
       />
 
-      <div className="space-y-2">
-        <Label htmlFor="title">
-          Título <span className="text-red-500">*</span>
-        </Label>
-        <Input
-          id="title"
+      <div>
+        <label style={velLabel}>
+          Título <span style={{ color: "#dc2626" }}>*</span>
+        </label>
+        <input
+          style={velInput}
           value={formData.title}
           onChange={(e) =>
             setFormData({ ...formData, title: e.target.value })
@@ -117,12 +179,12 @@ export function IssueForm({
         />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="description">
-          Descrição <span className="text-red-500">*</span>
-        </Label>
-        <Textarea
-          id="description"
+      <div>
+        <label style={velLabel}>
+          Descrição <span style={{ color: "#dc2626" }}>*</span>
+        </label>
+        <textarea
+          style={velTextarea}
           value={formData.description}
           onChange={(e) =>
             setFormData({ ...formData, description: e.target.value })
@@ -174,12 +236,12 @@ export function IssueForm({
       </div>
 
       <div className="flex gap-3 pt-4">
-        <Button type="submit" disabled={isSubmitting}>
+        <button type="submit" disabled={isSubmitting} style={{ ...velBtnPrimary, opacity: isSubmitting ? 0.6 : 1 }}>
           {isSubmitting ? "Salvando..." : isEdit ? "Atualizar" : "Cadastrar"}
-        </Button>
-        <Button type="button" variant="secondary" onClick={onCancel}>
+        </button>
+        <button type="button" style={velBtnOutline} onClick={onCancel}>
           Cancelar
-        </Button>
+        </button>
       </div>
     </form>
   );
