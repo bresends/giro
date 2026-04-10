@@ -13,7 +13,7 @@ export function IssueFormPage() {
   const navigate = useNavigate();
   const isEdit = !!id;
 
-  const vehicles = useQuery(api.vehicles.list, {});
+  const vehicles = useQuery(api.vehicles.listSimple, {});
   const issue = useQuery(
     api.vehicleIssues.get,
     id ? { id: id as Id<"vehicleIssues"> } : "skip"

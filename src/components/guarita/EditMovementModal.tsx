@@ -51,7 +51,7 @@ export function EditMovementModal({
   onOpenChange,
   movement,
 }: EditMovementModalProps) {
-  const vehicles = useQuery(api.vehicles.list, { inMaintenance: false });
+  const vehicles = useQuery(api.vehicles.listSimple, { inMaintenance: false });
   const personnel = useQuery(api.personnel.list, { activeOnly: true });
   const updateMovement = useMutation(api.vehicleMovements.update);
 

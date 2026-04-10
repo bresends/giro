@@ -1,6 +1,53 @@
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
+import { query, mutation, QueryCtx } from "./_generated/server";
+import { Doc } from "./_generated/dataModel";
 import { getAuthUserId } from "@convex-dev/auth/server";
+
+// Shared helper: enrich movements with vehicle and personnel info, returning only needed fields
+async function enrichMovements(ctx: QueryCtx, movements: Doc<"vehicleMovements">[]) {
+  return await Promise.all(
+    movements.map(async (movement) => {
+      const vehicle = await ctx.db.get(movement.vehicleId);
+      const personnel = await ctx.db.get(movement.personnelId);
+
+      let vehicleTypeName = "N/A";
+      if (vehicle) {
+        const vehicleType = await ctx.db.get(vehicle.typeId);
+        if (vehicleType) vehicleTypeName = vehicleType.name;
+      }
+
+      return {
+        _id: movement._id,
+        vehicleId: movement.vehicleId,
+        personnelId: movement.personnelId,
+        destination: movement.destination,
+        destinationType: movement.destinationType,
+        departureKm: movement.departureKm,
+        departureTime: movement.departureTime,
+        arrivalKm: movement.arrivalKm,
+        arrivalTime: movement.arrivalTime,
+        status: movement.status,
+        notes: movement.notes,
+        vehicle: vehicle
+          ? {
+              _id: vehicle._id,
+              operationalPrefix: vehicle.operationalPrefix,
+              plate: vehicle.plate,
+              type: vehicleTypeName,
+            }
+          : null,
+        personnel: personnel
+          ? {
+              _id: personnel._id,
+              rank: personnel.rank,
+              rg: personnel.rg,
+              name: personnel.name,
+            }
+          : null,
+      };
+    })
+  );
+}
 
 // Query: List today's movements (for guarita)
 export const listToday = query({
@@ -12,42 +59,10 @@ export const listToday = query({
 
     const movements = await ctx.db
       .query("vehicleMovements")
-      .withIndex("by_date")
-      .filter((q) => q.gte(q.field("departureTime"), startTimestamp))
+      .withIndex("by_date", (q) => q.gte("departureTime", startTimestamp))
       .collect();
 
-    // Get vehicle and personnel info
-    return await Promise.all(
-      movements.map(async (movement) => {
-        const vehicle = await ctx.db.get(movement.vehicleId);
-        const personnel = await ctx.db.get(movement.personnelId);
-
-        let vehicleType = null;
-        if (vehicle) {
-          vehicleType = await ctx.db.get(vehicle.typeId);
-        }
-
-        return {
-          ...movement,
-          vehicle: vehicle
-            ? {
-                _id: vehicle._id,
-                operationalPrefix: vehicle.operationalPrefix,
-                plate: vehicle.plate,
-                type: vehicleType ? vehicleType.name : "N/A",
-              }
-            : null,
-          personnel: personnel
-            ? {
-                _id: personnel._id,
-                rank: personnel.rank,
-                rg: personnel.rg,
-                name: personnel.name,
-              }
-            : null,
-        };
-      })
-    );
+    return await enrichMovements(ctx, movements);
   },
 });
 
@@ -61,38 +76,7 @@ export const listRecent = query({
       .order("desc")
       .take(50);
 
-    // Get vehicle and personnel info
-    return await Promise.all(
-      movements.map(async (movement) => {
-        const vehicle = await ctx.db.get(movement.vehicleId);
-        const personnel = await ctx.db.get(movement.personnelId);
-
-        let vehicleType = null;
-        if (vehicle) {
-          vehicleType = await ctx.db.get(vehicle.typeId);
-        }
-
-        return {
-          ...movement,
-          vehicle: vehicle
-            ? {
-                _id: vehicle._id,
-                operationalPrefix: vehicle.operationalPrefix,
-                plate: vehicle.plate,
-                type: vehicleType ? vehicleType.name : "N/A",
-              }
-            : null,
-          personnel: personnel
-            ? {
-                _id: personnel._id,
-                rank: personnel.rank,
-                rg: personnel.rg,
-                name: personnel.name,
-              }
-            : null,
-        };
-      })
-    );
+    return await enrichMovements(ctx, movements);
   },
 });
 
@@ -105,37 +89,7 @@ export const listInTransit = query({
       .withIndex("by_status", (q) => q.eq("status", "em_transito"))
       .collect();
 
-    return await Promise.all(
-      movements.map(async (movement) => {
-        const vehicle = await ctx.db.get(movement.vehicleId);
-        const personnel = await ctx.db.get(movement.personnelId);
-        
-        let vehicleType = null;
-        if (vehicle) {
-          vehicleType = await ctx.db.get(vehicle.typeId);
-        }
-
-        return {
-          ...movement,
-          vehicle: vehicle
-            ? {
-                _id: vehicle._id,
-                operationalPrefix: vehicle.operationalPrefix,
-                plate: vehicle.plate,
-                type: vehicleType ? vehicleType.name : "N/A",
-              }
-            : null,
-          personnel: personnel
-            ? {
-                _id: personnel._id,
-                rank: personnel.rank,
-                rg: personnel.rg,
-                name: personnel.name,
-              }
-            : null,
-        };
-      })
-    );
+    return await enrichMovements(ctx, movements);
   },
 });
 
@@ -171,51 +125,15 @@ export const listShiftMovements = query({
       endTimestamp = tomorrow7am.getTime();
     }
 
-    // Query with range filter
+    // Query with index range bounds (not .filter()) so Convex only scans the relevant range
     const movements = await ctx.db
       .query("vehicleMovements")
-      .withIndex("by_date")
-      .filter((q) =>
-        q.and(
-          q.gte(q.field("departureTime"), startTimestamp),
-          q.lt(q.field("departureTime"), endTimestamp)
-        )
+      .withIndex("by_date", (q) =>
+        q.gte("departureTime", startTimestamp).lt("departureTime", endTimestamp)
       )
-      .order("asc") // Chronological order
       .collect();
 
-    // Get vehicle and personnel info
-    return await Promise.all(
-      movements.map(async (movement) => {
-        const vehicle = await ctx.db.get(movement.vehicleId);
-        const personnel = await ctx.db.get(movement.personnelId);
-
-        let vehicleType = null;
-        if (vehicle) {
-          vehicleType = await ctx.db.get(vehicle.typeId);
-        }
-
-        return {
-          ...movement,
-          vehicle: vehicle
-            ? {
-                _id: vehicle._id,
-                operationalPrefix: vehicle.operationalPrefix,
-                plate: vehicle.plate,
-                type: vehicleType ? vehicleType.name : "N/A",
-              }
-            : null,
-          personnel: personnel
-            ? {
-                _id: personnel._id,
-                rank: personnel.rank,
-                rg: personnel.rg,
-                name: personnel.name,
-              }
-            : null,
-        };
-      })
-    );
+    return await enrichMovements(ctx, movements);
   },
 });
 
