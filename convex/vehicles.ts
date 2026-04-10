@@ -2,27 +2,47 @@ import { v } from "convex/values";
 import { query, mutation, QueryCtx } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
 
-// Helper function to check if vehicle has active maintenance
-// Only vehicles "in_progress" are considered unavailable
-// Vehicles "awaiting_ceman" are still available for use
-async function hasActiveMaintenance(ctx: QueryCtx, vehicleId: Id<"vehicles">) {
-  const activeMaintenance = await ctx.db
-    .query("maintenanceRecords")
-    .withIndex("by_vehicle", (q: any) => q.eq("vehicleId", vehicleId))
-    .filter((q: any) => q.eq(q.field("status"), "in_progress"))
-    .first();
-
-  return activeMaintenance !== null;
-}
-
-// Helper function to get active maintenance for vehicle
+// Helper function to get active maintenance for vehicle (in_progress only)
 async function getActiveMaintenance(ctx: QueryCtx, vehicleId: Id<"vehicles">) {
   return await ctx.db
     .query("maintenanceRecords")
-    .withIndex("by_vehicle", (q: any) => q.eq("vehicleId", vehicleId))
-    .filter((q: any) => q.eq(q.field("status"), "in_progress"))
+    .withIndex("by_vehicle_and_status", (q: any) =>
+      q.eq("vehicleId", vehicleId).eq("status", "in_progress")
+    )
     .first();
 }
+
+// Query: Lightweight list for dropdowns/selects (no joins except type name)
+export const listSimple = query({
+  args: {
+    inMaintenance: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    const vehicles = await ctx.db.query("vehicles").collect();
+
+    const results = await Promise.all(
+      vehicles.map(async (vehicle) => {
+        const type = await ctx.db.get(vehicle.typeId);
+        const activeMaintenance = await getActiveMaintenance(ctx, vehicle._id);
+        const inMaintenance = activeMaintenance !== null;
+
+        return {
+          _id: vehicle._id,
+          operationalPrefix: vehicle.operationalPrefix,
+          plate: vehicle.plate,
+          typeName: type?.name ?? "N/A",
+          serviceType: vehicle.serviceType,
+          inMaintenance,
+        };
+      })
+    );
+
+    if (args.inMaintenance !== undefined) {
+      return results.filter((v) => v.inMaintenance === args.inMaintenance);
+    }
+    return results;
+  },
+});
 
 // Query: Listar todas as viaturas com filtros opcionais
 export const list = query({
@@ -40,8 +60,7 @@ export const list = query({
     const vehiclesWithDetails = await Promise.all(
       vehicles.map(async (vehicle) => {
         const type = await ctx.db.get(vehicle.typeId);
-        const inMaintenance = await hasActiveMaintenance(ctx, vehicle._id);
-        const activeMaintenance = inMaintenance ? await getActiveMaintenance(ctx, vehicle._id) : null;
+        const activeMaintenance = await getActiveMaintenance(ctx, vehicle._id);
 
         // Get current KM from latest reading
         const latestReading = await ctx.db
@@ -55,7 +74,7 @@ export const list = query({
         return {
           ...vehicle,
           type,
-          inMaintenance,
+          inMaintenance: activeMaintenance !== null,
           maintenanceLocation: activeMaintenance?.location,
           currentKm,
         };
@@ -84,8 +103,7 @@ export const get = query({
     if (!vehicle) return null;
 
     const type = await ctx.db.get(vehicle.typeId);
-    const inMaintenance = await hasActiveMaintenance(ctx, args.id);
-    const activeMaintenance = inMaintenance ? await getActiveMaintenance(ctx, args.id) : null;
+    const activeMaintenance = await getActiveMaintenance(ctx, args.id);
 
     // Get current KM from latest reading
     const latestReading = await ctx.db
@@ -105,7 +123,7 @@ export const get = query({
     return {
       ...vehicle,
       type,
-      inMaintenance,
+      inMaintenance: activeMaintenance !== null,
       maintenanceLocation: activeMaintenance?.location,
       currentKm,
       kmUntilMaintenance,
@@ -125,13 +143,12 @@ export const getByPlate = query({
     if (!vehicle) return null;
 
     const type = await ctx.db.get(vehicle.typeId);
-    const inMaintenance = await hasActiveMaintenance(ctx, vehicle._id);
-    const activeMaintenance = inMaintenance ? await getActiveMaintenance(ctx, vehicle._id) : null;
+    const activeMaintenance = await getActiveMaintenance(ctx, vehicle._id);
 
     return {
       ...vehicle,
       type,
-      inMaintenance,
+      inMaintenance: activeMaintenance !== null,
       maintenanceLocation: activeMaintenance?.location,
     };
   },
@@ -149,13 +166,12 @@ export const getByPrefix = query({
     if (!vehicle) return null;
 
     const type = await ctx.db.get(vehicle.typeId);
-    const inMaintenance = await hasActiveMaintenance(ctx, vehicle._id);
-    const activeMaintenance = inMaintenance ? await getActiveMaintenance(ctx, vehicle._id) : null;
+    const activeMaintenance = await getActiveMaintenance(ctx, vehicle._id);
 
     return {
       ...vehicle,
       type,
-      inMaintenance,
+      inMaintenance: activeMaintenance !== null,
       maintenanceLocation: activeMaintenance?.location,
     };
   },
@@ -171,7 +187,8 @@ export const getStats = query({
     // Count vehicles with active maintenance
     let inMaintenance = 0;
     for (const vehicle of vehicles) {
-      if (await hasActiveMaintenance(ctx, vehicle._id)) {
+      const activeMaintenance = await getActiveMaintenance(ctx, vehicle._id);
+      if (activeMaintenance !== null) {
         inMaintenance++;
       }
     }
