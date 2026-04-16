@@ -57,6 +57,7 @@ export function ArrivalModal({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [warningConfirmed, setWarningConfirmed] = useState(false);
 
   // Reset form when dialog opens
   useEffect(() => {
@@ -65,6 +66,7 @@ export function ArrivalModal({
         arrivalKm: movement.departureKm,
       });
       setError(null);
+      setWarningConfirmed(false);
     }
   }, [open, movement]);
 
@@ -78,6 +80,15 @@ export function ArrivalModal({
       setError(
         `KM de chegada (${formData.arrivalKm}) não pode ser menor que KM de saída (${movement.departureKm} km)`
       );
+      return;
+    }
+
+    const distance = formData.arrivalKm - movement.departureKm;
+    if (distance > 500 && !warningConfirmed) {
+      setError(
+        `Distancia de ${new Intl.NumberFormat("pt-BR").format(distance)} km parece incorreta. Clique novamente em "Confirmar mesmo assim" se tiver certeza.`
+      );
+      setWarningConfirmed(true);
       return;
     }
 
@@ -104,6 +115,7 @@ export function ArrivalModal({
   if (!movement) return null;
 
   const kmTraveled = formData.arrivalKm - movement.departureKm;
+  const kmSuspicious = kmTraveled > 500;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -176,12 +188,13 @@ export function ArrivalModal({
               id="arrivalKm"
               type="number"
               value={formData.arrivalKm}
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData({
                   ...formData,
                   arrivalKm: parseInt(e.target.value) || 0,
-                })
-              }
+                });
+                setWarningConfirmed(false);
+              }}
               min={movement.departureKm}
               required
               className={`text-2xl font-bold h-16 ${
@@ -216,11 +229,32 @@ export function ArrivalModal({
           </div>
 
           {kmTraveled >= 0 && (
-            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-3 rounded-md">
-              <p className="text-sm text-green-800 dark:text-green-200">
-                <strong>Distância percorrida:</strong>{" "}
+            <div
+              className={`p-3 rounded-md border ${
+                kmTraveled > 500
+                  ? "bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-800"
+                  : kmTraveled === 0
+                    ? "bg-yellow-50 dark:bg-yellow-900/20 border-yellow-300 dark:border-yellow-800"
+                    : "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
+              }`}
+            >
+              <p
+                className={`text-sm ${
+                  kmTraveled > 500
+                    ? "text-red-800 dark:text-red-200"
+                    : kmTraveled === 0
+                      ? "text-yellow-800 dark:text-yellow-200"
+                      : "text-green-800 dark:text-green-200"
+                }`}
+              >
+                <strong>Distancia percorrida:</strong>{" "}
                 {new Intl.NumberFormat("pt-BR").format(kmTraveled)} km
               </p>
+              {kmTraveled > 500 && (
+                <p className="text-sm text-red-700 dark:text-red-300 mt-1 font-semibold">
+                  Distancia muito alta! Verifique se o KM esta correto.
+                </p>
+              )}
             </div>
           )}
 
@@ -236,8 +270,13 @@ export function ArrivalModal({
             <Button
               type="submit"
               disabled={isSubmitting || formData.arrivalKm < movement.departureKm}
+              variant={kmSuspicious && warningConfirmed ? "destructive" : "default"}
             >
-              {isSubmitting ? "Registrando..." : "Registrar Chegada"}
+              {isSubmitting
+                ? "Registrando..."
+                : kmSuspicious && warningConfirmed
+                  ? "Confirmar mesmo assim"
+                  : "Registrar Chegada"}
             </Button>
           </DialogFooter>
         </form>
