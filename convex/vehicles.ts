@@ -26,12 +26,19 @@ export const listSimple = query({
         const activeMaintenance = await getActiveMaintenance(ctx, vehicle._id);
         const inMaintenance = activeMaintenance !== null;
 
+        const latestReading = await ctx.db
+          .query("vehicleReadings")
+          .withIndex("by_vehicle", (q: any) => q.eq("vehicleId", vehicle._id))
+          .order("desc")
+          .first();
+
         return {
           _id: vehicle._id,
           operationalPrefix: vehicle.operationalPrefix,
           plate: vehicle.plate,
           typeName: type?.name ?? "N/A",
           serviceType: vehicle.serviceType,
+          currentKm: latestReading?.kmReading || 0,
           inMaintenance,
         };
       })
