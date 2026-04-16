@@ -127,7 +127,7 @@ export function MovementsPage() {
   const anomalyCount = movements.filter((m) => {
     if (m.status !== "concluido" || !m.arrivalKm) return false;
     const distance = m.arrivalKm - m.departureKm;
-    return distance === 0 || distance > 500;
+    return distance === 0 || distance > 1000;
   }).length;
 
   // Vehicle options for filter
@@ -171,7 +171,7 @@ export function MovementsPage() {
   function isAnomalousKm(movement: Movement): boolean {
     if (movement.status !== "concluido" || !movement.arrivalKm) return false;
     const distance = movement.arrivalKm - movement.departureKm;
-    return distance === 0 || distance > 500;
+    return distance === 0 || distance > 1000;
   }
 
   return (
