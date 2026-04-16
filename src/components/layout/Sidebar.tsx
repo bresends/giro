@@ -1,9 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Truck, Wrench, AlertTriangle, Settings } from "lucide-react";
+import { LayoutDashboard, Truck, ArrowLeftRight, Wrench, AlertTriangle, Settings } from "lucide-react";
 
 const navigation = [
   { name: "Dashboard", path: "/admin", Icon: LayoutDashboard },
   { name: "Viaturas", path: "/vehicles", Icon: Truck },
+  { name: "Movimentações", path: "/movements", Icon: ArrowLeftRight },
   { name: "Manutenções", path: "/maintenance", Icon: Wrench },
   { name: "Problemas", path: "/issues", Icon: AlertTriangle },
   { name: "Configurações", path: "/settings", Icon: Settings },

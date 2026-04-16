@@ -20,6 +20,7 @@ import { IssuesPage } from "./pages/IssuesPage";
 import { IssueDetailPage } from "./pages/IssueDetailPage";
 import { IssueFormPage } from "./pages/IssueFormPage";
 import { GuaritaPage } from "./pages/GuaritaPage";
+import { MovementsPage } from "./pages/MovementsPage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
@@ -53,6 +54,9 @@ export default function App() {
                 <Route path="/vehicles/new" element={<VehicleFormPage />} />
                 <Route path="/vehicles/:id" element={<VehicleDetailPage />} />
                 <Route path="/vehicles/:id/edit" element={<VehicleFormPage />} />
+
+                {/* Rotas de Movimentações */}
+                <Route path="/movements" element={<MovementsPage />} />
 
                 {/* Rotas de Manutenções */}
                 <Route path="/maintenance" element={<MaintenancesPage />} />
