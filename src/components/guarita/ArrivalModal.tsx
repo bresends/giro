@@ -115,7 +115,7 @@ export function ArrivalModal({
   if (!movement) return null;
 
   const kmTraveled = formData.arrivalKm - movement.departureKm;
-  const kmSuspicious = kmTraveled > 500;
+  const kmSuspicious = kmTraveled > 1000;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -231,7 +231,7 @@ export function ArrivalModal({
           {kmTraveled >= 0 && (
             <div
               className={`p-3 rounded-md border ${
-                kmTraveled > 500
+                kmTraveled > 1000
                   ? "bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-800"
                   : kmTraveled === 0
                     ? "bg-yellow-50 dark:bg-yellow-900/20 border-yellow-300 dark:border-yellow-800"
@@ -240,7 +240,7 @@ export function ArrivalModal({
             >
               <p
                 className={`text-sm ${
-                  kmTraveled > 500
+                  kmTraveled > 1000
                     ? "text-red-800 dark:text-red-200"
                     : kmTraveled === 0
                       ? "text-yellow-800 dark:text-yellow-200"
@@ -250,7 +250,7 @@ export function ArrivalModal({
                 <strong>Distancia percorrida:</strong>{" "}
                 {new Intl.NumberFormat("pt-BR").format(kmTraveled)} km
               </p>
-              {kmTraveled > 500 && (
+              {kmTraveled > 1000 && (
                 <p className="text-sm text-red-700 dark:text-red-300 mt-1 font-semibold">
                   Distancia muito alta! Verifique se o KM esta correto.
                 </p>
