@@ -1,7 +1,20 @@
 import { v } from "convex/values";
 import { query, mutation, QueryCtx } from "./_generated/server";
-import { Doc } from "./_generated/dataModel";
+import { Doc, Id } from "./_generated/dataModel";
 import { getAuthUserId } from "@convex-dev/auth/server";
+
+// Helper: get current KM for a vehicle from its latest completed movement
+export async function getCurrentKm(ctx: QueryCtx, vehicleId: Id<"vehicles">) {
+  const latestCompleted = await ctx.db
+    .query("vehicleMovements")
+    .withIndex("by_vehicle_and_status", (q: any) =>
+      q.eq("vehicleId", vehicleId).eq("status", "concluido")
+    )
+    .order("desc")
+    .first();
+
+  return latestCompleted?.arrivalKm ?? 0;
+}
 
 // Shared helper: enrich movements with vehicle and personnel info, returning only needed fields
 async function enrichMovements(ctx: QueryCtx, movements: Doc<"vehicleMovements">[]) {
@@ -347,16 +360,6 @@ export const registerArrival = mutation({
       updatedAt: now,
     });
 
-    // Create vehicle reading automatically
-    await ctx.db.insert("vehicleReadings", {
-      vehicleId: movement.vehicleId,
-      kmReading: args.arrivalKm,
-      readingDate: arrivalTime,
-      recordedBy: "Sistema - Guarita",
-      notes: `Movimento finalizado: ${movement.destination}`,
-      createdAt: now,
-    });
-
     return args.id;
   },
 });
@@ -431,26 +434,6 @@ export const update = mutation({
       ...updateData,
       updatedAt: now,
     });
-
-    // If arrivalKm was changed on a completed movement, update the corresponding vehicleReading
-    if (updateData.arrivalKm !== undefined && movement.status === "concluido" && movement.arrivalKm !== undefined) {
-      const vehicleId = updateData.vehicleId ?? movement.vehicleId;
-      const readings = await ctx.db
-        .query("vehicleReadings")
-        .withIndex("by_vehicle", (q) => q.eq("vehicleId", vehicleId))
-        .order("desc")
-        .collect();
-
-      // Find the reading that matches the old arrival KM
-      const matchingReading = readings.find(
-        (r) => r.kmReading === movement.arrivalKm
-      );
-      if (matchingReading) {
-        await ctx.db.patch(matchingReading._id, {
-          kmReading: updateData.arrivalKm,
-        });
-      }
-    }
 
     return id;
   },

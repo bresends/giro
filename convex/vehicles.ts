@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { query, mutation, QueryCtx } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
+import { getCurrentKm } from "./vehicleMovements";
 
 // Helper function to get active maintenance for vehicle (in_progress only)
 async function getActiveMaintenance(ctx: QueryCtx, vehicleId: Id<"vehicles">) {
@@ -26,11 +27,7 @@ export const listSimple = query({
         const activeMaintenance = await getActiveMaintenance(ctx, vehicle._id);
         const inMaintenance = activeMaintenance !== null;
 
-        const latestReading = await ctx.db
-          .query("vehicleReadings")
-          .withIndex("by_vehicle", (q: any) => q.eq("vehicleId", vehicle._id))
-          .order("desc")
-          .first();
+        const currentKm = await getCurrentKm(ctx, vehicle._id);
 
         return {
           _id: vehicle._id,
@@ -38,7 +35,7 @@ export const listSimple = query({
           plate: vehicle.plate,
           typeName: type?.name ?? "N/A",
           serviceType: vehicle.serviceType,
-          currentKm: latestReading?.kmReading || 0,
+          currentKm,
           inMaintenance,
         };
       })
@@ -69,14 +66,7 @@ export const list = query({
         const type = await ctx.db.get(vehicle.typeId);
         const activeMaintenance = await getActiveMaintenance(ctx, vehicle._id);
 
-        // Get current KM from latest reading
-        const latestReading = await ctx.db
-          .query("vehicleReadings")
-          .withIndex("by_vehicle", (q: any) => q.eq("vehicleId", vehicle._id))
-          .order("desc")
-          .first();
-
-        const currentKm = latestReading?.kmReading || 0;
+        const currentKm = await getCurrentKm(ctx, vehicle._id);
 
         return {
           ...vehicle,
@@ -112,14 +102,7 @@ export const get = query({
     const type = await ctx.db.get(vehicle.typeId);
     const activeMaintenance = await getActiveMaintenance(ctx, args.id);
 
-    // Get current KM from latest reading
-    const latestReading = await ctx.db
-      .query("vehicleReadings")
-      .withIndex("by_vehicle", (q: any) => q.eq("vehicleId", args.id))
-      .order("desc")
-      .first();
-
-    const currentKm = latestReading?.kmReading || 0;
+    const currentKm = await getCurrentKm(ctx, args.id);
 
     // Calculate KM until maintenance if nextMaintenanceKm is set
     let kmUntilMaintenance = null;
