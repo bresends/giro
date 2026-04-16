@@ -1,4 +1,5 @@
 import { query, QueryCtx } from "./_generated/server";
+import { getCurrentKm } from "./vehicleMovements";
 
 // Helper function to calculate alerts
 async function calculateMaintenanceAlerts(ctx: QueryCtx) {
@@ -54,15 +55,9 @@ async function calculateMaintenanceAlerts(ctx: QueryCtx) {
 
     // Alert: Preventive maintenance based on manual nextMaintenanceKm
     if (vehicle.nextMaintenanceKm) {
-      // Get current KM from latest reading
-      const latestReading = await ctx.db
-        .query("vehicleReadings")
-        .withIndex("by_vehicle", (q: any) => q.eq("vehicleId", vehicle._id))
-        .order("desc")
-        .first();
+      const currentKm = await getCurrentKm(ctx, vehicle._id);
 
-      if (latestReading) {
-        const currentKm = latestReading.kmReading;
+      if (currentKm > 0) {
         const nextMaintenanceKm = vehicle.nextMaintenanceKm;
         const kmUntilMaintenance = nextMaintenanceKm - currentKm;
 
