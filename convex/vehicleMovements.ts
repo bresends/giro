@@ -16,6 +16,10 @@ async function enrichMovements(ctx: QueryCtx, movements: Doc<"vehicleMovements">
         if (vehicleType) vehicleTypeName = vehicleType.name;
       }
 
+      const registeredByUser = movement.registeredByDeparture
+        ? await ctx.db.get(movement.registeredByDeparture)
+        : null;
+
       return {
         _id: movement._id,
         vehicleId: movement.vehicleId,
@@ -28,6 +32,7 @@ async function enrichMovements(ctx: QueryCtx, movements: Doc<"vehicleMovements">
         arrivalTime: movement.arrivalTime,
         status: movement.status,
         notes: movement.notes,
+        registeredByDepartureName: registeredByUser?.name ?? registeredByUser?.email ?? null,
         vehicle: vehicle
           ? {
               _id: vehicle._id,
@@ -428,6 +433,78 @@ export const update = mutation({
     });
 
     return id;
+  },
+});
+
+// Query: List movements with optional filters (for admin page)
+export const listFiltered = query({
+  args: {
+    startDate: v.optional(v.number()),
+    endDate: v.optional(v.number()),
+    vehicleId: v.optional(v.id("vehicles")),
+    status: v.optional(
+      v.union(v.literal("em_transito"), v.literal("concluido"))
+    ),
+  },
+  handler: async (ctx, args) => {
+    let movements: Doc<"vehicleMovements">[];
+
+    if (args.startDate !== undefined && args.endDate !== undefined) {
+      movements = await ctx.db
+        .query("vehicleMovements")
+        .withIndex("by_date", (q) =>
+          q.gte("departureTime", args.startDate!).lt("departureTime", args.endDate!)
+        )
+        .order("desc")
+        .take(200);
+    } else if (args.startDate !== undefined) {
+      movements = await ctx.db
+        .query("vehicleMovements")
+        .withIndex("by_date", (q) => q.gte("departureTime", args.startDate!))
+        .order("desc")
+        .take(200);
+    } else if (args.endDate !== undefined) {
+      movements = await ctx.db
+        .query("vehicleMovements")
+        .withIndex("by_date", (q) => q.lt("departureTime", args.endDate!))
+        .order("desc")
+        .take(200);
+    } else if (args.vehicleId !== undefined) {
+      movements = await ctx.db
+        .query("vehicleMovements")
+        .withIndex("by_vehicle", (q) => q.eq("vehicleId", args.vehicleId!))
+        .order("desc")
+        .take(200);
+
+      if (args.status) {
+        movements = movements.filter((m) => m.status === args.status);
+      }
+    } else if (args.status) {
+      movements = await ctx.db
+        .query("vehicleMovements")
+        .withIndex("by_status", (q) => q.eq("status", args.status!))
+        .order("desc")
+        .take(200);
+    } else {
+      // No filters: return last 100
+      movements = await ctx.db
+        .query("vehicleMovements")
+        .withIndex("by_date")
+        .order("desc")
+        .take(100);
+    }
+
+    // Apply secondary filters for date-range queries
+    if (args.startDate !== undefined || args.endDate !== undefined) {
+      if (args.vehicleId) {
+        movements = movements.filter((m) => m.vehicleId === args.vehicleId);
+      }
+      if (args.status) {
+        movements = movements.filter((m) => m.status === args.status);
+      }
+    }
+
+    return await enrichMovements(ctx, movements);
   },
 });
 
