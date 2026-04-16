@@ -432,6 +432,26 @@ export const update = mutation({
       updatedAt: now,
     });
 
+    // If arrivalKm was changed on a completed movement, update the corresponding vehicleReading
+    if (updateData.arrivalKm !== undefined && movement.status === "concluido" && movement.arrivalKm !== undefined) {
+      const vehicleId = updateData.vehicleId ?? movement.vehicleId;
+      const readings = await ctx.db
+        .query("vehicleReadings")
+        .withIndex("by_vehicle", (q) => q.eq("vehicleId", vehicleId))
+        .order("desc")
+        .collect();
+
+      // Find the reading that matches the old arrival KM
+      const matchingReading = readings.find(
+        (r) => r.kmReading === movement.arrivalKm
+      );
+      if (matchingReading) {
+        await ctx.db.patch(matchingReading._id, {
+          kmReading: updateData.arrivalKm,
+        });
+      }
+    }
+
     return id;
   },
 });
