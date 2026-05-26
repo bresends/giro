@@ -185,7 +185,10 @@ export function MaintenanceDetailPage() {
                 <p className="text-sm text-muted-foreground mb-1">
                   Observações
                 </p>
-                <p className="text-base">{maintenance.notes}</p>
+                <div
+                  className="text-base [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-6"
+                  dangerouslySetInnerHTML={{ __html: maintenance.notes }}
+                />
               </div>
             )}
 
