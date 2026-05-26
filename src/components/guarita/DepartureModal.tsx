@@ -21,7 +21,7 @@ interface DepartureModalProps {
 }
 
 export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
-  const allVehicles = useQuery(api.vehicles.list, { inMaintenance: false });
+  const allVehicles = useQuery(api.vehicles.list, {});
   const inTransitMovements = useQuery(api.vehicleMovements.listInTransit);
   const personnel = useQuery(api.personnel.list, { activeOnly: true });
   const createMovement = useMutation(api.vehicleMovements.create);
