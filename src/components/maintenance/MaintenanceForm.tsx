@@ -1,9 +1,13 @@
 import { FormEvent, useState } from "react";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { Bold, Italic, List, ListOrdered, Redo2, Undo2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { SimpleSelect } from "../common/SimpleSelect";
 import { DatePicker } from "../common/DatePicker";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import { Id } from "../../../convex/_generated/dataModel";
 
 interface MaintenanceFormData {
@@ -30,6 +34,119 @@ interface MaintenanceFormProps {
   onSubmit: (data: any) => Promise<void>;
   onCancel: () => void;
   isEdit?: boolean;
+}
+
+interface NotesEditorProps {
+  value?: string;
+  onChange: (value: string) => void;
+}
+
+function NotesEditor({ value, onChange }: NotesEditorProps) {
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: value || "",
+    editorProps: {
+      attributes: {
+        "aria-label": "Observações",
+        class:
+          "min-h-32 px-3 py-2 text-sm outline-none [&_p]:my-2 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-6",
+      },
+    },
+    onUpdate: ({ editor }) => {
+      onChange(editor.isEmpty ? "" : editor.getHTML());
+    },
+  });
+
+  const toolbarButtonClass = "size-8";
+
+  return (
+    <div className="overflow-hidden rounded-md border border-input bg-background shadow-xs focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]">
+      <div className="flex flex-wrap items-center gap-1 border-b border-border bg-muted/30 p-2">
+        <Button
+          type="button"
+          variant={editor?.isActive("bold") ? "secondary" : "ghost"}
+          size="icon-sm"
+          className={toolbarButtonClass}
+          onClick={() => editor?.chain().focus().toggleBold().run()}
+          disabled={!editor?.can().chain().focus().toggleBold().run()}
+          aria-label="Negrito"
+          title="Negrito"
+        >
+          <Bold />
+        </Button>
+        <Button
+          type="button"
+          variant={editor?.isActive("italic") ? "secondary" : "ghost"}
+          size="icon-sm"
+          className={toolbarButtonClass}
+          onClick={() => editor?.chain().focus().toggleItalic().run()}
+          disabled={!editor?.can().chain().focus().toggleItalic().run()}
+          aria-label="Itálico"
+          title="Itálico"
+        >
+          <Italic />
+        </Button>
+        <div className="mx-1 h-5 w-px bg-border" />
+        <Button
+          type="button"
+          variant={editor?.isActive("bulletList") ? "secondary" : "ghost"}
+          size="icon-sm"
+          className={toolbarButtonClass}
+          onClick={() => editor?.chain().focus().toggleBulletList().run()}
+          aria-label="Lista"
+          title="Lista"
+        >
+          <List />
+        </Button>
+        <Button
+          type="button"
+          variant={editor?.isActive("orderedList") ? "secondary" : "ghost"}
+          size="icon-sm"
+          className={toolbarButtonClass}
+          onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+          aria-label="Lista numerada"
+          title="Lista numerada"
+        >
+          <ListOrdered />
+        </Button>
+        <div className="mx-1 h-5 w-px bg-border" />
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          className={toolbarButtonClass}
+          onClick={() => editor?.chain().focus().undo().run()}
+          disabled={!editor?.can().chain().focus().undo().run()}
+          aria-label="Desfazer"
+          title="Desfazer"
+        >
+          <Undo2 />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          className={toolbarButtonClass}
+          onClick={() => editor?.chain().focus().redo().run()}
+          disabled={!editor?.can().chain().focus().redo().run()}
+          aria-label="Refazer"
+          title="Refazer"
+        >
+          <Redo2 />
+        </Button>
+      </div>
+      <EditorContent
+        id="notes"
+        editor={editor}
+        className={cn(
+          "cursor-text",
+          "[&_.ProseMirror-focused]:outline-none",
+          "[&_.ProseMirror_p:first-child]:mt-0",
+          "[&_.ProseMirror_p:last-child]:mb-0"
+        )}
+      />
+    </div>
+  );
 }
 
 export function MaintenanceForm({
@@ -295,11 +412,9 @@ export function MaintenanceForm({
 
       <div className="space-y-2">
         <Label htmlFor="notes">Observações</Label>
-        <Input
-          id="notes"
+        <NotesEditor
           value={formData.notes}
-          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          placeholder="Anotações adicionais sobre a manutenção"
+          onChange={(notes) => setFormData({ ...formData, notes })}
         />
       </div>
 
