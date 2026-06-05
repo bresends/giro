@@ -1,18 +1,111 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { Id } from "./_generated/dataModel";
 
-// Query: Get checklist template for a specific vehicle and role
+// Query: List all operational functions (enriched with current vehicle details)
+export const listOperationalFunctions = query({
+  args: {
+    activeOnly: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    let functions = await ctx.db.query("operationalFunctions").collect();
+
+    if (args.activeOnly) {
+      functions = functions.filter((f) => f.active);
+    }
+
+    return await Promise.all(
+      functions.map(async (f) => {
+        const vehicle = f.currentVehicleId
+          ? await ctx.db.get(f.currentVehicleId)
+          : null;
+        return {
+          ...f,
+          vehicle: vehicle
+            ? {
+                _id: vehicle._id,
+                operationalPrefix: vehicle.operationalPrefix,
+                plate: vehicle.plate,
+                model: vehicle.model,
+              }
+            : null,
+        };
+      })
+    );
+  },
+});
+
+// Mutation: Save or update an operational function (Admin only)
+export const saveOperationalFunction = mutation({
+  args: {
+    id: v.optional(v.id("operationalFunctions")),
+    name: v.string(),
+    description: v.optional(v.string()),
+    active: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("Não autorizado. Usuário não autenticado.");
+    }
+
+    const now = Date.now();
+
+    if (args.id) {
+      await ctx.db.patch(args.id, {
+        name: args.name,
+        description: args.description,
+        active: args.active,
+      });
+      return args.id;
+    } else {
+      return await ctx.db.insert("operationalFunctions", {
+        name: args.name,
+        description: args.description,
+        active: args.active,
+        createdAt: now,
+      });
+    }
+  },
+});
+
+// Mutation: Assign a physical vehicle to an operational function (Admin only)
+export const assignVehicle = mutation({
+  args: {
+    operationalFunctionId: v.id("operationalFunctions"),
+    vehicleId: v.optional(v.id("vehicles")),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("Não autorizado. Usuário não autenticado.");
+    }
+
+    const opFunction = await ctx.db.get(args.operationalFunctionId);
+    if (!opFunction) {
+      throw new Error("Função operacional não encontrada.");
+    }
+
+    await ctx.db.patch(args.operationalFunctionId, {
+      currentVehicleId: args.vehicleId || undefined,
+    });
+
+    return args.operationalFunctionId;
+  },
+});
+
+// Query: Get checklist template for a specific operational function and role
 export const getTemplate = query({
   args: {
-    vehicleId: v.id("vehicles"),
+    operationalFunctionId: v.id("operationalFunctions"),
     role: v.union(v.literal("motorista"), v.literal("comandante")),
   },
   handler: async (ctx, args) => {
     const template = await ctx.db
       .query("vehicleChecklistTemplates")
-      .withIndex("by_vehicle_and_role", (q) =>
-        q.eq("vehicleId", args.vehicleId).eq("role", args.role)
+      .withIndex("by_function_and_role", (q) =>
+        q.eq("operationalFunctionId", args.operationalFunctionId).eq("role", args.role)
       )
       .first();
 
@@ -30,7 +123,7 @@ export const getTemplate = query({
 // Mutation: Save checklist template (Admin only)
 export const saveTemplate = mutation({
   args: {
-    vehicleId: v.id("vehicles"),
+    operationalFunctionId: v.id("operationalFunctions"),
     role: v.union(v.literal("motorista"), v.literal("comandante")),
     content: v.string(),
   },
@@ -42,8 +135,8 @@ export const saveTemplate = mutation({
 
     const existing = await ctx.db
       .query("vehicleChecklistTemplates")
-      .withIndex("by_vehicle_and_role", (q) =>
-        q.eq("vehicleId", args.vehicleId).eq("role", args.role)
+      .withIndex("by_function_and_role", (q) =>
+        q.eq("operationalFunctionId", args.operationalFunctionId).eq("role", args.role)
       )
       .first();
 
@@ -58,7 +151,7 @@ export const saveTemplate = mutation({
       return existing._id;
     } else {
       return await ctx.db.insert("vehicleChecklistTemplates", {
-        vehicleId: args.vehicleId,
+        operationalFunctionId: args.operationalFunctionId,
         role: args.role,
         content: args.content,
         updatedAt: now,
@@ -71,7 +164,7 @@ export const saveTemplate = mutation({
 // Mutation: Submit a checklist (Militar)
 export const submitChecklist = mutation({
   args: {
-    vehicleId: v.id("vehicles"),
+    operationalFunctionId: v.id("operationalFunctions"),
     role: v.union(v.literal("motorista"), v.literal("comandante")),
     hasAlterations: v.boolean(),
   },
@@ -81,16 +174,30 @@ export const submitChecklist = mutation({
       throw new Error("Não autorizado. Usuário não autenticado.");
     }
 
+    // Verify operational function exists
+    const opFunction = await ctx.db.get(args.operationalFunctionId);
+    if (!opFunction) {
+      throw new Error("Função operacional não encontrada.");
+    }
+
+    // Check if the admin linked a physical vehicle to this function for this shift
+    if (!opFunction.currentVehicleId) {
+      throw new Error(
+        `Esta função (${opFunction.name}) não possui nenhuma viatura física vinculada pelo Comando para este turno.`
+      );
+    }
+
     // Verify if vehicle exists
-    const vehicle = await ctx.db.get(args.vehicleId);
+    const vehicle = await ctx.db.get(opFunction.currentVehicleId);
     if (!vehicle) {
-      throw new Error("Viatura não encontrada.");
+      throw new Error("Viatura física vinculada não encontrada no sistema.");
     }
 
     const now = Date.now();
 
     return await ctx.db.insert("vehicleChecklistSubmissions", {
-      vehicleId: args.vehicleId,
+      operationalFunctionId: args.operationalFunctionId,
+      vehicleId: opFunction.currentVehicleId,
       userId: userId,
       role: args.role,
       hasAlterations: args.hasAlterations,
@@ -100,14 +207,15 @@ export const submitChecklist = mutation({
   },
 });
 
-// Query: List daily checklist status for all vehicles
+// Query: List daily checklist status for all operational functions
 export const listDailyStatus = query({
   args: {
     startMs: v.number(), // Shift start epoch ms
     endMs: v.number(),   // Shift end epoch ms
   },
   handler: async (ctx, args) => {
-    const vehicles = await ctx.db.query("vehicles").collect();
+    let functions = await ctx.db.query("operationalFunctions").collect();
+    functions = functions.filter((f) => f.active);
 
     // Fetch all submissions within the shift time range
     const submissions = await ctx.db
@@ -121,40 +229,59 @@ export const listDailyStatus = query({
       )
       .collect();
 
-    // Enrich submissions with user info (email/name)
+    // Enrich submissions with user and vehicle info
     const enrichedSubmissions = await Promise.all(
       submissions.map(async (sub) => {
         const user = await ctx.db.get(sub.userId);
+        const vehicle = await ctx.db.get(sub.vehicleId);
         return {
           ...sub,
           userName: user?.name || user?.email || "Usuário",
           userEmail: user?.email,
+          vehiclePrefix: vehicle?.operationalPrefix || "N/A",
+          vehiclePlate: vehicle?.plate || "N/A",
         };
       })
     );
 
-    // Map status per vehicle
-    return vehicles.map((v) => {
-      const vehicleSubmissions = enrichedSubmissions.filter(
-        (sub) => sub.vehicleId === v._id
-      );
+    // Map status per operational function
+    return await Promise.all(
+      functions.map(async (f) => {
+        const functionSubmissions = enrichedSubmissions.filter(
+          (sub) => sub.operationalFunctionId === f._id
+        );
 
-      const motoristaSub = vehicleSubmissions.find(
-        (sub) => sub.role === "motorista"
-      );
-      const comandanteSub = vehicleSubmissions.find(
-        (sub) => sub.role === "comandante"
-      );
+        const motoristaSub = functionSubmissions.find(
+          (sub) => sub.role === "motorista"
+        );
+        const comandanteSub = functionSubmissions.find(
+          (sub) => sub.role === "comandante"
+        );
 
-      return {
-        vehicleId: v._id,
-        operationalPrefix: v.operationalPrefix,
-        plate: v.plate,
-        model: v.model,
-        motorista: motoristaSub || null,
-        comandante: comandanteSub || null,
-      };
-    }).sort((a, b) => a.operationalPrefix.localeCompare(b.operationalPrefix));
+        // Get details of the vehicle assigned currently
+        const currentVehicle = f.currentVehicleId
+          ? await ctx.db.get(f.currentVehicleId)
+          : null;
+
+        return {
+          operationalFunctionId: f._id,
+          name: f.name,
+          active: f.active,
+          currentVehicle: currentVehicle
+            ? {
+                _id: currentVehicle._id,
+                operationalPrefix: currentVehicle.operationalPrefix,
+                plate: currentVehicle.plate,
+                model: currentVehicle.model,
+              }
+            : null,
+          motorista: motoristaSub || null,
+          comandante: comandanteSub || null,
+        };
+      })
+    ).then((list) =>
+      list.sort((a, b) => a.name.localeCompare(b.name))
+    );
   },
 });
 
@@ -193,3 +320,208 @@ export const updateSeiDetails = mutation({
     return args.submissionId;
   },
 });
+
+// Mutation: Seed operational functions if empty
+export const seed = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const existing = await ctx.db.query("operationalFunctions").collect();
+    if (existing.length > 0) return;
+
+    const baseFunctions = [
+      "ARCA-01",
+      "UR-8°BBM ORDINÁRIA",
+      "UR-DBM JARDIM SANTO ANTÔNIO",
+      "UR-8°BBM EXTRA",
+      "Combate a Incêndio e Salvamento",
+      "Combate a Incêndio",
+      "ASA-AREA",
+      "ASA-OCV",
+      "ASA-OPERAÇÃO TEMPESTADE"
+    ];
+
+    const now = Date.now();
+    for (const name of baseFunctions) {
+      await ctx.db.insert("operationalFunctions", {
+        name,
+        active: true,
+        createdAt: now,
+      });
+    }
+  },
+});
+
+// Mutation: Migrate legacy checklist templates and submissions to use operational functions
+export const migrateToOperationalFunctions = mutation({
+  args: {},
+  handler: async (ctx) => {
+    // 1. Ensure operational functions are seeded
+    const existingFunctions = await ctx.db.query("operationalFunctions").collect();
+    let seededFunctions: { _id: Id<"operationalFunctions">; name: string }[] = existingFunctions;
+    if (existingFunctions.length === 0) {
+      const baseFunctions = [
+        "ARCA-01",
+        "UR-8°BBM ORDINÁRIA",
+        "UR-DBM JARDIM SANTO ANTÔNIO",
+        "UR-8°BBM EXTRA",
+        "Combate a Incêndio e Salvamento",
+        "Combate a Incêndio",
+        "ASA-AREA",
+        "ASA-OCV",
+        "ASA-OPERAÇÃO TEMPESTADE"
+      ];
+      const now = Date.now();
+      const newFunctions = [];
+      for (const name of baseFunctions) {
+        const id = await ctx.db.insert("operationalFunctions", {
+          name,
+          active: true,
+          createdAt: now,
+        });
+        newFunctions.push({ _id: id, name });
+      }
+      seededFunctions = newFunctions;
+    }
+
+    // Helper: find closest operational function based on vehicle details
+    const findOpFunctionForVehicle = (prefix: string) => {
+      const upperPrefix = prefix.toUpperCase();
+      if (upperPrefix.includes("ASA")) {
+        return seededFunctions.find((f) => f.name.includes("ASA-AREA"))?._id || seededFunctions[0]._id;
+      }
+      if (upperPrefix.includes("ARCA")) {
+        return seededFunctions.find((f) => f.name.includes("ARCA-01"))?._id || seededFunctions[0]._id;
+      }
+      if (upperPrefix.includes("ABTS")) {
+        return seededFunctions.find((f) => f.name.includes("Salvamento"))?._id || seededFunctions[0]._id;
+      }
+      if (upperPrefix.includes("ABT")) {
+        return seededFunctions.find((f) => f.name.includes("Combate a Incêndio") && !f.name.includes("Salvamento"))?._id || seededFunctions[0]._id;
+      }
+      if (upperPrefix.includes("UR")) {
+        if (upperPrefix.includes("JARDIM") || upperPrefix.includes("SANTO")) {
+          return seededFunctions.find((f) => f.name.includes("JARDIM SANTO"))?._id || seededFunctions[0]._id;
+        }
+        if (upperPrefix.includes("EXTRA")) {
+          return seededFunctions.find((f) => f.name.includes("EXTRA"))?._id || seededFunctions[0]._id;
+        }
+        return seededFunctions.find((f) => f.name.includes("ORDINÁRIA"))?._id || seededFunctions[0]._id;
+      }
+      return seededFunctions[0]._id; // Fallback to first function
+    };
+
+
+    // 2. Migrate Templates
+    const templates = await ctx.db.query("vehicleChecklistTemplates").collect();
+    console.log(`Encontrados ${templates.length} templates para migração.`);
+    for (const template of templates) {
+      const legacyTemplate = template as any;
+      console.log(`Template ID: ${template._id}, functionId: ${legacyTemplate.operationalFunctionId}, vehicleId: ${legacyTemplate.vehicleId}`);
+      if (!legacyTemplate.operationalFunctionId) {
+        let prefix = "ASA";
+        if (legacyTemplate.vehicleId) {
+          const vehicle = (await ctx.db.get(legacyTemplate.vehicleId)) as any;
+          prefix = vehicle?.operationalPrefix || "ASA";
+        }
+        const opFunctionId = findOpFunctionForVehicle(prefix);
+        console.log(`Patching template ${template._id} to operationalFunctionId: ${opFunctionId}`);
+        await ctx.db.patch(template._id, {
+          operationalFunctionId: opFunctionId,
+          vehicleId: undefined, // Remove legacy field
+        } as any);
+      }
+    }
+
+    // 3. Migrate Submissions
+    const submissions = await ctx.db.query("vehicleChecklistSubmissions").collect();
+    console.log(`Encontradas ${submissions.length} submissões para migração.`);
+    for (const sub of submissions) {
+      const legacySub = sub as any;
+      if (!legacySub.operationalFunctionId) {
+        let prefix = "ASA";
+        if (legacySub.vehicleId) {
+          const vehicle = (await ctx.db.get(legacySub.vehicleId)) as any;
+          prefix = vehicle?.operationalPrefix || "ASA";
+        }
+        const opFunctionId = findOpFunctionForVehicle(prefix);
+        console.log(`Patching submission ${sub._id} to operationalFunctionId: ${opFunctionId}`);
+        await ctx.db.patch(sub._id, {
+          operationalFunctionId: opFunctionId,
+        } as any);
+      }
+    }
+  },
+});
+
+// Query: List all checklist templates for diagnostic purposes
+export const listAllTemplates = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("vehicleChecklistTemplates").collect();
+  },
+});
+
+
+
+// Mutation: Rename default functions in the database (ABT-32 -> Combate a Incêndio, ABTS-12 -> Combate a Incêndio e Salvamento)
+export const renameDefaultFunctions = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const abt32 = await ctx.db
+      .query("operationalFunctions")
+      .filter((q) => q.eq(q.field("name"), "ABT-32"))
+      .first();
+    if (abt32) {
+      await ctx.db.patch(abt32._id, { name: "Combate a Incêndio" });
+    }
+
+    const abts12 = await ctx.db
+      .query("operationalFunctions")
+      .filter((q) => q.eq(q.field("name"), "ABTS-12"))
+      .first();
+    if (abts12) {
+      await ctx.db.patch(abts12._id, { name: "Combate a Incêndio e Salvamento" });
+    }
+  },
+});
+
+// Mutation: Delete an operational function (Admin only)
+export const removeOperationalFunction = mutation({
+  args: {
+    id: v.id("operationalFunctions"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("Não autorizado. Usuário não autenticado.");
+    }
+
+    // 1. Delete associated templates
+    const templates = await ctx.db
+      .query("vehicleChecklistTemplates")
+      .withIndex("by_function_and_role")
+      .filter((q) => q.eq(q.field("operationalFunctionId"), args.id))
+      .collect();
+    for (const template of templates) {
+      await ctx.db.delete(template._id);
+    }
+
+    // 2. Delete associated submissions
+    const submissions = await ctx.db
+      .query("vehicleChecklistSubmissions")
+      .withIndex("by_function_and_date")
+      .filter((q) => q.eq(q.field("operationalFunctionId"), args.id))
+      .collect();
+    for (const sub of submissions) {
+      await ctx.db.delete(sub._id);
+    }
+
+    // 3. Delete the operational function itself
+    await ctx.db.delete(args.id);
+
+    return args.id;
+  },
+});
+
+
+
