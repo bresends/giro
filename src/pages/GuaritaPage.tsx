@@ -31,6 +31,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getVehicleTypeColor } from "@/lib/utils";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { Loading } from "../components/common/Loading";
@@ -38,7 +39,6 @@ import { ArrivalModal } from "../components/guarita/ArrivalModal";
 import { DepartureModal } from "../components/guarita/DepartureModal";
 import { EditMovementModal } from "../components/guarita/EditMovementModal";
 import { PersonnelQuickAddModal } from "../components/guarita/PersonnelQuickAddModal";
-import { getVehicleTypeColor } from "@/lib/utils";
 
 interface Movement {
   _id: Id<"vehicleMovements">;
@@ -320,11 +320,14 @@ export function GuaritaPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {inTransit.map((movement) => {
-                const timeElapsed = Math.floor(
-                  (Date.now() - movement.departureTime) / (1000 * 60),
-                );
-                const hours = Math.floor(timeElapsed / 60);
-                const minutes = timeElapsed % 60;
+                const departure = Temporal.Instant.fromEpochMilliseconds(
+                  movement.departureTime,
+                ).toZonedDateTimeISO(Temporal.Now.timeZoneId());
+                const now = Temporal.Now.zonedDateTimeISO();
+                const elapsed = departure.until(now, {
+                  largestUnit: "day",
+                  smallestUnit: "minute",
+                });
 
                 return (
                   <Card
@@ -334,7 +337,11 @@ export function GuaritaPage() {
                     <CardContent className="p-4 space-y-3">
                       <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-2">
-                          <Badge className={getVehicleTypeColor(movement.vehicle?.type)}>
+                          <Badge
+                            className={getVehicleTypeColor(
+                              movement.vehicle?.type,
+                            )}
+                          >
                             {movement.vehicle?.operationalPrefix}
                           </Badge>
                           <p className="text-sm text-muted-foreground">
@@ -344,8 +351,11 @@ export function GuaritaPage() {
                         <div className="flex items-center gap-1 text-orange-600">
                           <Clock className="w-4 h-4" />
                           <span className="text-sm font-medium">
-                            {hours > 0 ? `${hours}h ` : ""}
-                            {minutes}min
+                            {elapsed.days > 0
+                              ? `${elapsed.days}d ${elapsed.hours}h`
+                              : elapsed.hours > 0
+                                ? `${elapsed.hours}h ${elapsed.minutes}min`
+                                : `${elapsed.minutes}min`}
                           </span>
                         </div>
                       </div>
@@ -484,7 +494,11 @@ export function GuaritaPage() {
                       >
                         <TableCell className="font-medium">{dateStr}</TableCell>
                         <TableCell>
-                          <Badge className={getVehicleTypeColor(movement.vehicle?.type)}>
+                          <Badge
+                            className={getVehicleTypeColor(
+                              movement.vehicle?.type,
+                            )}
+                          >
                             {movement.vehicle?.operationalPrefix}
                           </Badge>
                         </TableCell>
