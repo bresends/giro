@@ -151,4 +151,35 @@ export default defineSchema({
   numbers: defineTable({
     value: v.number(),
   }),
+
+  // Vehicle Checklists Module
+  vehicleChecklistTemplates: defineTable({
+    vehicleId: v.id("vehicles"),
+    role: v.union(v.literal("motorista"), v.literal("comandante")),
+    content: v.string(), // Texto rico em formato HTML gerado pelo Tiptap
+    updatedAt: v.number(),
+    updatedBy: v.id("users"), // Usuário administrativo que editou
+  }).index("by_vehicle_and_role", ["vehicleId", "role"]),
+
+  vehicleChecklistSubmissions: defineTable({
+    vehicleId: v.id("vehicles"),
+    userId: v.id("users"), // ID do usuário logado que efetuou a submissão
+    role: v.union(v.literal("motorista"), v.literal("comandante")),
+    hasAlterations: v.boolean(), // true = Com Alterações, false = Sem Alterações
+    createdAt: v.number(), // Data/Hora da submissão
+    // Controle administrativo de processos SEI (preenchido posteriormente pelo Admin)
+    seiProcessNumber: v.optional(v.string()),
+    seiStatus: v.optional(
+      v.union(
+        v.literal("pending"), // Aguardando abertura/registro do processo
+        v.literal("in_progress"), // Processo SEI em andamento na SGP
+        v.literal("resolved"), // Resolvido/Concluído
+        v.literal("no_action_needed") // Sem necessidade de providências
+      )
+    ),
+    adminNotes: v.optional(v.string()), // Notas internas da SGP
+  })
+    .index("by_vehicle_and_date", ["vehicleId", "createdAt"])
+    .index("by_date", ["createdAt"])
+    .index("by_has_alterations", ["hasAlterations"]),
 });
