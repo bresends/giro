@@ -202,7 +202,7 @@ export function AdminChecklistsPage() {
           }`}
         >
           <FileText className="w-4 h-4" />
-          Modelos de Checklist (Tiptap)
+          Modelos de Checklist
         </button>
       </div>
 
@@ -333,11 +333,14 @@ export function AdminChecklistsPage() {
                       <div className="space-y-1 pb-3 border-b border-border/50">
                         <span className="font-semibold text-xs text-muted-foreground uppercase block">Vincular Viatura:</span>
                         <SimpleSelect
-                          placeholder="Nenhuma viatura vinculada"
-                          options={(vehicles || []).map((v) => ({
-                            value: v._id,
-                            label: `${v.operationalPrefix} (${v.plate})`,
-                          }))}
+                          placeholder="Selecione uma viatura..."
+                          options={[
+                            { value: "", label: "Sem viatura vinculada" },
+                            ...(vehicles || []).map((v) => ({
+                              value: v._id,
+                              label: `${v.operationalPrefix} (${v.plate})`,
+                            }))
+                          ]}
                           value={item.currentVehicle?._id || ""}
                           onChange={(e) => handleAssignVehicle(item.operationalFunctionId, e.target.value)}
                         />
