@@ -21,6 +21,8 @@ import { IssueDetailPage } from "./pages/IssueDetailPage";
 import { IssueFormPage } from "./pages/IssueFormPage";
 import { GuaritaPage } from "./pages/GuaritaPage";
 import { MovementsPage } from "./pages/MovementsPage";
+import { ChecklistPage } from "./pages/ChecklistPage";
+import { AdminChecklistsPage } from "./pages/AdminChecklistsPage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
@@ -42,12 +44,22 @@ export default function App() {
             </GuaritaLayout>
           } />
 
+          {/* Rota do Checklist - Sistema separado para militares */}
+          <Route path="/checklist" element={
+            <GuaritaLayout>
+              <ChecklistPage />
+            </GuaritaLayout>
+          } />
+
           {/* Rotas do Admin - Com sidebar e layout padrão */}
           <Route path="/*" element={
             <Layout>
               <Routes>
                 <Route path="/" element={<Navigate to="/admin" replace />} />
                 <Route path="/admin" element={<DashboardPage />} />
+
+                {/* Rotas de Checklists */}
+                <Route path="/admin/checklists" element={<AdminChecklistsPage />} />
 
                 {/* Rotas de Viaturas */}
                 <Route path="/vehicles" element={<VehiclesPage />} />
