@@ -37,7 +37,8 @@ import {
   FileCheck2,
   Settings,
   Plus,
-  Pencil
+  Pencil,
+  Trash2
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -56,6 +57,7 @@ export function AdminChecklistsPage() {
   });
 
   const saveFunctionMutation = useMutation(api.vehicleChecklists.saveOperationalFunction);
+  const removeFunctionMutation = useMutation(api.vehicleChecklists.removeOperationalFunction);
 
   const handleOpenFunctionModal = (func?: any) => {
     if (func) {
@@ -94,6 +96,17 @@ export function AdminChecklistsPage() {
       setFunctionModalOpen(false);
     } catch (err) {
       toast.error("Erro ao salvar função operacional");
+    }
+  };
+
+  const handleDeleteFunction = async (funcId: Id<"operationalFunctions">, funcName: string) => {
+    if (window.confirm(`Tem certeza que deseja excluir a função "${funcName}"? Esta ação excluirá permanentemente todos os modelos e checklists vinculados.`)) {
+      try {
+        await removeFunctionMutation({ id: funcId });
+        toast.success("Função operacional excluída!");
+      } catch (err) {
+        toast.error("Erro ao excluir função operacional.");
+      }
     }
   };
 
@@ -708,6 +721,15 @@ export function AdminChecklistsPage() {
                     </div>
                   </CardHeader>
                   <CardContent className="pt-0 flex justify-end gap-2">
+                    <Button
+                      size="xs"
+                      variant="outline"
+                      className="h-7 text-xs flex gap-1 items-center cursor-pointer text-destructive hover:bg-destructive/10 hover:text-destructive-foreground"
+                      onClick={() => handleDeleteFunction(func._id, func.name)}
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      Excluir
+                    </Button>
                     <Button
                       size="xs"
                       variant="outline"

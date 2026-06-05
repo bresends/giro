@@ -333,8 +333,8 @@ export const seed = mutation({
       "UR-8°BBM ORDINÁRIA",
       "UR-DBM JARDIM SANTO ANTÔNIO",
       "UR-8°BBM EXTRA",
-      "ABTS-12",
-      "ABT-32",
+      "Combate a Incêndio e Salvamento",
+      "Combate a Incêndio",
       "ASA-AREA",
       "ASA-OCV",
       "ASA-OPERAÇÃO TEMPESTADE"
@@ -364,8 +364,8 @@ export const migrateToOperationalFunctions = mutation({
         "UR-8°BBM ORDINÁRIA",
         "UR-DBM JARDIM SANTO ANTÔNIO",
         "UR-8°BBM EXTRA",
-        "ABTS-12",
-        "ABT-32",
+        "Combate a Incêndio e Salvamento",
+        "Combate a Incêndio",
         "ASA-AREA",
         "ASA-OCV",
         "ASA-OPERAÇÃO TEMPESTADE"
@@ -393,10 +393,10 @@ export const migrateToOperationalFunctions = mutation({
         return seededFunctions.find((f) => f.name.includes("ARCA-01"))?._id || seededFunctions[0]._id;
       }
       if (upperPrefix.includes("ABTS")) {
-        return seededFunctions.find((f) => f.name.includes("ABTS-12"))?._id || seededFunctions[0]._id;
+        return seededFunctions.find((f) => f.name.includes("Salvamento"))?._id || seededFunctions[0]._id;
       }
       if (upperPrefix.includes("ABT")) {
-        return seededFunctions.find((f) => f.name.includes("ABT-32"))?._id || seededFunctions[0]._id;
+        return seededFunctions.find((f) => f.name.includes("Combate a Incêndio") && !f.name.includes("Salvamento"))?._id || seededFunctions[0]._id;
       }
       if (upperPrefix.includes("UR")) {
         if (upperPrefix.includes("JARDIM") || upperPrefix.includes("SANTO")) {
@@ -409,6 +409,7 @@ export const migrateToOperationalFunctions = mutation({
       }
       return seededFunctions[0]._id; // Fallback to first function
     };
+
 
     // 2. Migrate Templates
     const templates = await ctx.db.query("vehicleChecklistTemplates").collect();
@@ -440,4 +441,66 @@ export const migrateToOperationalFunctions = mutation({
     }
   },
 });
+
+// Mutation: Rename default functions in the database (ABT-32 -> Combate a Incêndio, ABTS-12 -> Combate a Incêndio e Salvamento)
+export const renameDefaultFunctions = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const abt32 = await ctx.db
+      .query("operationalFunctions")
+      .filter((q) => q.eq(q.field("name"), "ABT-32"))
+      .first();
+    if (abt32) {
+      await ctx.db.patch(abt32._id, { name: "Combate a Incêndio" });
+    }
+
+    const abts12 = await ctx.db
+      .query("operationalFunctions")
+      .filter((q) => q.eq(q.field("name"), "ABTS-12"))
+      .first();
+    if (abts12) {
+      await ctx.db.patch(abts12._id, { name: "Combate a Incêndio e Salvamento" });
+    }
+  },
+});
+
+// Mutation: Delete an operational function (Admin only)
+export const removeOperationalFunction = mutation({
+  args: {
+    id: v.id("operationalFunctions"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("Não autorizado. Usuário não autenticado.");
+    }
+
+    // 1. Delete associated templates
+    const templates = await ctx.db
+      .query("vehicleChecklistTemplates")
+      .withIndex("by_function_and_role")
+      .filter((q) => q.eq(q.field("operationalFunctionId"), args.id))
+      .collect();
+    for (const template of templates) {
+      await ctx.db.delete(template._id);
+    }
+
+    // 2. Delete associated submissions
+    const submissions = await ctx.db
+      .query("vehicleChecklistSubmissions")
+      .withIndex("by_function_and_date")
+      .filter((q) => q.eq(q.field("operationalFunctionId"), args.id))
+      .collect();
+    for (const sub of submissions) {
+      await ctx.db.delete(sub._id);
+    }
+
+    // 3. Delete the operational function itself
+    await ctx.db.delete(args.id);
+
+    return args.id;
+  },
+});
+
+
 
