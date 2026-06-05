@@ -19,7 +19,7 @@ export function ChecklistTemplateEditor({ initialValue, onSave }: ChecklistTempl
       attributes: {
         "aria-label": "Template do Checklist",
         class:
-          "min-h-[350px] max-h-[500px] overflow-y-auto px-4 py-3 text-sm outline-none prose prose-sm dark:prose-invert max-w-none [&_p]:my-1.5 [&_ul]:my-1.5 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-6",
+          "min-h-[600px] max-h-[800px] overflow-y-auto px-4 py-3 text-sm outline-none prose prose-sm dark:prose-invert max-w-none [&_p]:my-1.5 [&_ul]:my-1.5 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-6",
       },
     },
   });
