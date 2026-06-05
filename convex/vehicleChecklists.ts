@@ -214,7 +214,8 @@ export const listDailyStatus = query({
     endMs: v.number(),   // Shift end epoch ms
   },
   handler: async (ctx, args) => {
-    const functions = await ctx.db.query("operationalFunctions").collect();
+    let functions = await ctx.db.query("operationalFunctions").collect();
+    functions = functions.filter((f) => f.active);
 
     // Fetch all submissions within the shift time range
     const submissions = await ctx.db
