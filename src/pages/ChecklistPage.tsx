@@ -31,11 +31,11 @@ import { SimpleSelect } from "../components/common/SimpleSelect";
 
 export function ChecklistPage() {
   const [searchParams] = useSearchParams();
-  const vehicles = useQuery(api.vehicles.list, {});
+  const opFunctions = useQuery(api.vehicleChecklists.listOperationalFunctions, { activeOnly: true });
   const submitChecklist = useMutation(api.vehicleChecklists.submitChecklist);
 
   const [formData, setFormData] = useState({
-    vehicleId: "" as Id<"vehicles"> | "",
+    operationalFunctionId: "" as Id<"operationalFunctions"> | "",
     role: "" as "motorista" | "comandante" | "",
     hasAlterations: false,
   });
@@ -43,29 +43,48 @@ export function ChecklistPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Pre-select vehicle if vehicleId is passed in search params (e.g., from QR code)
+  // Find the selected function details
+  const selectedFunction = opFunctions?.find(
+    (f) => f._id === formData.operationalFunctionId
+  );
+  const isVehicleLinked = !!selectedFunction?.vehicle;
+
+  // Pre-select function if vehicleId is passed in search params (e.g., from QR code)
   useEffect(() => {
     const paramVehicleId = searchParams.get("vehicleId");
-    if (paramVehicleId) {
-      setFormData((prev) => ({
-        ...prev,
-        vehicleId: paramVehicleId as Id<"vehicles">,
-      }));
+    if (paramVehicleId && opFunctions) {
+      const matchedFunction = opFunctions.find(
+        (f) => f.currentVehicleId === paramVehicleId
+      );
+      if (matchedFunction) {
+        setFormData((prev) => ({
+          ...prev,
+          operationalFunctionId: matchedFunction._id,
+        }));
+        toast.success(`Função ${matchedFunction.name} identificada para a viatura escaneada.`);
+      } else {
+        toast.error("Nenhuma função operacional ativa está vinculada a esta viatura no momento.");
+      }
     }
-  }, [searchParams]);
+  }, [searchParams, opFunctions]);
 
-  // Query template for selected vehicle and role
+  // Query template for selected function and role
   const template = useQuery(
     api.vehicleChecklists.getTemplate,
-    formData.vehicleId && formData.role
-      ? { vehicleId: formData.vehicleId, role: formData.role }
+    formData.operationalFunctionId && formData.role
+      ? { operationalFunctionId: formData.operationalFunctionId, role: formData.role }
       : "skip",
   );
 
-  const vehicleOptions = (vehicles || []).map((v) => ({
-    value: v._id,
-    label: `${v.operationalPrefix} (${v.plate})`,
-  }));
+  const opFunctionOptions = (opFunctions || []).map((f) => {
+    const vehicleText = f.vehicle
+      ? ` - Viatura: ${f.vehicle.operationalPrefix} (${f.vehicle.plate})`
+      : " - (Sem Viatura Vinculada)";
+    return {
+      value: f._id,
+      label: `${f.name}${vehicleText}`,
+    };
+  });
 
   const roleOptions = [
     { value: "motorista", label: "Motorista" },
@@ -74,15 +93,20 @@ export function ChecklistPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.vehicleId || !formData.role) {
-      toast.error("Selecione a viatura e a função");
+    if (!formData.operationalFunctionId || !formData.role) {
+      toast.error("Selecione a função e o papel de serviço");
+      return;
+    }
+
+    if (!isVehicleLinked) {
+      toast.error("Não é possível enviar o checklist sem uma viatura vinculada.");
       return;
     }
 
     setIsSubmitting(true);
     try {
       await submitChecklist({
-        vehicleId: formData.vehicleId,
+        operationalFunctionId: formData.operationalFunctionId,
         role: formData.role,
         hasAlterations: formData.hasAlterations,
       });
@@ -98,7 +122,6 @@ export function ChecklistPage() {
   };
 
   if (isSubmitted) {
-    const selectedVehicle = vehicles?.find((v) => v._id === formData.vehicleId);
     return (
       <div className="max-w-md mx-auto py-8 px-4 text-center">
         <Card className="border-t-4 border-t-green-500 shadow-md">
@@ -111,9 +134,9 @@ export function ChecklistPage() {
                 Checklist Registrado!
               </CardTitle>
               <CardDescription className="text-base text-muted-foreground">
-                A conferência da viatura{" "}
-                <strong>{selectedVehicle?.operationalPrefix}</strong> (
-                {formData.role === "motorista" ? "Motorista" : "Comandante"})
+                A conferência da função <strong>{selectedFunction?.name}</strong>{" "}
+                (Viatura: {selectedFunction?.vehicle?.operationalPrefix || "N/A"}) para{" "}
+                <strong>{formData.role === "motorista" ? "Motorista" : "Comandante"}</strong>{" "}
                 foi salva com sucesso no sistema.
               </CardDescription>
             </div>
@@ -179,33 +202,33 @@ export function ChecklistPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card className="shadow-xs border-border">
           <CardHeader className="pb-4">
-            <CardTitle className="text-lg">Dados da Viatura e Função</CardTitle>
+            <CardTitle className="text-lg">Função Operacional e Papel</CardTitle>
             <CardDescription>
-              Selecione a viatura e o seu papel de serviço
+              Selecione a função que você está assumindo no serviço
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2 flex flex-col">
               <label className="text-sm font-medium leading-none">
-                Viatura <span className="text-red-500">*</span>
+                Função Operacional <span className="text-red-500">*</span>
               </label>
               <Combobox
-                items={vehicleOptions}
+                items={opFunctionOptions}
                 value={
-                  vehicleOptions.find(
-                    (v) => v.value === formData.vehicleId,
+                  opFunctionOptions.find(
+                    (v) => v.value === formData.operationalFunctionId,
                   ) || null
                 }
                 onValueChange={(v) =>
                   setFormData((prev) => ({
                     ...prev,
-                    vehicleId: v ? (v.value as Id<"vehicles">) : "",
+                    operationalFunctionId: v ? (v.value as Id<"operationalFunctions">) : "",
                   }))
                 }
               >
-                <ComboboxInput placeholder="Selecione a viatura" />
+                <ComboboxInput placeholder="Selecione a função" />
                 <ComboboxContent>
-                  <ComboboxEmpty>Nenhuma viatura encontrada.</ComboboxEmpty>
+                  <ComboboxEmpty>Nenhuma função encontrada.</ComboboxEmpty>
                   <ComboboxList>
                     {(v) => (
                       <ComboboxItem key={v.value} value={v}>
@@ -217,8 +240,29 @@ export function ChecklistPage() {
               </Combobox>
             </div>
 
+            {formData.operationalFunctionId && !isVehicleLinked && (
+              <div className="flex gap-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg p-4 text-red-800 dark:text-red-400">
+                <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <h4 className="font-bold text-sm">Vincular Viatura Pendente</h4>
+                  <p className="text-xs leading-relaxed text-red-800/95 dark:text-red-300">
+                    Esta função ({selectedFunction?.name}) não possui nenhuma viatura física vinculada pelo Comando para este turno. O preenchimento do checklist está bloqueado.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {formData.operationalFunctionId && isVehicleLinked && (
+              <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-lg p-4 space-y-1 text-blue-800 dark:text-blue-300">
+                <span className="text-xs font-semibold uppercase tracking-wider block">Viatura Vinculada:</span>
+                <p className="text-sm font-medium">
+                  {selectedFunction?.vehicle?.operationalPrefix} ({selectedFunction?.vehicle?.model} - Placa: {selectedFunction?.vehicle?.plate})
+                </p>
+              </div>
+            )}
+
             <SimpleSelect
-              label="Função"
+              label="Papel no Serviço"
               placeholder="Selecione sua função"
               options={roleOptions}
               value={formData.role}
@@ -243,10 +287,14 @@ export function ChecklistPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="min-h-32 flex flex-col justify-center bg-muted/20 dark:bg-muted/5 rounded-lg p-4">
-            {!formData.vehicleId || !formData.role ? (
+            {!formData.operationalFunctionId || !formData.role ? (
               <p className="text-sm text-muted-foreground text-center">
-                Selecione a viatura e a função para carregar a lista de
+                Selecione a função e o papel de serviço para carregar a lista de
                 materiais.
+              </p>
+            ) : !isVehicleLinked ? (
+              <p className="text-sm text-destructive dark:text-red-400 text-center font-medium">
+                Viatura física não vinculada a esta função. Vinculação necessária para preencher.
               </p>
             ) : template === undefined ? (
               <p className="text-sm text-muted-foreground text-center">
@@ -254,7 +302,7 @@ export function ChecklistPage() {
               </p>
             ) : template === null ? (
               <p className="text-sm text-destructive dark:text-red-400 text-center font-medium">
-                Nenhum checklist cadastrado para esta viatura e função.
+                Nenhum checklist cadastrado para esta função operacional e papel de serviço.
               </p>
             ) : (
               <div className="space-y-4">
@@ -280,7 +328,7 @@ export function ChecklistPage() {
         </Card>
 
         {/* Alteration Selector */}
-        {formData.vehicleId && formData.role && template && (
+        {formData.operationalFunctionId && formData.role && template && isVehicleLinked && (
           <Card className="shadow-xs border-border">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg">
@@ -348,7 +396,7 @@ export function ChecklistPage() {
           type="submit"
           className="w-full text-base py-6 font-semibold"
           disabled={
-            isSubmitting || !formData.vehicleId || !formData.role || !template
+            isSubmitting || !formData.operationalFunctionId || !formData.role || !template || !isVehicleLinked
           }
         >
           {isSubmitting ? "Enviando..." : "Enviar Checklist"}
