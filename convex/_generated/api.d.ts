@@ -17,6 +17,7 @@ import type * as migrations_removeColorField from "../migrations/removeColorFiel
 import type * as myFunctions from "../myFunctions.js";
 import type * as personnel from "../personnel.js";
 import type * as seedVehicleTypes from "../seedVehicleTypes.js";
+import type * as vehicleChecklists from "../vehicleChecklists.js";
 import type * as vehicleIssues from "../vehicleIssues.js";
 import type * as vehicleMovements from "../vehicleMovements.js";
 import type * as vehicleReadings from "../vehicleReadings.js";
@@ -39,6 +40,7 @@ declare const fullApi: ApiFromModules<{
   myFunctions: typeof myFunctions;
   personnel: typeof personnel;
   seedVehicleTypes: typeof seedVehicleTypes;
+  vehicleChecklists: typeof vehicleChecklists;
   vehicleIssues: typeof vehicleIssues;
   vehicleMovements: typeof vehicleMovements;
   vehicleReadings: typeof vehicleReadings;
