@@ -1,7 +1,8 @@
 import { useAuthActions } from "@convex-dev/auth/react";
-import { LogOut, ShieldCheck } from "lucide-react";
+import { LogOut, ShieldCheck, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLayoutEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 interface GuaritaLayoutProps {
   children: React.ReactNode;
@@ -9,6 +10,7 @@ interface GuaritaLayoutProps {
 
 export function GuaritaLayout({ children }: GuaritaLayoutProps) {
   const { signOut } = useAuthActions();
+  const location = useLocation();
 
   // Force light theme
   useLayoutEffect(() => {
@@ -21,6 +23,8 @@ export function GuaritaLayout({ children }: GuaritaLayoutProps) {
       }
     };
   }, []);
+
+  const isChecklistRoute = location.pathname === "/checklist";
 
   return (
     <div className="light min-h-screen bg-background text-foreground">
@@ -40,10 +44,28 @@ export function GuaritaLayout({ children }: GuaritaLayoutProps) {
               </div>
             </div>
 
-            <Button variant="outline" onClick={() => void signOut()}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Sair
-            </Button>
+            <div className="flex items-center gap-3">
+              {isChecklistRoute ? (
+                <Link to="/guarita">
+                  <Button variant="secondary" className="flex items-center gap-2 font-semibold">
+                    <ShieldCheck className="w-4 h-4" />
+                    Ir para Guarita
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/checklist">
+                  <Button variant="default" className="flex items-center gap-2 font-semibold shadow-xs">
+                    <ClipboardList className="w-4 h-4" />
+                    Checklist
+                  </Button>
+                </Link>
+              )}
+
+              <Button variant="outline" onClick={() => void signOut()}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Sair
+              </Button>
+            </div>
           </div>
         </div>
       </header>

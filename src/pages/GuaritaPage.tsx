@@ -258,12 +258,12 @@ export function GuaritaPage() {
       {/* Header */}
       <Card>
         <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold">
+              <h1 className="text-2xl md:text-3xl font-bold">
                 Guarita - Controle de Viaturas
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {new Date().toLocaleDateString("pt-BR", {
                   weekday: "long",
                   year: "numeric",
@@ -272,13 +272,14 @@ export function GuaritaPage() {
                 })}
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-2 md:gap-3 w-full md:w-auto">
               <Button
                 size="lg"
                 variant="outline"
                 onClick={handleCopyShiftReport}
                 disabled={shiftMovements === undefined}
                 title="Copiar movimentações do turno"
+                className="flex-1 md:flex-initial"
               >
                 {copied ? (
                   <Check className="w-5 h-5 mr-2 text-green-600" />
@@ -291,6 +292,7 @@ export function GuaritaPage() {
                 size="lg"
                 variant="outline"
                 onClick={() => setPersonnelModalOpen(true)}
+                className="flex-1 md:flex-initial"
               >
                 <UserPlus className="w-5 h-5 mr-2" />
                 Cadastrar Militar
@@ -299,6 +301,7 @@ export function GuaritaPage() {
                 size="lg"
                 variant="default"
                 onClick={() => setDepartureModalOpen(true)}
+                className="w-full md:w-auto flex-1 md:flex-initial"
               >
                 <LogOut className="w-5 h-5 mr-2" />
                 Registrar Saída
