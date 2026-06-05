@@ -96,13 +96,28 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
   useEffect(() => {
     if (
       latestMovement?.personnelId &&
+      latestMovement?.departureTime &&
       formData.vehicleId &&
       !formData.personnelId
     ) {
-      setFormData((prev) => ({
-        ...prev,
-        personnelId: latestMovement.personnelId,
-      }));
+      const tz = Temporal.Now.timeZoneId();
+
+      // Como o turno de 24h começa às 7h da manhã, subtraímos 7 horas de ambos
+      // os horários para alinhar o início do turno com a meia-noite do calendário.
+      // Se as datas resultantes forem iguais, a saída pertence ao mesmo turno.
+      const nowShifted = Temporal.Now.zonedDateTimeISO().subtract({ hours: 7 });
+      const movementShifted = Temporal.Instant.fromEpochMilliseconds(
+        latestMovement.departureTime,
+      )
+        .toZonedDateTimeISO(tz)
+        .subtract({ hours: 7 });
+
+      if (nowShifted.toPlainDate().equals(movementShifted.toPlainDate())) {
+        setFormData((prev) => ({
+          ...prev,
+          personnelId: latestMovement.personnelId,
+        }));
+      }
     }
   }, [latestMovement, formData.vehicleId]);
 
@@ -186,9 +201,7 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
             <Combobox
               items={vehicleItems}
               value={
-                vehicleItems.find(
-                  (v) => v.value === formData.vehicleId,
-                ) || null
+                vehicleItems.find((v) => v.value === formData.vehicleId) || null
               }
               onValueChange={(v) =>
                 setFormData({
@@ -218,9 +231,8 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
             <Combobox
               items={personnelItems}
               value={
-                personnelItems.find(
-                  (p) => p.value === formData.personnelId,
-                ) || null
+                personnelItems.find((p) => p.value === formData.personnelId) ||
+                null
               }
               onValueChange={(p) =>
                 setFormData({
