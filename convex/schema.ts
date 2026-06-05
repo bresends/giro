@@ -193,4 +193,5 @@ export default defineSchema({
     .index("by_function_and_date", ["operationalFunctionId", "createdAt"])
     .index("by_date", ["createdAt"])
     .index("by_has_alterations", ["hasAlterations"]),
+
 });
