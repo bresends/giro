@@ -7,6 +7,14 @@ import { SimpleSelect } from "../components/common/SimpleSelect";
 import { ChecklistTemplateEditor } from "../components/checklists/ChecklistTemplateEditor";
 import { Loading } from "../components/common/Loading";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -410,16 +418,40 @@ export function AdminChecklistsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <SimpleSelect
-                label="Viatura"
-                placeholder="Selecione a viatura"
-                options={(vehicles || []).map((v) => ({
-                  value: v._id,
-                  label: `${v.operationalPrefix} (${v.plate})`,
-                }))}
-                value={selectedTemplateVehicle}
-                onChange={(e) => setSelectedTemplateVehicle(e.target.value as Id<"vehicles">)}
-              />
+              <div className="space-y-2 flex flex-col">
+                <label className="text-sm font-medium leading-none">
+                  Viatura <span className="text-red-500">*</span>
+                </label>
+                <Combobox
+                  items={(vehicles || []).map((v) => ({
+                    value: v._id,
+                    label: `${v.operationalPrefix} (${v.plate})`,
+                  }))}
+                  value={
+                    (vehicles || [])
+                      .map((v) => ({
+                        value: v._id,
+                        label: `${v.operationalPrefix} (${v.plate})`,
+                      }))
+                      .find((v) => v.value === selectedTemplateVehicle) || null
+                  }
+                  onValueChange={(v) =>
+                    setSelectedTemplateVehicle(v ? (v.value as Id<"vehicles">) : "")
+                  }
+                >
+                  <ComboboxInput placeholder="Selecione a viatura" />
+                  <ComboboxContent>
+                    <ComboboxEmpty>Nenhuma viatura encontrada.</ComboboxEmpty>
+                    <ComboboxList>
+                      {(v) => (
+                        <ComboboxItem key={v.value} value={v}>
+                          {v.label}
+                        </ComboboxItem>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
+              </div>
 
               <SimpleSelect
                 label="Função"

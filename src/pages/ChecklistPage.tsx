@@ -17,6 +17,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { SimpleSelect } from "../components/common/SimpleSelect";
@@ -177,19 +185,37 @@ export function ChecklistPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <SimpleSelect
-              label="Viatura"
-              placeholder="Selecione a viatura"
-              options={vehicleOptions}
-              value={formData.vehicleId}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  vehicleId: e.target.value as Id<"vehicles">,
-                }))
-              }
-              required
-            />
+            <div className="space-y-2 flex flex-col">
+              <label className="text-sm font-medium leading-none">
+                Viatura <span className="text-red-500">*</span>
+              </label>
+              <Combobox
+                items={vehicleOptions}
+                value={
+                  vehicleOptions.find(
+                    (v) => v.value === formData.vehicleId,
+                  ) || null
+                }
+                onValueChange={(v) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    vehicleId: v ? (v.value as Id<"vehicles">) : "",
+                  }))
+                }
+              >
+                <ComboboxInput placeholder="Selecione a viatura" />
+                <ComboboxContent>
+                  <ComboboxEmpty>Nenhuma viatura encontrada.</ComboboxEmpty>
+                  <ComboboxList>
+                    {(v) => (
+                      <ComboboxItem key={v.value} value={v}>
+                        {v.label}
+                      </ComboboxItem>
+                    )}
+                  </ComboboxList>
+                </ComboboxContent>
+              </Combobox>
+            </div>
 
             <SimpleSelect
               label="Função"
