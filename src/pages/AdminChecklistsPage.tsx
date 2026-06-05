@@ -34,14 +34,68 @@ import {
   AlertTriangle, 
   Clock, 
   CalendarDays,
-  FileCheck2
+  FileCheck2,
+  Settings,
+  Plus,
+  Pencil
 } from "lucide-react";
 import { toast } from "sonner";
 
 export function AdminChecklistsPage() {
-  const [activeTab, setActiveTab] = useState<"submissions" | "templates">("submissions");
+  const [activeTab, setActiveTab] = useState<"submissions" | "templates" | "functions">("submissions");
   const vehicles = useQuery(api.vehicles.list, {});
   const opFunctions = useQuery(api.vehicleChecklists.listOperationalFunctions, {});
+
+  // Function Modal state
+  const [functionModalOpen, setFunctionModalOpen] = useState(false);
+  const [editingFunction, setEditingFunction] = useState<any>(null);
+  const [functionFormData, setFunctionFormData] = useState({
+    name: "",
+    description: "",
+    active: true,
+  });
+
+  const saveFunctionMutation = useMutation(api.vehicleChecklists.saveOperationalFunction);
+
+  const handleOpenFunctionModal = (func?: any) => {
+    if (func) {
+      setEditingFunction(func);
+      setFunctionFormData({
+        name: func.name,
+        description: func.description || "",
+        active: func.active,
+      });
+    } else {
+      setEditingFunction(null);
+      setFunctionFormData({
+        name: "",
+        description: "",
+        active: true,
+      });
+    }
+    setFunctionModalOpen(true);
+  };
+
+  const handleSaveFunction = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!functionFormData.name.trim()) {
+      toast.error("O nome da função é obrigatório");
+      return;
+    }
+
+    try {
+      await saveFunctionMutation({
+        id: editingFunction?._id || undefined,
+        name: functionFormData.name.trim(),
+        description: functionFormData.description.trim() || undefined,
+        active: functionFormData.active,
+      });
+      toast.success(editingFunction ? "Função atualizada!" : "Função criada com sucesso!");
+      setFunctionModalOpen(false);
+    } catch (err) {
+      toast.error("Erro ao salvar função operacional");
+    }
+  };
 
   // Run seed on initialization
   const seedMutation = useMutation(api.vehicleChecklists.seed);
@@ -203,6 +257,17 @@ export function AdminChecklistsPage() {
         >
           <FileText className="w-4 h-4" />
           Modelos de Checklist
+        </button>
+        <button
+          onClick={() => setActiveTab("functions")}
+          className={`flex items-center gap-2 px-4 py-2.5 font-medium text-sm border-b-2 -mb-px transition-colors cursor-pointer ${
+            activeTab === "functions"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Settings className="w-4 h-4" />
+          Gerenciar Funções
         </button>
       </div>
 
@@ -597,6 +662,125 @@ export function AdminChecklistsPage() {
               </Button>
               <Button type="submit">
                 Salvar Alterações
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* TAB 3: Operational Functions Management */}
+      {activeTab === "functions" && (
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-xl font-semibold">Lista de Funções Operacionais</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Gerencie os postos de serviço ativos. Se desativar uma função, ela não aparecerá para os militares fazerem checklist.
+              </p>
+            </div>
+            <Button onClick={() => handleOpenFunctionModal()} className="flex items-center gap-1.5 shrink-0">
+              <Plus className="w-4 h-4" />
+              <span>Nova Função</span>
+            </Button>
+          </div>
+
+          {opFunctions === undefined ? (
+            <Loading text="Carregando funções..." />
+          ) : opFunctions.length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
+              Nenhuma função operacional cadastrada. Clique em "Nova Função" para cadastrar.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {opFunctions.map((func: any) => (
+                <Card key={func._id} className="shadow-xs hover:shadow-sm transition-all border-border flex flex-col justify-between">
+                  <CardHeader className="pb-3 flex flex-row items-start justify-between space-y-0">
+                    <div className="space-y-1">
+                      <CardTitle className="text-base font-bold flex flex-wrap items-center gap-2">
+                        {func.name}
+                        <Badge variant={func.active ? "outline" : "secondary"} className={func.active ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-950/20 dark:text-green-400 dark:border-green-900 text-[10px]" : "text-[10px]"}>
+                          {func.active ? "Ativa" : "Inativa"}
+                        </Badge>
+                      </CardTitle>
+                      <CardDescription className="text-xs">
+                        {func.description || "Sem descrição cadastrada"}
+                      </CardDescription>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0 flex justify-end gap-2">
+                    <Button
+                      size="xs"
+                      variant="outline"
+                      className="h-7 text-xs flex gap-1 items-center cursor-pointer"
+                      onClick={() => handleOpenFunctionModal(func)}
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                      Editar
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Operational Function Management Dialog */}
+      <Dialog open={functionModalOpen} onOpenChange={setFunctionModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex gap-2 items-center">
+              <Settings className="w-5 h-5 text-primary" />
+              <span>{editingFunction ? "Editar Função Operacional" : "Nova Função Operacional"}</span>
+            </DialogTitle>
+            <DialogDescription>
+              {editingFunction ? "Modifique os detalhes da função operacional abaixo" : "Cadastre uma nova função operacional no sistema"}
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleSaveFunction} className="space-y-4 pt-2">
+            <div className="space-y-1.5">
+              <Label htmlFor="funcName">Nome da Função <span className="text-red-500">*</span></Label>
+              <Input
+                id="funcName"
+                placeholder="Ex: ASA-OCV, UR-8°BBM ORDINÁRIA"
+                value={functionFormData.name}
+                onChange={(e) => setFunctionFormData((prev) => ({ ...prev, name: e.target.value }))}
+                required
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="funcDesc">Descrição / Observações</Label>
+              <Textarea
+                id="funcDesc"
+                placeholder="Ex: Viatura de comando de área, atende ocorrências gerais..."
+                value={functionFormData.description}
+                onChange={(e) => setFunctionFormData((prev) => ({ ...prev, description: e.target.value }))}
+                rows={3}
+              />
+            </div>
+
+            <div className="flex items-center justify-between border rounded-lg p-3 bg-muted/10">
+              <div className="space-y-0.5">
+                <Label htmlFor="funcActive" className="text-sm font-semibold cursor-pointer">Status Ativo</Label>
+                <p className="text-xs text-muted-foreground">Define se os militares podem selecionar esta função para preencher o checklist.</p>
+              </div>
+              <input
+                id="funcActive"
+                type="checkbox"
+                checked={functionFormData.active}
+                onChange={(e) => setFunctionFormData((prev) => ({ ...prev, active: e.target.checked }))}
+                className="w-4 h-4 accent-primary rounded cursor-pointer"
+              />
+            </div>
+
+            <DialogFooter className="pt-2">
+              <Button type="button" variant="outline" onClick={() => setFunctionModalOpen(false)}>
+                Cancelar
+              </Button>
+              <Button type="submit">
+                Salvar
               </Button>
             </DialogFooter>
           </form>
