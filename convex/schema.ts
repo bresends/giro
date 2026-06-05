@@ -153,16 +153,25 @@ export default defineSchema({
   }),
 
   // Vehicle Checklists Module
+  operationalFunctions: defineTable({
+    name: v.string(), // Nome da função operacional (ex: ASA-AREA, UR-8°BBM EXTRA)
+    description: v.optional(v.string()),
+    active: v.boolean(),
+    currentVehicleId: v.optional(v.id("vehicles")), // Viatura física vinculada à função neste turno
+    createdAt: v.number(),
+  }).index("by_name", ["name"]),
+
   vehicleChecklistTemplates: defineTable({
-    vehicleId: v.id("vehicles"),
+    operationalFunctionId: v.id("operationalFunctions"), // checklist agora é vinculado à função operacional
     role: v.union(v.literal("motorista"), v.literal("comandante")),
     content: v.string(), // Texto rico em formato HTML gerado pelo Tiptap
     updatedAt: v.number(),
     updatedBy: v.id("users"), // Usuário administrativo que editou
-  }).index("by_vehicle_and_role", ["vehicleId", "role"]),
+  }).index("by_function_and_role", ["operationalFunctionId", "role"]),
 
   vehicleChecklistSubmissions: defineTable({
-    vehicleId: v.id("vehicles"),
+    operationalFunctionId: v.id("operationalFunctions"), // Função operacional preenchida
+    vehicleId: v.id("vehicles"), // Viatura física vinculada no momento da submissão
     userId: v.id("users"), // ID do usuário logado que efetuou a submissão
     role: v.union(v.literal("motorista"), v.literal("comandante")),
     hasAlterations: v.boolean(), // true = Com Alterações, false = Sem Alterações
@@ -180,6 +189,7 @@ export default defineSchema({
     adminNotes: v.optional(v.string()), // Notas internas da SGP
   })
     .index("by_vehicle_and_date", ["vehicleId", "createdAt"])
+    .index("by_function_and_date", ["operationalFunctionId", "createdAt"])
     .index("by_date", ["createdAt"])
     .index("by_has_alterations", ["hasAlterations"]),
 });

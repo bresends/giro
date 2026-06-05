@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "convex/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { DatePicker } from "../components/common/DatePicker";
@@ -41,6 +41,13 @@ import { toast } from "sonner";
 export function AdminChecklistsPage() {
   const [activeTab, setActiveTab] = useState<"submissions" | "templates">("submissions");
   const vehicles = useQuery(api.vehicles.list, {});
+  const opFunctions = useQuery(api.vehicleChecklists.listOperationalFunctions, {});
+
+  // Run seed on initialization
+  const seedMutation = useMutation(api.vehicleChecklists.seed);
+  useEffect(() => {
+    seedMutation();
+  }, [seedMutation]);
 
   // Date selection for daily submissions (default to today)
   const [selectedDate, setSelectedDate] = useState<Date>(() => {
@@ -79,17 +86,18 @@ export function AdminChecklistsPage() {
   const dailyStatus = useQuery(api.vehicleChecklists.listDailyStatus, { startMs, endMs });
   
   // Template states
-  const [selectedTemplateVehicle, setSelectedTemplateVehicle] = useState<Id<"vehicles"> | "">("");
+  const [selectedTemplateFunction, setSelectedTemplateFunction] = useState<Id<"operationalFunctions"> | "">("");
   const [selectedTemplateRole, setSelectedTemplateRole] = useState<"motorista" | "comandante" | "">("");
   
   const templateData = useQuery(
     api.vehicleChecklists.getTemplate,
-    selectedTemplateVehicle && selectedTemplateRole
-      ? { vehicleId: selectedTemplateVehicle, role: selectedTemplateRole }
+    selectedTemplateFunction && selectedTemplateRole
+      ? { operationalFunctionId: selectedTemplateFunction, role: selectedTemplateRole }
       : "skip"
   );
   
   const saveTemplateMutation = useMutation(api.vehicleChecklists.saveTemplate);
+  const assignVehicleMutation = useMutation(api.vehicleChecklists.assignVehicle);
   const updateSeiDetailsMutation = useMutation(api.vehicleChecklists.updateSeiDetails);
 
   // SEI Modal state
@@ -130,20 +138,32 @@ export function AdminChecklistsPage() {
   };
 
   const handleSaveTemplate = async (content: string) => {
-    if (!selectedTemplateVehicle || !selectedTemplateRole) {
-      toast.error("Viatura e função inválidas");
+    if (!selectedTemplateFunction || !selectedTemplateRole) {
+      toast.error("Função e papel de serviço inválidos");
       return;
     }
 
     try {
       await saveTemplateMutation({
-        vehicleId: selectedTemplateVehicle,
+        operationalFunctionId: selectedTemplateFunction,
         role: selectedTemplateRole,
         content,
       });
       toast.success("Lista de materiais salva com sucesso!");
     } catch (err) {
       toast.error("Erro ao salvar o template");
+    }
+  };
+
+  const handleAssignVehicle = async (opFunctionId: Id<"operationalFunctions">, vehicleId: string) => {
+    try {
+      await assignVehicleMutation({
+        operationalFunctionId: opFunctionId,
+        vehicleId: vehicleId ? (vehicleId as Id<"vehicles">) : undefined,
+      });
+      toast.success("Viatura física vinculada com sucesso!");
+    } catch (error) {
+      toast.error("Erro ao vincular a viatura física à função.");
     }
   };
 
@@ -285,7 +305,7 @@ export function AdminChecklistsPage() {
 
                 return (
                   <Card 
-                    key={item.vehicleId} 
+                    key={item.operationalFunctionId} 
                     className={`shadow-xs transition-all border-l-4 ${
                       hasAlteration
                         ? "border-l-red-500 bg-red-50/10 dark:bg-red-950/5"
@@ -294,8 +314,12 @@ export function AdminChecklistsPage() {
                   >
                     <CardHeader className="pb-3 flex flex-row items-start justify-between space-y-0">
                       <div>
-                        <CardTitle className="text-lg font-bold">{item.operationalPrefix}</CardTitle>
-                        <CardDescription className="text-xs">{item.model} • {item.plate}</CardDescription>
+                        <CardTitle className="text-lg font-bold">{item.name}</CardTitle>
+                        <CardDescription className="text-xs">
+                          {item.currentVehicle
+                            ? `${item.currentVehicle.model} • ${item.currentVehicle.operationalPrefix} (${item.currentVehicle.plate})`
+                            : "Sem viatura vinculada"}
+                        </CardDescription>
                       </div>
                       {hasAlteration && (
                         <Badge variant="destructive" className="flex gap-1 items-center">
@@ -305,6 +329,20 @@ export function AdminChecklistsPage() {
                       )}
                     </CardHeader>
                     <CardContent className="space-y-4">
+                      {/* Viatura Física Dropdown */}
+                      <div className="space-y-1 pb-3 border-b border-border/50">
+                        <span className="font-semibold text-xs text-muted-foreground uppercase block">Vincular Viatura:</span>
+                        <SimpleSelect
+                          placeholder="Nenhuma viatura vinculada"
+                          options={(vehicles || []).map((v) => ({
+                            value: v._id,
+                            label: `${v.operationalPrefix} (${v.plate})`,
+                          }))}
+                          value={item.currentVehicle?._id || ""}
+                          onChange={(e) => handleAssignVehicle(item.operationalFunctionId, e.target.value)}
+                        />
+                      </div>
+
                       {/* Motorista Block */}
                       <div className="space-y-1.5 border-b pb-3 border-border/50">
                         <div className="flex items-center justify-between text-sm">
@@ -414,38 +452,38 @@ export function AdminChecklistsPage() {
             <CardHeader className="pb-4">
               <CardTitle className="text-lg">Seleção do Modelo de Materiais</CardTitle>
               <CardDescription>
-                Selecione a viatura e a função para editar a lista de materiais exigidos
+                Selecione a função operacional e o papel no serviço para editar a lista de materiais exigidos
               </CardDescription>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2 flex flex-col">
                 <label className="text-sm font-medium leading-none">
-                  Viatura <span className="text-red-500">*</span>
+                  Função Operacional <span className="text-red-500">*</span>
                 </label>
                 <Combobox
-                  items={(vehicles || []).map((v) => ({
-                    value: v._id,
-                    label: `${v.operationalPrefix} (${v.plate})`,
+                  items={(opFunctions || []).map((f) => ({
+                    value: f._id,
+                    label: f.name,
                   }))}
                   value={
-                    (vehicles || [])
-                      .map((v) => ({
-                        value: v._id,
-                        label: `${v.operationalPrefix} (${v.plate})`,
+                    (opFunctions || [])
+                      .map((f) => ({
+                        value: f._id,
+                        label: f.name,
                       }))
-                      .find((v) => v.value === selectedTemplateVehicle) || null
+                      .find((f) => f.value === selectedTemplateFunction) || null
                   }
-                  onValueChange={(v) =>
-                    setSelectedTemplateVehicle(v ? (v.value as Id<"vehicles">) : "")
+                  onValueChange={(f) =>
+                    setSelectedTemplateFunction(f ? (f.value as Id<"operationalFunctions">) : "")
                   }
                 >
-                  <ComboboxInput placeholder="Selecione a viatura" />
+                  <ComboboxInput placeholder="Selecione a função" />
                   <ComboboxContent>
-                    <ComboboxEmpty>Nenhuma viatura encontrada.</ComboboxEmpty>
+                    <ComboboxEmpty>Nenhuma função encontrada.</ComboboxEmpty>
                     <ComboboxList>
-                      {(v) => (
-                        <ComboboxItem key={v.value} value={v}>
-                          {v.label}
+                      {(f) => (
+                        <ComboboxItem key={f.value} value={f}>
+                          {f.label}
                         </ComboboxItem>
                       )}
                     </ComboboxList>
@@ -454,8 +492,8 @@ export function AdminChecklistsPage() {
               </div>
 
               <SimpleSelect
-                label="Função"
-                placeholder="Selecione a função"
+                label="Papel no Serviço"
+                placeholder="Selecione o papel"
                 options={[
                   { value: "motorista", label: "Motorista" },
                   { value: "comandante", label: "Comandante" },
@@ -466,7 +504,7 @@ export function AdminChecklistsPage() {
             </CardContent>
           </Card>
 
-          {selectedTemplateVehicle && selectedTemplateRole ? (
+          {selectedTemplateFunction && selectedTemplateRole ? (
             <Card className="shadow-xs border-border">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg flex items-center justify-between">
@@ -478,7 +516,7 @@ export function AdminChecklistsPage() {
                   )}
                 </CardTitle>
                 <CardDescription>
-                  Insira abaixo a descrição detalhada dos materiais que devem constar obrigatoriamente na viatura para conferência.
+                  Insira abaixo a descrição detalhada dos materiais que devem constar obrigatoriamente nesta função para conferência.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -494,7 +532,7 @@ export function AdminChecklistsPage() {
             </Card>
           ) : (
             <div className="text-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
-              Selecione a viatura e a função acima para visualizar e editar o checklist correspondente.
+              Selecione a função operacional e o papel acima para visualizar e editar o checklist correspondente.
             </div>
           )}
         </div>
