@@ -45,11 +45,6 @@ export function GuaritaLayout({ children }: GuaritaLayoutProps) {
             </div>
 
             <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={() => void signOut()}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Sair
-              </Button>
-              
               {isChecklistRoute ? (
                 <Link to="/guarita">
                   <Button variant="secondary" className="flex items-center gap-2 font-semibold">
@@ -65,6 +60,11 @@ export function GuaritaLayout({ children }: GuaritaLayoutProps) {
                   </Button>
                 </Link>
               )}
+
+              <Button variant="outline" onClick={() => void signOut()}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Sair
+              </Button>
             </div>
           </div>
         </div>
