@@ -56,7 +56,10 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
     notes: "",
   });
 
-  const frameworks = ["Next.js", "SvelteKit", "Nuxt.js", "Remix", "Astro"];
+  const personnelItems = (personnel || []).map((p) => ({
+    value: p._id,
+    label: `${p.rank} ${p.rg} ${p.name}`,
+  }));
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -195,17 +198,16 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
               Motorista <span className="text-red-500">*</span>
             </Label>
             <Combobox
-              items={personnel || []}
-              itemToStringLabel={(p) => `${p.rank} ${p.rg} ${p.name}`}
-              itemToStringValue={(p) => p._id}
-              isItemEqualToValue={(p, val) => p?._id === val?._id}
+              items={personnelItems}
               value={
-                personnel?.find((p) => p._id === formData.personnelId) || null
+                personnelItems.find(
+                  (p) => p.value === formData.personnelId,
+                ) || null
               }
               onValueChange={(p) =>
                 setFormData({
                   ...formData,
-                  personnelId: p ? p._id : "",
+                  personnelId: p ? p.value : "",
                 })
               }
             >
@@ -214,8 +216,8 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
                 <ComboboxEmpty>Nenhum motorista encontrado.</ComboboxEmpty>
                 <ComboboxList>
                   {(p) => (
-                    <ComboboxItem key={p._id} value={p}>
-                      {p.rank} {p.rg} {p.name}
+                    <ComboboxItem key={p.value} value={p}>
+                      {p.label}
                     </ComboboxItem>
                   )}
                 </ComboboxList>
