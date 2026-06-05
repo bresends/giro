@@ -56,6 +56,11 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
     notes: "",
   });
 
+  const vehicleItems = (vehicles || []).map((v) => ({
+    value: v._id,
+    label: `${v.operationalPrefix} - ${v.plate}`,
+  }));
+
   const personnelItems = (personnel || []).map((p) => ({
     value: p._id,
     label: `${p.rank} ${p.rg} ${p.name}`,
@@ -174,24 +179,37 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
               <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
             </div>
           )}
-          <SimpleSelect
-            label="Viatura"
-            value={formData.vehicleId}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                vehicleId: e.target.value as Id<"vehicles">,
-              })
-            }
-            options={
-              vehicles?.map((v) => ({
-                value: v._id,
-                label: `${v.operationalPrefix} - ${v.plate}`,
-              })) || []
-            }
-            placeholder="Selecione a viatura"
-            required
-          />
+          <div className="space-y-2 flex flex-col">
+            <Label>
+              Viatura <span className="text-red-500">*</span>
+            </Label>
+            <Combobox
+              items={vehicleItems}
+              value={
+                vehicleItems.find(
+                  (v) => v.value === formData.vehicleId,
+                ) || null
+              }
+              onValueChange={(v) =>
+                setFormData({
+                  ...formData,
+                  vehicleId: v ? v.value : "",
+                })
+              }
+            >
+              <ComboboxInput placeholder="Selecione a viatura" />
+              <ComboboxContent container={container}>
+                <ComboboxEmpty>Nenhuma viatura encontrada.</ComboboxEmpty>
+                <ComboboxList>
+                  {(v) => (
+                    <ComboboxItem key={v.value} value={v}>
+                      {v.label}
+                    </ComboboxItem>
+                  )}
+                </ComboboxList>
+              </ComboboxContent>
+            </Combobox>
+          </div>
 
           <div className="space-y-2 flex flex-col">
             <Label>
