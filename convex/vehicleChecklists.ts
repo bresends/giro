@@ -413,12 +413,18 @@ export const migrateToOperationalFunctions = mutation({
 
     // 2. Migrate Templates
     const templates = await ctx.db.query("vehicleChecklistTemplates").collect();
+    console.log(`Encontrados ${templates.length} templates para migração.`);
     for (const template of templates) {
       const legacyTemplate = template as any;
-      if (!legacyTemplate.operationalFunctionId && legacyTemplate.vehicleId) {
-        const vehicle = (await ctx.db.get(legacyTemplate.vehicleId)) as any;
-        const opFunctionId = findOpFunctionForVehicle(vehicle?.operationalPrefix || "ASA");
-        
+      console.log(`Template ID: ${template._id}, functionId: ${legacyTemplate.operationalFunctionId}, vehicleId: ${legacyTemplate.vehicleId}`);
+      if (!legacyTemplate.operationalFunctionId) {
+        let prefix = "ASA";
+        if (legacyTemplate.vehicleId) {
+          const vehicle = (await ctx.db.get(legacyTemplate.vehicleId)) as any;
+          prefix = vehicle?.operationalPrefix || "ASA";
+        }
+        const opFunctionId = findOpFunctionForVehicle(prefix);
+        console.log(`Patching template ${template._id} to operationalFunctionId: ${opFunctionId}`);
         await ctx.db.patch(template._id, {
           operationalFunctionId: opFunctionId,
           vehicleId: undefined, // Remove legacy field
@@ -428,12 +434,17 @@ export const migrateToOperationalFunctions = mutation({
 
     // 3. Migrate Submissions
     const submissions = await ctx.db.query("vehicleChecklistSubmissions").collect();
+    console.log(`Encontradas ${submissions.length} submissões para migração.`);
     for (const sub of submissions) {
       const legacySub = sub as any;
       if (!legacySub.operationalFunctionId) {
-        const vehicle = (await ctx.db.get(legacySub.vehicleId)) as any;
-        const opFunctionId = findOpFunctionForVehicle(vehicle?.operationalPrefix || "ASA");
-        
+        let prefix = "ASA";
+        if (legacySub.vehicleId) {
+          const vehicle = (await ctx.db.get(legacySub.vehicleId)) as any;
+          prefix = vehicle?.operationalPrefix || "ASA";
+        }
+        const opFunctionId = findOpFunctionForVehicle(prefix);
+        console.log(`Patching submission ${sub._id} to operationalFunctionId: ${opFunctionId}`);
         await ctx.db.patch(sub._id, {
           operationalFunctionId: opFunctionId,
         } as any);
@@ -441,6 +452,16 @@ export const migrateToOperationalFunctions = mutation({
     }
   },
 });
+
+// Query: List all checklist templates for diagnostic purposes
+export const listAllTemplates = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("vehicleChecklistTemplates").collect();
+  },
+});
+
+
 
 // Mutation: Rename default functions in the database (ABT-32 -> Combate a Incêndio, ABTS-12 -> Combate a Incêndio e Salvamento)
 export const renameDefaultFunctions = mutation({

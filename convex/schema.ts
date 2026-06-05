@@ -162,7 +162,8 @@ export default defineSchema({
   }).index("by_name", ["name"]),
 
   vehicleChecklistTemplates: defineTable({
-    operationalFunctionId: v.id("operationalFunctions"), // checklist agora é vinculado à função operacional
+    operationalFunctionId: v.optional(v.id("operationalFunctions")), // checklist agora é vinculado à função operacional
+    vehicleId: v.optional(v.any()), // campo legado temporário para migração
     role: v.union(v.literal("motorista"), v.literal("comandante")),
     content: v.string(), // Texto rico em formato HTML gerado pelo Tiptap
     updatedAt: v.number(),
@@ -170,7 +171,7 @@ export default defineSchema({
   }).index("by_function_and_role", ["operationalFunctionId", "role"]),
 
   vehicleChecklistSubmissions: defineTable({
-    operationalFunctionId: v.id("operationalFunctions"), // Função operacional preenchida
+    operationalFunctionId: v.optional(v.id("operationalFunctions")), // Função operacional preenchida
     vehicleId: v.id("vehicles"), // Viatura física vinculada no momento da submissão
     userId: v.id("users"), // ID do usuário logado que efetuou a submissão
     role: v.union(v.literal("motorista"), v.literal("comandante")),

@@ -110,11 +110,13 @@ export function AdminChecklistsPage() {
     }
   };
 
-  // Run seed on initialization
+  // Run seed and migration on initialization
   const seedMutation = useMutation(api.vehicleChecklists.seed);
+  const migrateMutation = useMutation(api.vehicleChecklists.migrateToOperationalFunctions);
   useEffect(() => {
     seedMutation();
-  }, [seedMutation]);
+    migrateMutation();
+  }, [seedMutation, migrateMutation]);
 
   // Date selection for daily submissions (default to today)
   const [selectedDate, setSelectedDate] = useState<Date>(() => {
