@@ -1,19 +1,27 @@
-import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
-import { Id } from "../../../convex/_generated/dataModel";
+import { useMutation, useQuery } from "convex/react";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { api } from "../../../convex/_generated/api";
+import { Id } from "../../../convex/_generated/dataModel";
 import { SimpleSelect } from "../common/SimpleSelect";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "../ui/combobox";
 
 interface DepartureModalProps {
   open: boolean;
@@ -21,6 +29,7 @@ interface DepartureModalProps {
 }
 
 export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const allVehicles = useQuery(api.vehicles.list, {});
   const inTransitMovements = useQuery(api.vehicleMovements.listInTransit);
   const personnel = useQuery(api.personnel.list, { activeOnly: true });
@@ -29,7 +38,7 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
   // Filter out vehicles that are currently in transit
   const vehicles = allVehicles?.filter((vehicle) => {
     return !inTransitMovements?.some(
-      (movement) => movement.vehicleId === vehicle._id
+      (movement) => movement.vehicleId === vehicle._id,
     );
   });
 
@@ -37,9 +46,17 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
     vehicleId: "" as Id<"vehicles"> | "",
     personnelId: "" as Id<"personnel"> | "",
     destination: "",
-    destinationType: "" as "ocorrencia" | "qrf" | "ceman" | "cal" | "outro" | "",
+    destinationType: "" as
+      | "ocorrencia"
+      | "qrf"
+      | "ceman"
+      | "cal"
+      | "outro"
+      | "",
     notes: "",
   });
+
+  const frameworks = ["Next.js", "SvelteKit", "Nuxt.js", "Remix", "Astro"];
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -64,12 +81,16 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
   // Get latest movement for the selected vehicle to prefill the driver
   const latestMovement = useQuery(
     api.vehicleMovements.getLatest,
-    formData.vehicleId ? { vehicleId: formData.vehicleId } : "skip"
+    formData.vehicleId ? { vehicleId: formData.vehicleId } : "skip",
   );
 
   // Prefill driver when vehicle is selected and latest movement is loaded
   useEffect(() => {
-    if (latestMovement?.personnelId && formData.vehicleId && !formData.personnelId) {
+    if (
+      latestMovement?.personnelId &&
+      formData.vehicleId &&
+      !formData.personnelId
+    ) {
       setFormData((prev) => ({
         ...prev,
         personnelId: latestMovement.personnelId,
@@ -96,8 +117,13 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
       return;
     }
 
-    if (selectedVehicle.currentKm === undefined || selectedVehicle.currentKm === null) {
-      setError("KM atual da viatura não disponível. Verifique se há leituras registradas.");
+    if (
+      selectedVehicle.currentKm === undefined ||
+      selectedVehicle.currentKm === null
+    ) {
+      setError(
+        "KM atual da viatura não disponível. Verifique se há leituras registradas.",
+      );
       return;
     }
 
@@ -127,11 +153,15 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl light text-foreground">
+      <DialogContent
+        ref={setContainer}
+        className="max-w-2xl light text-foreground"
+      >
         <DialogHeader>
           <DialogTitle>Registrar Saída de Viatura</DialogTitle>
           <DialogDescription>
-            Registre a saída de uma viatura informando a viatura, o motorista e o destino.
+            Registre a saída de uma viatura informando a viatura, o motorista e
+            o destino.
           </DialogDescription>
         </DialogHeader>
 
@@ -141,39 +171,56 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
               <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
             </div>
           )}
+          <SimpleSelect
+            label="Viatura"
+            value={formData.vehicleId}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                vehicleId: e.target.value as Id<"vehicles">,
+              })
+            }
+            options={
+              vehicles?.map((v) => ({
+                value: v._id,
+                label: `${v.operationalPrefix} - ${v.plate}`,
+              })) || []
+            }
+            placeholder="Selecione a viatura"
+            required
+          />
 
-          <div className="grid grid-cols-2 gap-4">
-            <SimpleSelect
-              label="Viatura"
-              value={formData.vehicleId}
-              onChange={(e) =>
-                setFormData({ ...formData, vehicleId: e.target.value as Id<"vehicles"> })
+          <div className="space-y-2 flex flex-col">
+            <Label>
+              Motorista <span className="text-red-500">*</span>
+            </Label>
+            <Combobox
+              items={personnel || []}
+              itemToStringLabel={(p) => `${p.rank} ${p.rg} ${p.name}`}
+              itemToStringValue={(p) => p._id}
+              isItemEqualToValue={(p, val) => p?._id === val?._id}
+              value={
+                personnel?.find((p) => p._id === formData.personnelId) || null
               }
-              options={
-                vehicles?.map((v) => ({
-                  value: v._id,
-                  label: `${v.operationalPrefix} - ${v.plate}`,
-                })) || []
+              onValueChange={(p) =>
+                setFormData({
+                  ...formData,
+                  personnelId: p ? p._id : "",
+                })
               }
-              placeholder="Selecione a viatura"
-              required
-            />
-
-            <SimpleSelect
-              label="Motorista"
-              value={formData.personnelId}
-              onChange={(e) =>
-                setFormData({ ...formData, personnelId: e.target.value as Id<"personnel"> })
-              }
-              options={
-                personnel?.map((p) => ({
-                  value: p._id,
-                  label: `${p.rank} ${p.name} - RG ${p.rg}`,
-                })) || []
-              }
-              placeholder="Selecione o motorista"
-              required
-            />
+            >
+              <ComboboxInput placeholder="Selecione o motorista" />
+              <ComboboxContent container={container}>
+                <ComboboxEmpty>Nenhum motorista encontrado.</ComboboxEmpty>
+                <ComboboxList>
+                  {(p) => (
+                    <ComboboxItem key={p._id} value={p}>
+                      {p.rank} {p.rg} {p.name}
+                    </ComboboxItem>
+                  )}
+                </ComboboxList>
+              </ComboboxContent>
+            </Combobox>
           </div>
 
           {selectedVehicle && (
@@ -182,7 +229,10 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
                 <div>
                   <p className="text-muted-foreground">KM de Saída (atual):</p>
                   <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                    {new Intl.NumberFormat("pt-BR").format(selectedVehicle.currentKm)} km
+                    {new Intl.NumberFormat("pt-BR").format(
+                      selectedVehicle.currentKm,
+                    )}{" "}
+                    km
                   </p>
                 </div>
                 <div>
@@ -200,7 +250,6 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
               </p>
             </div>
           )}
-
           <div className="grid grid-cols-2 gap-4">
             <SimpleSelect
               label="Tipo de Destino"
@@ -208,7 +257,8 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  destinationType: e.target.value as typeof formData.destinationType,
+                  destinationType: e.target
+                    .value as typeof formData.destinationType,
                 })
               }
               options={[
@@ -236,7 +286,6 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
               />
             </div>
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="notes">Observações</Label>
             <Input
@@ -248,7 +297,6 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
               placeholder="Observações adicionais (opcional)"
             />
           </div>
-
           <DialogFooter>
             <Button
               type="button"
