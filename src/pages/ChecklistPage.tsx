@@ -304,6 +304,34 @@ export function ChecklistPage() {
           </CardContent>
         </Card>
 
+        {/* General Guidelines */}
+        <Card className="shadow-xs border-amber-200 dark:border-amber-900 border-l-4 border-l-amber-500 bg-amber-50/40 dark:bg-amber-950/10">
+          <CardHeader className="pb-2 flex flex-row items-center gap-2.5">
+            <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
+            <CardTitle className="text-base font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
+              Orientações Gerais
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm space-y-3 leading-relaxed text-amber-900 dark:text-amber-300">
+            <p>
+              Fica estabelecido que o presente Check List de Viatura terá caráter exclusivamente descritivo.
+            </p>
+            <p>
+              Caso sejam identificadas inconsistências, ausências, avarias, extravios, substituições ou quaisquer divergências durante a conferência, deverá ser <strong className="text-amber-950 dark:text-amber-200 font-extrabold underline decoration-amber-500/50">OBRIGATORIAMENTE</strong> confeccionado documento oficial via Sistema Eletrônico de Informações (SEI), encaminhado ao Chefe da SGP para ciência e providências cabíveis.
+            </p>
+            <p>
+              Cada constatação de alteração, inconsistência, ausência ou avaria deverá ser formalizada em <strong className="text-amber-950 dark:text-amber-200 font-extrabold">NOVO PROCESSO</strong> SEI específico, destinado ao Chefe da SGP.
+            </p>
+            <p>
+              O procedimento tem por finalidade facilitar o controle individualizado das alterações constatadas pelos militares durante o serviço operacional.
+            </p>
+            <p>
+              Não havendo alterações ou inconsistências, será suficiente o registro da expressão <strong className="text-amber-950 dark:text-amber-200 font-extrabold">“SEM ALTERAÇÕES”</strong> no campo correspondente ao final do Check List.
+            </p>
+          </CardContent>
+        </Card>
+
+
         {/* Display Materials Template */}
         <Card className="shadow-xs border-border">
           <CardHeader>
