@@ -1,11 +1,11 @@
 import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
 import { Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { Loading } from "../components/common/Loading";
-import { IssueList } from "../components/issues/IssueList";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { api } from "../../convex/_generated/api";
+import { Loading } from "../components/common/Loading";
 import { SimpleSelect } from "../components/common/SimpleSelect";
+import { IssueList } from "../components/issues/IssueList";
 
 const velPanel: React.CSSProperties = {
   background: "#fff",
@@ -81,7 +81,15 @@ export function IssuesPage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 12,
+        }}
+      >
         <div>
           <h1
             style={{
@@ -94,7 +102,14 @@ export function IssuesPage() {
           >
             Problemas
           </h1>
-          <p style={{ color: "#999", fontFamily: "'Barlow', sans-serif", fontSize: 14, marginTop: 4 }}>
+          <p
+            style={{
+              color: "#999",
+              fontFamily: "'Barlow', sans-serif",
+              fontSize: 14,
+              marginTop: 4,
+            }}
+          >
             Gerencie os problemas e defeitos da frota
           </p>
         </div>
@@ -108,9 +123,23 @@ export function IssuesPage() {
       <div style={velPanel}>
         <div style={{ marginBottom: 12 }}>
           <span style={velSectionLabel}>Filtros</span>
-          <div style={{ width: 24, height: 2, background: "#dc2626", marginTop: 6 }} />
+          <div
+            style={{
+              width: 24,
+              height: 2,
+              background: "#dc2626",
+              marginTop: 6,
+            }}
+          />
         </div>
-        <div style={{ display: "flex", gap: 16, alignItems: "flex-end", flexWrap: "wrap" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: 16,
+            alignItems: "flex-end",
+            flexWrap: "wrap",
+          }}
+        >
           <div style={{ width: 240 }}>
             <SimpleSelect
               label="Status"

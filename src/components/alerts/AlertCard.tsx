@@ -1,13 +1,16 @@
+import { AlertTriangle, Clock, Wrench } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Id } from "../../../convex/_generated/dataModel";
-import { AlertTriangle, Clock, Wrench } from "lucide-react";
 
 interface AlertCardProps {
   alert: {
     vehicleId: Id<"vehicles">;
     vehiclePrefix: string;
     vehiclePlate: string;
-    type: "maintenance_overdue" | "maintenance_soon" | "in_maintenance_too_long";
+    type:
+      | "maintenance_overdue"
+      | "maintenance_soon"
+      | "in_maintenance_too_long";
     severity: "critical" | "high" | "medium" | "low";
     message: string;
     details: string;
@@ -116,42 +119,67 @@ export function AlertCard({ alert }: AlertCardProps) {
             <p className="text-[10px] text-[#999]">{alert.vehiclePlate}</p>
           </div>
         </div>
-        <span style={{ ...velBadge, background: config.badgeBg, color: config.color }}>
+        <span
+          style={{
+            ...velBadge,
+            background: config.badgeBg,
+            color: config.color,
+          }}
+        >
           <Icon size={10} />
           {config.label}
         </span>
       </div>
 
       <div className="mt-3">
-        <p className="text-sm font-medium text-[#1a1a1a]" style={{ fontFamily: "'Barlow', sans-serif" }}>
+        <p
+          className="text-sm font-medium text-[#1a1a1a]"
+          style={{ fontFamily: "'Barlow', sans-serif" }}
+        >
           {alert.message}
         </p>
         <p className="text-xs text-[#999] mt-1">{alert.details}</p>
       </div>
 
-      {alert.currentKm !== undefined && alert.nextMaintenanceKm !== undefined && (
-        <div
-          className="mt-3 pt-3 text-xs text-[#999]"
-          style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}
-        >
-          <div className="flex justify-between">
-            <span style={{ fontFamily: "'Barlow Condensed', sans-serif", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: 10 }}>
-              KM atual
-            </span>
-            <span className="font-mono" style={{ color: "#2563eb" }}>
-              {new Intl.NumberFormat("pt-BR").format(alert.currentKm)} km
-            </span>
+      {alert.currentKm !== undefined &&
+        alert.nextMaintenanceKm !== undefined && (
+          <div
+            className="mt-3 pt-3 text-xs text-[#999]"
+            style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}
+          >
+            <div className="flex justify-between">
+              <span
+                style={{
+                  fontFamily: "'Barlow Condensed', sans-serif",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  fontSize: 10,
+                }}
+              >
+                KM atual
+              </span>
+              <span className="font-mono" style={{ color: "#2563eb" }}>
+                {new Intl.NumberFormat("pt-BR").format(alert.currentKm)} km
+              </span>
+            </div>
+            <div className="flex justify-between mt-1">
+              <span
+                style={{
+                  fontFamily: "'Barlow Condensed', sans-serif",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  fontSize: 10,
+                }}
+              >
+                Próxima revisão
+              </span>
+              <span className="font-mono" style={{ color: "#2563eb" }}>
+                {new Intl.NumberFormat("pt-BR").format(alert.nextMaintenanceKm)}{" "}
+                km
+              </span>
+            </div>
           </div>
-          <div className="flex justify-between mt-1">
-            <span style={{ fontFamily: "'Barlow Condensed', sans-serif", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: 10 }}>
-              Próxima revisão
-            </span>
-            <span className="font-mono" style={{ color: "#2563eb" }}>
-              {new Intl.NumberFormat("pt-BR").format(alert.nextMaintenanceKm)} km
-            </span>
-          </div>
-        </div>
-      )}
+        )}
 
       {alert.daysInMaintenance !== undefined && (
         <div
@@ -159,7 +187,14 @@ export function AlertCard({ alert }: AlertCardProps) {
           style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}
         >
           <div className="flex justify-between">
-            <span style={{ fontFamily: "'Barlow Condensed', sans-serif", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: 10 }}>
+            <span
+              style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                fontSize: 10,
+              }}
+            >
               Dias em manutenção
             </span>
             <span className="font-semibold" style={{ color: config.color }}>
