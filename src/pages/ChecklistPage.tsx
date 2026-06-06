@@ -31,7 +31,9 @@ import { SimpleSelect } from "../components/common/SimpleSelect";
 
 export function ChecklistPage() {
   const [searchParams] = useSearchParams();
-  const opFunctions = useQuery(api.vehicleChecklists.listOperationalFunctions, { activeOnly: true });
+  const opFunctions = useQuery(api.vehicleChecklists.listOperationalFunctions, {
+    activeOnly: true,
+  });
   const submitChecklist = useMutation(api.vehicleChecklists.submitChecklist);
 
   const [formData, setFormData] = useState({
@@ -45,7 +47,7 @@ export function ChecklistPage() {
 
   // Find the selected function details
   const selectedFunction = opFunctions?.find(
-    (f) => f._id === formData.operationalFunctionId
+    (f) => f._id === formData.operationalFunctionId,
   );
   const isVehicleLinked = !!selectedFunction?.vehicle;
 
@@ -54,16 +56,20 @@ export function ChecklistPage() {
     const paramVehicleId = searchParams.get("vehicleId");
     if (paramVehicleId && opFunctions) {
       const matchedFunction = opFunctions.find(
-        (f) => f.currentVehicleId === paramVehicleId
+        (f) => f.currentVehicleId === paramVehicleId,
       );
       if (matchedFunction) {
         setFormData((prev) => ({
           ...prev,
           operationalFunctionId: matchedFunction._id,
         }));
-        toast.success(`Função ${matchedFunction.name} identificada para a viatura escaneada.`);
+        toast.success(
+          `Função ${matchedFunction.name} identificada para a viatura escaneada.`,
+        );
       } else {
-        toast.error("Nenhuma função operacional ativa está vinculada a esta viatura no momento.");
+        toast.error(
+          "Nenhuma função operacional ativa está vinculada a esta viatura no momento.",
+        );
       }
     }
   }, [searchParams, opFunctions]);
@@ -72,7 +78,10 @@ export function ChecklistPage() {
   const template = useQuery(
     api.vehicleChecklists.getTemplate,
     formData.operationalFunctionId && formData.role
-      ? { operationalFunctionId: formData.operationalFunctionId, role: formData.role }
+      ? {
+          operationalFunctionId: formData.operationalFunctionId,
+          role: formData.role,
+        }
       : "skip",
   );
 
@@ -99,7 +108,9 @@ export function ChecklistPage() {
     }
 
     if (!isVehicleLinked) {
-      toast.error("Não é possível enviar o checklist sem uma viatura vinculada.");
+      toast.error(
+        "Não é possível enviar o checklist sem uma viatura vinculada.",
+      );
       return;
     }
 
@@ -134,9 +145,12 @@ export function ChecklistPage() {
                 Checklist Registrado!
               </CardTitle>
               <CardDescription className="text-base text-muted-foreground">
-                A conferência da função <strong>{selectedFunction?.name}</strong>{" "}
-                (Viatura: {selectedFunction?.vehicle?.operationalPrefix || "N/A"}) para{" "}
-                <strong>{formData.role === "motorista" ? "Motorista" : "Comandante"}</strong>{" "}
+                A conferência da função{" "}
+                <strong>{selectedFunction?.name}</strong> (Viatura:{" "}
+                {selectedFunction?.vehicle?.operationalPrefix || "N/A"}) para{" "}
+                <strong>
+                  {formData.role === "motorista" ? "Motorista" : "Comandante"}
+                </strong>{" "}
                 foi salva com sucesso no sistema.
               </CardDescription>
             </div>
@@ -202,15 +216,17 @@ export function ChecklistPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card className="shadow-xs border-border">
           <CardHeader className="pb-4">
-            <CardTitle className="text-lg">Função Operacional e Papel</CardTitle>
+            <CardTitle className="text-lg">
+              Função Operacional e Papel
+            </CardTitle>
             <CardDescription>
-              Selecione a função que você está assumindo no serviço
+              Selecione a viatura e função que está assumindo no serviço
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2 flex flex-col">
               <label className="text-sm font-medium leading-none">
-                Função Operacional <span className="text-red-500">*</span>
+                Viatura <span className="text-red-500">*</span>
               </label>
               <Combobox
                 items={opFunctionOptions}
@@ -222,11 +238,13 @@ export function ChecklistPage() {
                 onValueChange={(v) =>
                   setFormData((prev) => ({
                     ...prev,
-                    operationalFunctionId: v ? (v.value as Id<"operationalFunctions">) : "",
+                    operationalFunctionId: v
+                      ? (v.value as Id<"operationalFunctions">)
+                      : "",
                   }))
                 }
               >
-                <ComboboxInput placeholder="Selecione a função" />
+                <ComboboxInput placeholder="Selecione a viatura" />
                 <ComboboxContent>
                   <ComboboxEmpty>Nenhuma função encontrada.</ComboboxEmpty>
                   <ComboboxList>
@@ -244,9 +262,13 @@ export function ChecklistPage() {
               <div className="flex gap-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg p-4 text-red-800 dark:text-red-400">
                 <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                  <h4 className="font-bold text-sm">Vincular Viatura Pendente</h4>
+                  <h4 className="font-bold text-sm">
+                    Vincular Viatura Pendente
+                  </h4>
                   <p className="text-xs leading-relaxed text-red-800/95 dark:text-red-300">
-                    Esta função ({selectedFunction?.name}) não possui nenhuma viatura física vinculada pelo Comando para este turno. O preenchimento do checklist está bloqueado.
+                    Esta função ({selectedFunction?.name}) não possui nenhuma
+                    viatura física vinculada. Entre em contato com a SGP. O
+                    preenchimento do checklist está bloqueado.
                   </p>
                 </div>
               </div>
@@ -254,15 +276,19 @@ export function ChecklistPage() {
 
             {formData.operationalFunctionId && isVehicleLinked && (
               <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-lg p-4 space-y-1 text-blue-800 dark:text-blue-300">
-                <span className="text-xs font-semibold uppercase tracking-wider block">Viatura Vinculada:</span>
+                <span className="text-xs font-semibold uppercase tracking-wider block">
+                  Viatura Vinculada:
+                </span>
                 <p className="text-sm font-medium">
-                  {selectedFunction?.vehicle?.operationalPrefix} ({selectedFunction?.vehicle?.model} - Placa: {selectedFunction?.vehicle?.plate})
+                  {selectedFunction?.vehicle?.operationalPrefix} (
+                  {selectedFunction?.vehicle?.model} - Placa:{" "}
+                  {selectedFunction?.vehicle?.plate})
                 </p>
               </div>
             )}
 
             <SimpleSelect
-              label="Papel no Serviço"
+              label="Função"
               placeholder="Selecione sua função"
               options={roleOptions}
               value={formData.role}
@@ -294,7 +320,8 @@ export function ChecklistPage() {
               </p>
             ) : !isVehicleLinked ? (
               <p className="text-sm text-destructive dark:text-red-400 text-center font-medium">
-                Viatura física não vinculada a esta função. Vinculação necessária para preencher.
+                Viatura física não vinculada a esta função. Vinculação
+                necessária para preencher.
               </p>
             ) : template === undefined ? (
               <p className="text-sm text-muted-foreground text-center">
@@ -302,7 +329,8 @@ export function ChecklistPage() {
               </p>
             ) : template === null ? (
               <p className="text-sm text-destructive dark:text-red-400 text-center font-medium">
-                Nenhum checklist cadastrado para esta função operacional e papel de serviço.
+                Nenhum checklist cadastrado para esta função operacional e papel
+                de serviço.
               </p>
             ) : (
               <div className="space-y-4">
@@ -328,75 +356,89 @@ export function ChecklistPage() {
         </Card>
 
         {/* Alteration Selector */}
-        {formData.operationalFunctionId && formData.role && template && isVehicleLinked && (
-          <Card className="shadow-xs border-border">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg">
-                Resultado da Conferência
-              </CardTitle>
-              <CardDescription>
-                Existem materiais faltantes, danificados ou divergências?
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFormData((prev) => ({ ...prev, hasAlterations: false }))
-                  }
-                  className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all cursor-pointer ${
-                    !formData.hasAlterations
-                      ? "border-green-500 bg-green-50/50 dark:bg-green-950/10 text-green-700 dark:text-green-400"
-                      : "border-border hover:bg-muted/50"
-                  }`}
-                >
-                  <CheckCircle className="w-8 h-8 mb-2" />
-                  <span className="font-semibold text-sm">Sem Alterações</span>
-                </button>
+        {formData.operationalFunctionId &&
+          formData.role &&
+          template &&
+          isVehicleLinked && (
+            <Card className="shadow-xs border-border">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg">
+                  Resultado da Conferência
+                </CardTitle>
+                <CardDescription>
+                  Existem materiais faltantes, danificados ou divergências?
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        hasAlterations: false,
+                      }))
+                    }
+                    className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all cursor-pointer ${
+                      !formData.hasAlterations
+                        ? "border-green-500 bg-green-50/50 dark:bg-green-950/10 text-green-700 dark:text-green-400"
+                        : "border-border hover:bg-muted/50"
+                    }`}
+                  >
+                    <CheckCircle className="w-8 h-8 mb-2" />
+                    <span className="font-semibold text-sm">
+                      Sem Alterações
+                    </span>
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFormData((prev) => ({ ...prev, hasAlterations: true }))
-                  }
-                  className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all cursor-pointer ${
-                    formData.hasAlterations
-                      ? "border-red-500 bg-red-50/50 dark:bg-red-950/10 text-red-700 dark:text-red-400 font-semibold"
-                      : "border-border hover:bg-muted/50"
-                  }`}
-                >
-                  <AlertTriangle className="w-8 h-8 mb-2" />
-                  <span className="font-semibold text-sm">Com Alterações</span>
-                </button>
-              </div>
-
-              {formData.hasAlterations && (
-                <div className="flex gap-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg p-4 text-red-800 dark:text-red-400">
-                  <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5" />
-                  <div className="space-y-1">
-                    <h4 className="font-bold text-sm">
-                      Registro de Processo Obrigatório
-                    </h4>
-                    <p className="text-xs leading-relaxed text-red-800/95 dark:text-red-300">
-                      Caso sejam identificadas inconsistências, avarias,
-                      extravios, substituições ou ausência de materiais, você
-                      deve <strong>obrigatoriamente</strong> abrir um novo
-                      processo no SEI direcionado ao Chefe da SGP relatando a
-                      situação.
-                    </p>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData((prev) => ({ ...prev, hasAlterations: true }))
+                    }
+                    className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all cursor-pointer ${
+                      formData.hasAlterations
+                        ? "border-red-500 bg-red-50/50 dark:bg-red-950/10 text-red-700 dark:text-red-400 font-semibold"
+                        : "border-border hover:bg-muted/50"
+                    }`}
+                  >
+                    <AlertTriangle className="w-8 h-8 mb-2" />
+                    <span className="font-semibold text-sm">
+                      Com Alterações
+                    </span>
+                  </button>
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
+
+                {formData.hasAlterations && (
+                  <div className="flex gap-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg p-4 text-red-800 dark:text-red-400">
+                    <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <h4 className="font-bold text-sm">
+                        Registro de Processo Obrigatório
+                      </h4>
+                      <p className="text-xs leading-relaxed text-red-800/95 dark:text-red-300">
+                        Caso sejam identificadas inconsistências, avarias,
+                        extravios, substituições ou ausência de materiais, você
+                        deve <strong>obrigatoriamente</strong> abrir um novo
+                        processo no SEI direcionado ao Chefe da SGP relatando a
+                        situação.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
         <Button
           type="submit"
           className="w-full text-base py-6 font-semibold"
           disabled={
-            isSubmitting || !formData.operationalFunctionId || !formData.role || !template || !isVehicleLinked
+            isSubmitting ||
+            !formData.operationalFunctionId ||
+            !formData.role ||
+            !template ||
+            !isVehicleLinked
           }
         >
           {isSubmitting ? "Enviando..." : "Enviar Checklist"}
