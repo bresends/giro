@@ -199,7 +199,7 @@ export function ChecklistPage() {
   }
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-6 space-y-6">
+    <div className="max-w-xl mx-auto px-0 sm:px-4 py-6 space-y-6">
       <div className="flex items-center gap-3">
         <div className="p-2 bg-primary/10 rounded-lg">
           <ClipboardList className="w-6 h-6 text-primary" />
