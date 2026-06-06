@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/combobox";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
+import { RichTextRenderer } from "../components/common/RichTextRenderer";
 import { SimpleSelect } from "../components/common/SimpleSelect";
 
 export function ChecklistPage() {
@@ -346,10 +347,7 @@ export function ChecklistPage() {
                     h
                   </span>
                 </div>
-                <div
-                  className="prose prose-sm dark:prose-invert max-w-none text-sm wrap-break-word leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: template.content }}
-                />
+                <RichTextRenderer content={template.content} />
               </div>
             )}
           </CardContent>
