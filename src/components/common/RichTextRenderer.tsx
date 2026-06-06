@@ -14,7 +14,7 @@ export function RichTextRenderer({ content }: RichTextRendererProps) {
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm dark:prose-invert max-w-none text-sm wrap-break-word leading-relaxed [&_p]:my-1.5 [&_ul]:my-1.5 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-6 focus:outline-none",
+          "prose prose-sm dark:prose-invert max-w-none text-sm wrap-break-word leading-relaxed text-justify [&_p]:my-1.5 [&_ul]:my-1.5 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-6 focus:outline-none",
       },
     },
   });
