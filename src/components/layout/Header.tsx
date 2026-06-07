@@ -1,6 +1,7 @@
-import { useConvexAuth } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { LogOut, Zap } from "lucide-react";
+import { useConvexAuth } from "convex/react";
+import { LogOut } from "lucide-react";
+import { Logo } from "../common/Logo";
 
 export function Header() {
   const { isAuthenticated } = useConvexAuth();
@@ -18,12 +19,7 @@ export function Header() {
       <div className="px-6">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-end gap-3">
-            <Zap
-              className="text-red-600 mb-0.5"
-              size={24}
-              strokeWidth={2}
-              fill="rgba(220,38,38,0.12)"
-            />
+            <Logo size={10} className="mb-0.5" />
             <h1
               className="text-2xl text-[#1a1a1a] leading-none tracking-wider"
               style={{ fontFamily: "'Bebas Neue', sans-serif" }}
@@ -32,7 +28,9 @@ export function Header() {
             </h1>
             <div
               className="h-0.5 w-8 mb-1"
-              style={{ background: "linear-gradient(90deg, #dc2626, transparent)" }}
+              style={{
+                background: "linear-gradient(90deg, #dc2626, transparent)",
+              }}
             />
             <span
               className="text-[10px] text-[#999] tracking-[0.2em] uppercase mb-0.5"

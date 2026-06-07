@@ -2,10 +2,10 @@
 
 import { useAuthActions } from "@convex-dev/auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Zap } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
+import { Logo } from "../../components/common/Logo";
 
 const signInSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -60,9 +60,19 @@ export function LoginVelocityLight() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
 
+        .vl-input-wrapper {
+          background: #e5e5e5;
+          padding: 1px;
+          transition: all 0.2s ease;
+          clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+        }
+        .vl-input-wrapper:focus-within {
+          background: #dc2626;
+          box-shadow: 0 0 20px rgba(220,38,38,0.06);
+        }
         .vl-input {
           background: #fff;
-          border: 1.5px solid #e5e5e5;
+          border: none;
           color: #1a1a1a;
           font-family: 'Barlow', sans-serif;
           font-size: 15px;
@@ -70,17 +80,12 @@ export function LoginVelocityLight() {
           padding: 13px 16px;
           width: 100%;
           outline: none;
-          transition: all 0.2s ease;
+          display: block;
           clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
         }
         .vl-input::placeholder {
           color: #c0c0c0;
           font-weight: 300;
-        }
-        .vl-input:focus {
-          border-color: #dc2626;
-          background: #fff;
-          box-shadow: 0 0 20px rgba(220,38,38,0.06);
         }
 
         .vl-btn {
@@ -168,19 +173,31 @@ export function LoginVelocityLight() {
             viewBox="0 0 500 500"
           >
             <line
-              x1="500" y1="0" x2="0" y2="500"
-              stroke="#dc2626" strokeWidth="1"
+              x1="500"
+              y1="0"
+              x2="0"
+              y2="500"
+              stroke="#dc2626"
+              strokeWidth="1"
               strokeDasharray="6 6"
               style={{ animation: "dash-move-light 1s linear infinite" }}
             />
             <line
-              x1="500" y1="100" x2="100" y2="500"
-              stroke="#dc2626" strokeWidth="0.5"
+              x1="500"
+              y1="100"
+              x2="100"
+              y2="500"
+              stroke="#dc2626"
+              strokeWidth="0.5"
               strokeDasharray="4 8"
             />
             <line
-              x1="500" y1="200" x2="200" y2="500"
-              stroke="#dc2626" strokeWidth="0.5"
+              x1="500"
+              y1="200"
+              x2="200"
+              y2="500"
+              stroke="#dc2626"
+              strokeWidth="0.5"
             />
           </svg>
 
@@ -191,11 +208,14 @@ export function LoginVelocityLight() {
           >
             <polygon
               points="0,400 0,200 200,400"
-              fill="none" stroke="#dc2626" strokeWidth="1"
+              fill="none"
+              stroke="#dc2626"
+              strokeWidth="1"
             />
             <polygon
               points="0,400 0,300 100,400"
-              fill="rgba(220,38,38,0.15)" stroke="none"
+              fill="rgba(220,38,38,0.15)"
+              stroke="none"
             />
           </svg>
 
@@ -226,14 +246,9 @@ export function LoginVelocityLight() {
         <div className="w-full max-w-[400px] relative z-10">
           {/* Brand header */}
           <div className="mb-10 vl-animate-1">
-            <div className="flex items-end gap-4 mb-3">
-              <div className="relative">
-                <Zap
-                  className="text-red-600"
-                  size={32}
-                  strokeWidth={2}
-                  fill="rgba(220,38,38,0.12)"
-                />
+            <div className="flex items-end gap-2 mb-3">
+              <div className="relative mb-1">
+                <Logo size={46} />
               </div>
               <h1
                 className="text-5xl text-[#1a1a1a] leading-none tracking-wider"
@@ -244,9 +259,9 @@ export function LoginVelocityLight() {
               <div
                 className="h-1 flex-1 mb-2"
                 style={{
-                  background:
-                    "linear-gradient(90deg, #dc2626, transparent)",
-                  clipPath: "polygon(0 0, 100% 0, calc(100% - 4px) 100%, 0 100%)",
+                  background: "linear-gradient(90deg, #dc2626, transparent)",
+                  clipPath:
+                    "polygon(0 0, 100% 0, calc(100% - 4px) 100%, 0 100%)",
                 }}
               />
             </div>
@@ -277,7 +292,8 @@ export function LoginVelocityLight() {
                 border: "1px solid rgba(0,0,0,0.06)",
                 clipPath:
                   "polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px))",
-                boxShadow: "0 4px 40px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.03)",
+                boxShadow:
+                  "0 4px 40px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.03)",
                 backdropFilter: "blur(12px)",
               }}
             >
@@ -303,7 +319,10 @@ export function LoginVelocityLight() {
               <div className="mb-6">
                 <h2
                   className="text-2xl text-[#1a1a1a] tracking-[0.1em] uppercase"
-                  style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600 }}
+                  style={{
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    fontWeight: 600,
+                  }}
                 >
                   {flow === "signIn" ? "Acessar" : "Registrar"}
                 </h2>
@@ -329,13 +348,15 @@ export function LoginVelocityLight() {
                       >
                         Email
                       </label>
-                      <input
-                        {...field}
-                        type="email"
-                        placeholder="operador@cbmgo.gov.br"
-                        className="vl-input"
-                        autoComplete="email"
-                      />
+                      <div className="vl-input-wrapper">
+                        <input
+                          {...field}
+                          type="email"
+                          placeholder="operador@cbmgo.gov.br"
+                          className="vl-input"
+                          autoComplete="email"
+                        />
+                      </div>
                       {fieldState.invalid && fieldState.error && (
                         <p className="text-xs text-red-600 mt-1">
                           {fieldState.error.message}
@@ -356,16 +377,18 @@ export function LoginVelocityLight() {
                       >
                         Senha
                       </label>
-                      <input
-                        {...field}
-                        type="password"
-                        className="vl-input"
-                        autoComplete={
-                          flow === "signIn"
-                            ? "current-password"
-                            : "new-password"
-                        }
-                      />
+                      <div className="vl-input-wrapper">
+                        <input
+                          {...field}
+                          type="password"
+                          className="vl-input"
+                          autoComplete={
+                            flow === "signIn"
+                              ? "current-password"
+                              : "new-password"
+                          }
+                        />
+                      </div>
                       {fieldState.invalid && fieldState.error && (
                         <p className="text-xs text-red-600 mt-1">
                           {fieldState.error.message}
@@ -389,12 +412,14 @@ export function LoginVelocityLight() {
                         >
                           Confirmar Senha
                         </label>
-                        <input
-                          {...field}
-                          type="password"
-                          className="vl-input"
-                          autoComplete="new-password"
-                        />
+                        <div className="vl-input-wrapper">
+                          <input
+                            {...field}
+                            type="password"
+                            className="vl-input"
+                            autoComplete="new-password"
+                          />
+                        </div>
                         {fieldState.invalid && fieldState.error && (
                           <p className="text-xs text-red-600 mt-1">
                             {fieldState.error.message}

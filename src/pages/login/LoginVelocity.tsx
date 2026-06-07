@@ -2,10 +2,10 @@
 
 import { useAuthActions } from "@convex-dev/auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Zap } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
+import { Logo } from "../../components/common/Logo";
 
 const signInSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -60,9 +60,19 @@ export function LoginVelocity() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
 
+        .vel-input-wrapper {
+          background: rgba(255,255,255,0.08);
+          padding: 1px;
+          transition: all 0.2s ease;
+          clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+        }
+        .vel-input-wrapper:focus-within {
+          background: #dc2626;
+          box-shadow: 0 0 20px rgba(220,38,38,0.1);
+        }
         .vel-input {
-          background: rgba(255,255,255,0.04);
-          border: 1.5px solid rgba(255,255,255,0.08);
+          background: #0d0d0d;
+          border: none;
           color: #fff;
           font-family: 'Barlow', sans-serif;
           font-size: 15px;
@@ -70,17 +80,12 @@ export function LoginVelocity() {
           padding: 13px 16px;
           width: 100%;
           outline: none;
-          transition: all 0.2s ease;
+          display: block;
           clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
         }
         .vel-input::placeholder {
           color: rgba(255,255,255,0.15);
           font-weight: 300;
-        }
-        .vel-input:focus {
-          border-color: #dc2626;
-          background: rgba(220,38,38,0.05);
-          box-shadow: 0 0 20px rgba(220,38,38,0.1);
         }
 
         .vel-btn {
@@ -168,19 +173,31 @@ export function LoginVelocity() {
             viewBox="0 0 500 500"
           >
             <line
-              x1="500" y1="0" x2="0" y2="500"
-              stroke="#dc2626" strokeWidth="1"
+              x1="500"
+              y1="0"
+              x2="0"
+              y2="500"
+              stroke="#dc2626"
+              strokeWidth="1"
               strokeDasharray="6 6"
               style={{ animation: "dash-move 1s linear infinite" }}
             />
             <line
-              x1="500" y1="100" x2="100" y2="500"
-              stroke="#dc2626" strokeWidth="0.5"
+              x1="500"
+              y1="100"
+              x2="100"
+              y2="500"
+              stroke="#dc2626"
+              strokeWidth="0.5"
               strokeDasharray="4 8"
             />
             <line
-              x1="500" y1="200" x2="200" y2="500"
-              stroke="#dc2626" strokeWidth="0.5"
+              x1="500"
+              y1="200"
+              x2="200"
+              y2="500"
+              stroke="#dc2626"
+              strokeWidth="0.5"
             />
           </svg>
 
@@ -190,11 +207,14 @@ export function LoginVelocity() {
           >
             <polygon
               points="0,400 0,200 200,400"
-              fill="none" stroke="#dc2626" strokeWidth="1"
+              fill="none"
+              stroke="#dc2626"
+              strokeWidth="1"
             />
             <polygon
               points="0,400 0,300 100,400"
-              fill="rgba(220,38,38,0.3)" stroke="none"
+              fill="rgba(220,38,38,0.3)"
+              stroke="none"
             />
           </svg>
         </div>
@@ -220,13 +240,8 @@ export function LoginVelocity() {
           {/* Brand header */}
           <div className="mb-10 vel-animate-1">
             <div className="flex items-end gap-4 mb-3">
-              <div className="relative">
-                <Zap
-                  className="text-red-500"
-                  size={32}
-                  strokeWidth={2}
-                  fill="rgba(220,38,38,0.2)"
-                />
+              <div className="relative mb-1">
+                <Logo size={44} />
               </div>
               <h1
                 className="text-5xl text-white leading-none tracking-wider"
@@ -237,9 +252,9 @@ export function LoginVelocity() {
               <div
                 className="h-1 flex-1 mb-2"
                 style={{
-                  background:
-                    "linear-gradient(90deg, #dc2626, transparent)",
-                  clipPath: "polygon(0 0, 100% 0, calc(100% - 4px) 100%, 0 100%)",
+                  background: "linear-gradient(90deg, #dc2626, transparent)",
+                  clipPath:
+                    "polygon(0 0, 100% 0, calc(100% - 4px) 100%, 0 100%)",
                 }}
               />
             </div>
@@ -286,7 +301,10 @@ export function LoginVelocity() {
               <div className="mb-6">
                 <h2
                   className="text-2xl text-white tracking-[0.1em] uppercase"
-                  style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600 }}
+                  style={{
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    fontWeight: 600,
+                  }}
                 >
                   {flow === "signIn" ? "Acessar" : "Registrar"}
                 </h2>
@@ -312,13 +330,15 @@ export function LoginVelocity() {
                       >
                         Email
                       </label>
-                      <input
-                        {...field}
-                        type="email"
-                        placeholder="operador@cbmgo.gov.br"
-                        className="vel-input"
-                        autoComplete="email"
-                      />
+                      <div className="vel-input-wrapper">
+                        <input
+                          {...field}
+                          type="email"
+                          placeholder="operador@cbmgo.gov.br"
+                          className="vel-input"
+                          autoComplete="email"
+                        />
+                      </div>
                       {fieldState.invalid && fieldState.error && (
                         <p className="text-xs text-red-400 mt-1">
                           {fieldState.error.message}
@@ -339,16 +359,18 @@ export function LoginVelocity() {
                       >
                         Senha
                       </label>
-                      <input
-                        {...field}
-                        type="password"
-                        className="vel-input"
-                        autoComplete={
-                          flow === "signIn"
-                            ? "current-password"
-                            : "new-password"
-                        }
-                      />
+                      <div className="vel-input-wrapper">
+                        <input
+                          {...field}
+                          type="password"
+                          className="vel-input"
+                          autoComplete={
+                            flow === "signIn"
+                              ? "current-password"
+                              : "new-password"
+                          }
+                        />
+                      </div>
                       {fieldState.invalid && fieldState.error && (
                         <p className="text-xs text-red-400 mt-1">
                           {fieldState.error.message}
@@ -372,12 +394,14 @@ export function LoginVelocity() {
                         >
                           Confirmar Senha
                         </label>
-                        <input
-                          {...field}
-                          type="password"
-                          className="vel-input"
-                          autoComplete="new-password"
-                        />
+                        <div className="vel-input-wrapper">
+                          <input
+                            {...field}
+                            type="password"
+                            className="vel-input"
+                            autoComplete="new-password"
+                          />
+                        </div>
                         {fieldState.invalid && fieldState.error && (
                           <p className="text-xs text-red-400 mt-1">
                             {fieldState.error.message}

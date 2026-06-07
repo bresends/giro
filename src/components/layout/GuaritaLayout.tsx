@@ -1,6 +1,7 @@
 import { useAuthActions } from "@convex-dev/auth/react";
-import { LogOut, Zap } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useLayoutEffect } from "react";
+import { Logo } from "../common/Logo";
 
 interface GuaritaLayoutProps {
   children: React.ReactNode;
@@ -44,12 +45,7 @@ export function GuaritaLayout({ children }: GuaritaLayoutProps) {
         <div className="container mx-auto px-6">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-end gap-3">
-              <Zap
-                className="text-red-600 mb-0.5"
-                size={24}
-                strokeWidth={2}
-                fill="rgba(220,38,38,0.12)"
-              />
+              <Logo size={30} className="mb-0.5" />
               <h1
                 className="text-2xl text-[#1a1a1a] leading-none tracking-wider"
                 style={{ fontFamily: "'Bebas Neue', sans-serif" }}
