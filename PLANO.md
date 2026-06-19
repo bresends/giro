@@ -3,7 +3,7 @@
 > **Projeto:** GIRO — Sistema de Gestão de Frota CBMGO  
 > **Data:** 2026-06-19  
 > **Estratégia:** Branch nova a partir da `main`, aplicar o design manualmente componente por componente  
-> **Branch de referência:** `feat/velocity-light-design-system`  
+> **Branch de referência:** `feat/velocity-light-design-system`
 
 ---
 
@@ -12,6 +12,7 @@
 A branch `feat/velocity-light-design-system` implementou um **overhaul visual completo** da aplicação, substituindo o design genérico por uma linguagem visual própria chamada **"Velocity Light"** — um design tático, angular e inspirado em motorsport/engenharia militar.
 
 A `main`, porém, evoluiu bastante em funcionalidades (23 commits à frente do merge-base), incluindo:
+
 - **Combobox** (3 PRs)
 - **Vehicle Checklist completo** (schema, backend, páginas, UI — 4 PRs)
 - **Temporal API** para reset de motorista por turno
@@ -28,27 +29,27 @@ O CSS base (`index.css`) é **essencialmente idêntico** entre as branches — a
 
 ### Identidade Visual
 
-| Aspecto | Especificação |
-|---|---|
-| **Estética** | Light, flat, tático-angular, inspirado em motorsport |
+| Aspecto                  | Especificação                                                           |
+| ------------------------ | ----------------------------------------------------------------------- |
+| **Estética**             | Light, flat, tático-angular, inspirado em motorsport                    |
 | **Background da página** | `#f7f7f7` + listras diagonais sutis `rgba(220,38,38,0.015)` a cada 80px |
-| **Superfícies/Cards** | `#ffffff` |
-| **Cor da marca** | `#dc2626` (vermelho) — botões, acentos, bordas ativas |
-| **Cor de dados** | `#2563eb` (azul) — KM, valores, links |
-| **Texto primário** | `#1a1a1a` |
-| **Texto muted** | `#999999` |
-| **Bordas** | `rgba(0,0,0,0.06)` |
-| **Cantos** | **clip-path chanfrados** (NÃO border-radius) |
-| **Sombras** | Praticamente zero — só `hover:shadow-md` em interações |
+| **Superfícies/Cards**    | `#ffffff`                                                               |
+| **Cor da marca**         | `#dc2626` (vermelho) — botões, acentos, bordas ativas                   |
+| **Cor de dados**         | `#2563eb` (azul) — KM, valores, links                                   |
+| **Texto primário**       | `#1a1a1a`                                                               |
+| **Texto muted**          | `#999999`                                                               |
+| **Bordas**               | `rgba(0,0,0,0.06)`                                                      |
+| **Cantos**               | **clip-path chanfrados** (NÃO border-radius)                            |
+| **Sombras**              | Praticamente zero — só `hover:shadow-md` em interações                  |
 
 ### Tipografia
 
-| Fonte | Peso | Uso |
-|---|---|---|
-| **Bebas Neue** | 400 | Headings, números grandes, brand "GIRO", prefixos de viaturas |
-| **Barlow** | 300-700 | Body text, inputs, descrições, UI geral |
-| **Barlow Condensed** | 400-700 | Labels, badges, navegação, meta info, uppercase |
-| **Menlo** (mono) | — | Valores de KM, números de processo |
+| Fonte                | Peso    | Uso                                                           |
+| -------------------- | ------- | ------------------------------------------------------------- |
+| **Bebas Neue**       | 400     | Headings, números grandes, brand "GIRO", prefixos de viaturas |
+| **Barlow**           | 300-700 | Body text, inputs, descrições, UI geral                       |
+| **Barlow Condensed** | 400-700 | Labels, badges, navegação, meta info, uppercase               |
+| **Menlo** (mono)     | —       | Valores de KM, números de processo                            |
 
 ### Import de Fontes (adicionar no `index.css`)
 
@@ -83,19 +84,26 @@ Nav item:             Barlow Condensed, 500/700, 12px, tracking 0.1em, UPPERCASE
 Todos os cantos usam este padrão — **NÃO usar border-radius** em componentes custom:
 
 ```css
-clipPath: polygon(0 0, calc(100% - Xpx) 0, 100% Xpx, 100% 100%, Xpx 100%, 0 calc(100% - Xpx))
+clippath: polygon(
+  0 0,
+  calc(100% - Xpx) 0,
+  100% Xpx,
+  100% 100%,
+  Xpx 100%,
+  0 calc(100% - Xpx)
+);
 ```
 
-| Elemento | X (tamanho do corte) |
-|---|---|
-| Badges | 4px |
-| Botões pequenos | 6px |
-| Guarita button (sidebar) | 8px |
-| Inputs | 8px |
-| Stat cards | 10px |
-| Vehicle cards | 10px |
-| Botão primário | 12px |
-| Login form panel | 16px |
+| Elemento                 | X (tamanho do corte) |
+| ------------------------ | -------------------- |
+| Badges                   | 4px                  |
+| Botões pequenos          | 6px                  |
+| Guarita button (sidebar) | 8px                  |
+| Inputs                   | 8px                  |
+| Stat cards               | 10px                 |
+| Vehicle cards            | 10px                 |
+| Botão primário           | 12px                 |
+| Login form panel         | 16px                 |
 
 ### Padrão de Badge
 
@@ -109,21 +117,22 @@ const velBadge = {
   fontWeight: 600,
   letterSpacing: "0.1em",
   textTransform: "uppercase" as const,
-  clipPath: "polygon(0 0, calc(100%-4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100%-4px))",
+  clipPath:
+    "polygon(0 0, calc(100%-4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100%-4px))",
 };
 ```
 
 ### Mapa de Cores de Badge
 
-| Estado | Background | Cor do texto |
-|---|---|---|
-| Ativa / Concluída / Resolvido | `rgba(22,163,74,0.08)` | `#16a34a` |
-| Em Manutenção / Corretiva | `rgba(249,115,22,0.08)` | `#ea580c` |
-| Operacional / Info | `rgba(37,99,235,0.08)` | `#2563eb` |
-| Backup / Neutral | `rgba(0,0,0,0.04)` | `#999` |
-| Em Andamento / Média | `rgba(234,179,8,0.08)` | `#ca8a04` |
-| Cancelada / Crítica | `rgba(220,38,38,0.08)` | `#dc2626` |
-| Baixa | `rgba(37,99,235,0.08)` | `#2563eb` |
+| Estado                        | Background              | Cor do texto |
+| ----------------------------- | ----------------------- | ------------ |
+| Ativa / Concluída / Resolvido | `rgba(22,163,74,0.08)`  | `#16a34a`    |
+| Em Manutenção / Corretiva     | `rgba(249,115,22,0.08)` | `#ea580c`    |
+| Operacional / Info            | `rgba(37,99,235,0.08)`  | `#2563eb`    |
+| Backup / Neutral              | `rgba(0,0,0,0.04)`      | `#999`       |
+| Em Andamento / Média          | `rgba(234,179,8,0.08)`  | `#ca8a04`    |
+| Cancelada / Crítica           | `rgba(220,38,38,0.08)`  | `#dc2626`    |
+| Baixa                         | `rgba(37,99,235,0.08)`  | `#2563eb`    |
 
 ### Padrão de Card
 
@@ -131,7 +140,8 @@ const velBadge = {
 const velPanel: CSSProperties = {
   background: "#fff",
   border: "1px solid rgba(0,0,0,0.06)",
-  clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))",
+  clipPath:
+    "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))",
 };
 ```
 
@@ -149,7 +159,8 @@ const velBtnPrimary: CSSProperties = {
   padding: "10px 24px",
   border: "none",
   cursor: "pointer",
-  clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))",
+  clipPath:
+    "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))",
 };
 // hover: background: "#b91c1c", translateY(-1px), box-shadow: 0 6px 24px rgba(220,38,38,0.3)
 ```
@@ -176,6 +187,7 @@ const velBtnBack: CSSProperties = {
 ## Pré-requisitos
 
 1. Criar branch nova a partir da `main`:
+
    ```bash
    git checkout main
    git pull origin main
@@ -197,6 +209,7 @@ const velBtnBack: CSSProperties = {
 **Before:** O arquivo começa com `@import "tailwindcss";`
 
 **After:** Adicionar ANTES de tudo:
+
 ```css
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&display=swap");
 ```
@@ -252,106 +265,167 @@ export const velPanel: CSSProperties = {
 };
 
 export const velBtnPrimary: CSSProperties = {
-  background: colors.brand, color: "#fff",
-  fontFamily: fonts.ui, fontSize: "13px", fontWeight: 600,
-  letterSpacing: "0.15em", textTransform: "uppercase",
-  padding: "10px 24px", border: "none", cursor: "pointer",
+  background: colors.brand,
+  color: "#fff",
+  fontFamily: fonts.ui,
+  fontSize: "13px",
+  fontWeight: 600,
+  letterSpacing: "0.15em",
+  textTransform: "uppercase",
+  padding: "10px 24px",
+  border: "none",
+  cursor: "pointer",
   clipPath: clipCorners(12),
 };
 
 export const velBtnOutline: CSSProperties = {
-  background: "transparent", color: colors.muted,
-  fontFamily: fonts.ui, fontSize: "13px", fontWeight: 600,
-  letterSpacing: "0.15em", textTransform: "uppercase",
-  padding: "10px 24px", border: "1px solid rgba(0,0,0,0.1)",
-  cursor: "pointer", clipPath: clipCorners(12),
+  background: "transparent",
+  color: colors.muted,
+  fontFamily: fonts.ui,
+  fontSize: "13px",
+  fontWeight: 600,
+  letterSpacing: "0.15em",
+  textTransform: "uppercase",
+  padding: "10px 24px",
+  border: "1px solid rgba(0,0,0,0.1)",
+  cursor: "pointer",
+  clipPath: clipCorners(12),
 };
 
 export const velBtnBack: CSSProperties = {
-  background: "transparent", border: "none", color: colors.muted,
-  fontFamily: fonts.ui, fontSize: "11px", fontWeight: 600,
-  letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer",
+  background: "transparent",
+  border: "none",
+  color: colors.muted,
+  fontFamily: fonts.ui,
+  fontSize: "11px",
+  fontWeight: 600,
+  letterSpacing: "0.15em",
+  textTransform: "uppercase",
+  cursor: "pointer",
 };
 
-export const velBtnDanger: CSSProperties = { ...velBtnPrimary, background: colors.brandDanger };
+export const velBtnDanger: CSSProperties = {
+  ...velBtnPrimary,
+  background: colors.brandDanger,
+};
 
 export const velSectionLabel: CSSProperties = {
-  fontSize: "10px", color: colors.muted, letterSpacing: "0.15em",
-  textTransform: "uppercase", fontFamily: fonts.ui, fontWeight: 600,
+  fontSize: "10px",
+  color: colors.muted,
+  letterSpacing: "0.15em",
+  textTransform: "uppercase",
+  fontFamily: fonts.ui,
+  fontWeight: 600,
 };
 
 export const velFieldLabel: CSSProperties = {
-  fontSize: "10px", color: colors.muted, letterSpacing: "0.15em",
-  textTransform: "uppercase", fontFamily: fonts.ui, fontWeight: 600, marginBottom: "4px",
+  fontSize: "10px",
+  color: colors.muted,
+  letterSpacing: "0.15em",
+  textTransform: "uppercase",
+  fontFamily: fonts.ui,
+  fontWeight: 600,
+  marginBottom: "4px",
 };
 
 export const velFieldValue: CSSProperties = {
-  fontSize: "15px", color: colors.text, fontFamily: fonts.body, fontWeight: 600,
+  fontSize: "15px",
+  color: colors.text,
+  fontFamily: fonts.body,
+  fontWeight: 600,
 };
 
 export const velPageTitle: CSSProperties = {
-  fontFamily: fonts.display, fontSize: "28px", color: colors.text,
-  letterSpacing: "0.04em", lineHeight: 1,
+  fontFamily: fonts.display,
+  fontSize: "28px",
+  color: colors.text,
+  letterSpacing: "0.04em",
+  lineHeight: 1,
 };
 
 export const velBadge = (bg: string, fg: string): CSSProperties => ({
-  display: "inline-flex", alignItems: "center", padding: "2px 10px",
-  fontSize: "10px", fontFamily: fonts.ui, fontWeight: 600,
-  letterSpacing: "0.1em", textTransform: "uppercase",
-  background: bg, color: fg, clipPath: clipCorners(4),
+  display: "inline-flex",
+  alignItems: "center",
+  padding: "2px 10px",
+  fontSize: "10px",
+  fontFamily: fonts.ui,
+  fontWeight: 600,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  background: bg,
+  color: fg,
+  clipPath: clipCorners(4),
 });
 
 export const badgePresets = {
-  active:     () => velBadge("rgba(22,163,74,0.08)", colors.green),
-  completed:  () => velBadge("rgba(22,163,74,0.08)", colors.green),
-  resolved:   () => velBadge("rgba(22,163,74,0.08)", colors.green),
+  active: () => velBadge("rgba(22,163,74,0.08)", colors.green),
+  completed: () => velBadge("rgba(22,163,74,0.08)", colors.green),
+  resolved: () => velBadge("rgba(22,163,74,0.08)", colors.green),
   inProgress: () => velBadge("rgba(234,179,8,0.08)", colors.amber),
-  pending:    () => velBadge("rgba(234,179,8,0.08)", colors.amber),
-  maintenance:() => velBadge("rgba(249,115,22,0.08)", colors.orange),
+  pending: () => velBadge("rgba(234,179,8,0.08)", colors.amber),
+  maintenance: () => velBadge("rgba(249,115,22,0.08)", colors.orange),
   corrective: () => velBadge("rgba(249,115,22,0.08)", colors.orange),
-  high:       () => velBadge("rgba(249,115,22,0.08)", colors.orange),
-  info:       () => velBadge("rgba(37,99,235,0.08)", colors.blue),
-  operational:() => velBadge("rgba(37,99,235,0.08)", colors.blue),
-  low:        () => velBadge("rgba(37,99,235,0.08)", colors.blue),
-  neutral:    () => velBadge("rgba(0,0,0,0.04)", colors.muted),
-  cancelled:  () => velBadge("rgba(220,38,38,0.08)", colors.red),
-  critical:   () => velBadge("rgba(220,38,38,0.08)", colors.red),
-  closed:     () => velBadge("rgba(0,0,0,0.04)", colors.muted),
+  high: () => velBadge("rgba(249,115,22,0.08)", colors.orange),
+  info: () => velBadge("rgba(37,99,235,0.08)", colors.blue),
+  operational: () => velBadge("rgba(37,99,235,0.08)", colors.blue),
+  low: () => velBadge("rgba(37,99,235,0.08)", colors.blue),
+  neutral: () => velBadge("rgba(0,0,0,0.04)", colors.muted),
+  cancelled: () => velBadge("rgba(220,38,38,0.08)", colors.red),
+  critical: () => velBadge("rgba(220,38,38,0.08)", colors.red),
+  closed: () => velBadge("rgba(0,0,0,0.04)", colors.muted),
 } as const;
 
 export const velStatCard: CSSProperties = { ...velPanel, padding: "20px" };
 
 export const velIconContainer: CSSProperties = {
-  width: "40px", height: "40px", display: "flex",
-  alignItems: "center", justifyContent: "center",
-  background: "rgba(220,38,38,0.04)", clipPath: clipCorners(6),
+  width: "40px",
+  height: "40px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  background: "rgba(220,38,38,0.04)",
+  clipPath: clipCorners(6),
 };
 
 export const diagonalStripes: CSSProperties = {
-  background: "repeating-linear-gradient(-45deg, transparent, transparent 80px, rgba(220,38,38,0.015) 80px, rgba(220,38,38,0.015) 82px)",
+  background:
+    "repeating-linear-gradient(-45deg, transparent, transparent 80px, rgba(220,38,38,0.015) 80px, rgba(220,38,38,0.015) 82px)",
 };
 
 export const frostedGlass: CSSProperties = {
-  background: "rgba(247,247,247,0.92)", backdropFilter: "blur(12px)",
+  background: "rgba(247,247,247,0.92)",
+  backdropFilter: "blur(12px)",
   borderBottom: `1px solid ${colors.border}`,
 };
 
 export const velRedBar = (width = 24, height = 2): CSSProperties => ({
-  width: `${width}px`, height: `${height}px`, background: colors.brand,
+  width: `${width}px`,
+  height: `${height}px`,
+  background: colors.brand,
 });
 
-export const velDivider: CSSProperties = { borderTop: `1px solid ${colors.border}` };
+export const velDivider: CSSProperties = {
+  borderTop: `1px solid ${colors.border}`,
+};
 
 export const velTableHeader: CSSProperties = {
-  fontSize: "10px", color: colors.muted, letterSpacing: "0.15em",
-  textTransform: "uppercase", fontFamily: fonts.ui, fontWeight: 600,
-  background: "rgba(0,0,0,0.02)", padding: "12px 24px",
+  fontSize: "10px",
+  color: colors.muted,
+  letterSpacing: "0.15em",
+  textTransform: "uppercase",
+  fontFamily: fonts.ui,
+  fontWeight: 600,
+  background: "rgba(0,0,0,0.02)",
+  padding: "12px 24px",
   borderBottom: `1px solid ${colors.border}`,
 };
 
 export const velTableCell: CSSProperties = {
-  fontSize: "13px", color: colors.text, fontFamily: fonts.body,
-  padding: "16px 24px", borderBottom: `1px solid ${colors.borderLight}`,
+  fontSize: "13px",
+  color: colors.text,
+  fontFamily: fonts.body,
+  padding: "16px 24px",
+  borderBottom: `1px solid ${colors.borderLight}`,
 };
 ```
 
@@ -379,6 +453,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 **Referência completa:** `git show feat/velocity-light-design-system:src/components/layout/Header.tsx`
 
 **Instruções passo a passo:**
+
 1. Importar `Logo` de `../common/Logo`
 2. Importar `{ frostedGlass, clipCorners, fonts }` de `@/styles/velocity`
 3. Remover ícone `Truck`
@@ -394,6 +469,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 **After:** Sidebar white com borda sutil, nav items em Barlow Condensed uppercase, estado ativo com borda vermelha esquerda, botão "Guarita" vermelho com clip-path no fundo.
 
 **Instruções passo a passo:**
+
 1. Importar `{ fonts, colors, clipCorners }` de `@/styles/velocity`
 2. **MANTER** os items de navegação da main (Checklists, Movimentações) — a design branch não os tem
 3. Substituir classes do `<aside>`:
@@ -417,6 +493,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 **After:** Background `#f7f7f7` + listras diagonais, font Barlow, force light theme.
 
 **Instruções passo a passo:**
+
 1. Importar `{ diagonalStripes, fonts, colors }` de `@/styles/velocity`
 2. Wrapper: `className="light min-h-screen"` + `style={{ background: colors.background, fontFamily: fonts.body }}`
 3. Adicionar div de listras diagonais: `className="fixed inset-0 pointer-events-none"` + `style={diagonalStripes}`
@@ -430,6 +507,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 **After:** Mesma estrutura de frosted-glass do Header, listras diagonais, Logo + "GIRO" + label "CBMGO · 8°BBM".
 
 **Instruções passo a passo:**
+
 1. Importar estilos de `@/styles/velocity`
 2. **MANTER** a lógica de navegação Guarita/Checklist da main (nav tabs)
 3. Aplicar `frostedGlass` no header
@@ -475,6 +553,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 **After:** Extrair para componente separado `LoginVelocityLight`, com split layout, gradientes, animações.
 
 **Instruções passo a passo:**
+
 1. Copiar `src/pages/login/LoginVelocityLight.tsx` da branch de design
 2. No `App.tsx`:
    - Remover a `function LoginPage()` inline inteira (schemas + component)
@@ -498,6 +577,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 **After:** Badges com `velBadge()`, clip-path 4px.
 
 **Mapa de status:**
+
 - `disponivel` → `badgePresets.active()`
 - `em_transito` → `badgePresets.info()`
 - `em_manutencao` → `badgePresets.maintenance()`
@@ -511,6 +591,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 **After:** Badges com `velBadge()`, clip-path 4px.
 
 **Mapa de status:**
+
 - `operacional` → `badgePresets.operational()`
 - `reserva` → `badgePresets.neutral()`
 
@@ -523,6 +604,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 **After:** Badges com `velBadge()`, clip-path 4px.
 
 **Mapa de status:**
+
 - `aguardando_ceman` → `badgePresets.pending()`
 - `em_andamento` → `badgePresets.inProgress()`
 - `concluida` → `badgePresets.completed()`
@@ -533,6 +615,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 ### 3.4 — `src/components/maintenance/MaintenanceTypeBadge.tsx`
 
 **Mapa de status:**
+
 - `preventiva` → `badgePresets.info()`
 - `corretiva` → `badgePresets.corrective()`
 
@@ -541,6 +624,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 ### 3.5 — `src/components/issues/IssueSeverityBadge.tsx`
 
 **Mapa de severidade:**
+
 - `baixa` → `badgePresets.low()`
 - `media` → `badgePresets.inProgress()`
 - `alta` → `badgePresets.high()`
@@ -551,6 +635,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 ### 3.6 — `src/components/issues/IssueStatusBadge.tsx`
 
 **Mapa de status:**
+
 - `aberto` → `badgePresets.high()`
 - `em_andamento` → `badgePresets.inProgress()`
 - `resolvido` → `badgePresets.resolved()`
@@ -571,6 +656,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 **After:** Card com clip-path 10px, ícone em container clip-path 6px, tipografia Bebas Neue para valor + Barlow Condensed para label.
 
 **Instruções passo a passo:**
+
 1. Substituir todo o container por `style={velStatCard}`
 2. Label: `style={velSectionLabel}` (10px, #999, Barlow Condensed, uppercase)
 3. Valor: Bebas Neue, text-3xl, #1a1a1a
@@ -587,6 +673,7 @@ git show feat/velocity-light-design-system:public/logo.svg > public/logo.svg
 **After:** Card com clip-path 10px, plate em Bebas Neue, KM em azul `#2563eb`, labels em Barlow Condensed.
 
 **Instruções passo a passo:**
+
 1. Container: `style={velPanel}` com padding 16-20px
 2. Placa: `fontFamily: fonts.display`, `text-lg`
 3. Modelo: `fontFamily: fonts.body`, `color: "#999"`, `fontSize: "13px"`
@@ -670,6 +757,7 @@ Título Bebas Neue, filtros redesenhados, cards redesenhados.
 > ⚠️ **ATENÇÃO:** MAIOR e mais complexa página (778 linhas na main). A main tem features adicionais (validações de KM, veículos em manutenção, etc.) que a design branch NÃO tem.
 
 **Instruções:**
+
 1. Título: Bebas Neue + barra vermelha
 2. Stats de resumo: `velStatCard` + Bebas Neue para números
 3. Tabela de movimentos: `velTableHeader` + `velTableCell`
@@ -779,6 +867,7 @@ Mesmo padrão de modal.
 ### 7.5 — `src/pages/MovementsPage.tsx` ⚡ SÓ EXISTE NA MAIN — DESIGN DO ZERO
 
 **Padrão a seguir (493 linhas):**
+
 1. Título: `style={velPageTitle}` + barra vermelha
 2. Tabela: `velTableHeader` + `velTableCell` + container `velPanel`
 3. Filtros: Barlow Condensed labels, inputs com bordas sutis
@@ -789,6 +878,7 @@ Mesmo padrão de modal.
 ### 7.6 — `src/pages/ChecklistPage.tsx` ⚡ SÓ EXISTE NA MAIN — DESIGN DO ZERO
 
 **Padrão a seguir (475 linhas):**
+
 1. Título: Bebas Neue + barra vermelha
 2. Cards de seleção: `velPanel` com clip-path
 3. Labels: `velFieldLabel`
@@ -800,6 +890,7 @@ Mesmo padrão de modal.
 ### 7.7 — `src/pages/AdminChecklistsPage.tsx` ⚡ SÓ EXISTE NA MAIN — DESIGN DO ZERO
 
 **Padrão a seguir (815 linhas — MAIOR página nova):**
+
 1. Título: Bebas Neue + barra vermelha
 2. Tabs: Barlow Condensed uppercase, ativa com borda vermelha inferior
 3. Tabelas: `velTableHeader` + `velTableCell`
@@ -840,32 +931,33 @@ Verificar e ajustar se necessário:
 
 Testar TODAS as rotas:
 
-| Rota | Página | Check |
-|---|---|---|
-| `/` | Redirect → `/guarita` | ⬜ |
-| `/guarita` | GuaritaPage | ⬜ |
-| `/checklist` | ChecklistPage | ⬜ |
-| `/admin` | DashboardPage | ⬜ |
-| `/vehicles` | VehiclesPage | ⬜ |
-| `/vehicles/new` | VehicleFormPage | ⬜ |
-| `/vehicles/:id` | VehicleDetailPage | ⬜ |
-| `/vehicles/:id/edit` | VehicleFormPage | ⬜ |
-| `/maintenance` | MaintenancesPage | ⬜ |
-| `/maintenance/new` | MaintenanceFormPage | ⬜ |
-| `/maintenance/:id` | MaintenanceDetailPage | ⬜ |
-| `/maintenance/:id/edit` | MaintenanceFormPage | ⬜ |
-| `/issues` | IssuesPage | ⬜ |
-| `/issues/new` | IssueFormPage | ⬜ |
-| `/issues/:id` | IssueDetailPage | ⬜ |
-| `/issues/:id/edit` | IssueFormPage | ⬜ |
-| `/movements` | MovementsPage | ⬜ |
-| `/admin/checklists` | AdminChecklistsPage | ⬜ |
-| `/settings` | Placeholder | ⬜ |
-| Login | LoginVelocityLight | ⬜ |
+| Rota                    | Página                | Check |
+| ----------------------- | --------------------- | ----- |
+| `/`                     | Redirect → `/guarita` | ⬜    |
+| `/guarita`              | GuaritaPage           | ⬜    |
+| `/checklist`            | ChecklistPage         | ⬜    |
+| `/admin`                | DashboardPage         | ⬜    |
+| `/vehicles`             | VehiclesPage          | ⬜    |
+| `/vehicles/new`         | VehicleFormPage       | ⬜    |
+| `/vehicles/:id`         | VehicleDetailPage     | ⬜    |
+| `/vehicles/:id/edit`    | VehicleFormPage       | ⬜    |
+| `/maintenance`          | MaintenancesPage      | ⬜    |
+| `/maintenance/new`      | MaintenanceFormPage   | ⬜    |
+| `/maintenance/:id`      | MaintenanceDetailPage | ⬜    |
+| `/maintenance/:id/edit` | MaintenanceFormPage   | ⬜    |
+| `/issues`               | IssuesPage            | ⬜    |
+| `/issues/new`           | IssueFormPage         | ⬜    |
+| `/issues/:id`           | IssueDetailPage       | ⬜    |
+| `/issues/:id/edit`      | IssueFormPage         | ⬜    |
+| `/movements`            | MovementsPage         | ⬜    |
+| `/admin/checklists`     | AdminChecklistsPage   | ⬜    |
+| `/settings`             | Placeholder           | ⬜    |
+| Login                   | LoginVelocityLight    | ⬜    |
 
 ### 8.3 — Checklist de Consistência Visual
 
 Para **cada página**, verificar:
+
 - [ ] Fontes corretas (Bebas Neue headings, Barlow Condensed labels, Barlow body)
 - [ ] Cores corretas (#dc2626 acentos, #2563eb dados, #999 muted)
 - [ ] Clip-path nos tamanhos corretos (ver tabela)
@@ -885,17 +977,17 @@ Para **cada página**, verificar:
 
 ## Resumo de Escopo por Fase
 
-| Fase | Escopo | Arquivos | Complexidade |
-|---|---|---|---|
-| **0** | Fundação (CSS, fontes, módulo de estilos) | 3 novos | 🟢 Baixa |
-| **1** | Layout Shell (Header, Sidebar, Layout, Guarita) | 4 arquivos | 🟡 Média |
-| **2** | UI Base (Loading, Select, DatePicker, Login) | 4-5 arquivos | 🟡 Média |
-| **3** | Badges (6 componentes) | 6 arquivos | 🟢 Baixa |
-| **4** | Cards e Listagens (8 componentes) | 8 arquivos | 🟡 Média |
-| **5** | Páginas de Listagem (5 páginas + Guarita) | 6 arquivos | 🔴 Alta |
-| **6** | Páginas de Detalhe e Forms (9 componentes) | 9 arquivos | 🔴 Alta |
-| **7** | Modals + Páginas Novas da Main (9 itens) | 9 arquivos | 🔴 Alta |
-| **8** | Polimento e QA | ~7 UI + verificação | 🟡 Média |
+| Fase  | Escopo                                          | Arquivos            | Complexidade |
+| ----- | ----------------------------------------------- | ------------------- | ------------ |
+| **0** | Fundação (CSS, fontes, módulo de estilos)       | 3 novos             | 🟢 Baixa     |
+| **1** | Layout Shell (Header, Sidebar, Layout, Guarita) | 4 arquivos          | 🟡 Média     |
+| **2** | UI Base (Loading, Select, DatePicker, Login)    | 4-5 arquivos        | 🟡 Média     |
+| **3** | Badges (6 componentes)                          | 6 arquivos          | 🟢 Baixa     |
+| **4** | Cards e Listagens (8 componentes)               | 8 arquivos          | 🟡 Média     |
+| **5** | Páginas de Listagem (5 páginas + Guarita)       | 6 arquivos          | 🔴 Alta      |
+| **6** | Páginas de Detalhe e Forms (9 componentes)      | 9 arquivos          | 🔴 Alta      |
+| **7** | Modals + Páginas Novas da Main (9 itens)        | 9 arquivos          | 🔴 Alta      |
+| **8** | Polimento e QA                                  | ~7 UI + verificação | 🟡 Média     |
 
 **Total: ~50 arquivos a modificar/criar**
 
