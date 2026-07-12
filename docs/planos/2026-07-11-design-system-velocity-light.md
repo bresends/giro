@@ -1,7 +1,7 @@
 # Design system Velocity Light
 
 **Criado em:** 2026-07-11
-**Estado:** planejando
+**Estado:** em andamento
 
 ## Objetivo
 
@@ -40,7 +40,7 @@ Ao final, tokens, primitives e composições básicas devem estar prontos para s
 - [Referência visual Velocity Light](../referencias/01-velocity-light.md)
 - Branch visual: `origin/feat/velocity-light-design-system`.
 - O frontend usa Tailwind CSS 4, CVA e componentes `shadcn` locais em `src/components/ui/`.
-- O `src/index.css` atual possui definições globais duplicadas.
+- A fundação duplicada de `src/index.css` foi consolidada durante este plano.
 - A branch visual demonstra a identidade, mas aplica grande parte dela diretamente nas páginas com estilos inline.
 
 ## Decisões
@@ -52,15 +52,19 @@ Ao final, tokens, primitives e composições básicas devem estar prontos para s
 | 2026-07-11 | Implementar somente o tema claro                 | O piloto usa Velocity Light e precisa de escopo controlado                 | Tema escuro poderá ser tratado em iniciativa própria                |
 | 2026-07-11 | Carregar Barlow e Bebas Neue pelo Google Fonts   | Mantém a identidade escolhida com configuração simples                     | As fontes precisam de fallbacks locais                              |
 | 2026-07-11 | Usar uma rota interna como showcase              | Permite validar o sistema sem introduzir Storybook                         | A rota existirá somente quando `import.meta.env.DEV` for verdadeiro |
+| 2026-07-11 | Explorar o sistema na rota antes das primitives  | Permite fechar a direção visual sem alterar componentes compartilhados     | O laboratório usa HTML semântico e tokens, depois orienta as APIs   |
+| 2026-07-11 | Manter o tema escuro apenas como preview         | O styleguide precisa comparar contraste sem ampliar o escopo das páginas   | O toggle não representa suporte escuro liberado no produto          |
 | 2026-07-11 | Não migrar páginas neste plano                   | Design system e remodelagem de páginas são entregas verificáveis distintas | Admin + Viaturas terá um plano próprio após esta entrega            |
+| 2026-07-11 | Manter DesignSystemPage como um arquivo único    | Facilita a visualização global e condensa a exploração do laboratório      | A organização é feita estruturalmente no arquivo, em vez de módulos |
 
 ## Etapas
 
-- [ ] **ATUAL:** Consolidar tokens e estilos-base em `src/index.css`, incluindo fontes, estados semânticos e cantos chanfrados.
-- [ ] Adaptar as primitives compartilhadas, preservando suas APIs sempre que possível e adicionando variantes com CVA.
-- [ ] Criar `PageHeader`, `SectionHeader`, `StatusBadge` e `EmptyState`, além de alinhar `StatCard` à nova fundação.
-- [ ] Criar `/design-system` com exemplos das variantes, estados e composições implementadas.
-- [ ] Validar acessibilidade básica, desktop, mobile, lint e build; registrar a entrega e atualizar o painel.
+- [x] Consolidar tokens e estilos-base em `src/index.css`, incluindo fontes, estados semânticos e cantos chanfrados.
+- [x] Criar o laboratório exploratório em `/design-system`, sem alterar as primitives compartilhadas.
+- [x] Organizar estruturalmente o styleguide, consolidar taxonomia e refinar os exemplos visuais em arquivo único.
+- [ ] **ATUAL:** Fechar tokens e comportamentos após validar o laboratório em tema claro, tema escuro, desktop e mobile.
+- [ ] Adaptar primitives e composições compartilhadas, preservando APIs existentes e usando CVA.
+- [ ] Converter o laboratório em showcase das APIs reais, validar build e acessibilidade e registrar a entrega.
 
 ## Interfaces previstas
 
@@ -83,11 +87,66 @@ Os nomes finais podem ser ajustados durante a implementação para respeitar os 
 - Executar `npm run lint` e `npm run build`.
 - Confirmar que nenhuma página de produto ou regra de negócio foi alterada.
 
+## Estado atual do laboratório
+
+### Rotas e estrutura
+
+- `/design-system` é a única rota do laboratório, disponível apenas em desenvolvimento para usuários autenticados.
+- `src/styleguide/navigation.ts` define a navegação lateral por âncoras.
+- `src/styleguide/StyleguideLayout.tsx` fornece sidebar responsiva e preview claro/escuro.
+- `src/pages/DesignSystemPage.tsx` concentra atualmente todo o conteúdo do laboratório.
+- `public/logo.svg` contém a marca com recorte interno realmente transparente.
+
+### Fundações representadas
+
+- Paleta semântica e escalas de vermelho, azul, verde, amarelo, laranja e neutros.
+- Background, surface e papéis de borda.
+- Tipografia com Bebas Neue, Barlow, Barlow Condensed e mono.
+- Escalas de heading, body, peso, spacing, radius, cantos chanfrados e sombras.
+- Iconografia Lucide em `32px`, `24px` e `16px`.
+- Preview de tema escuro restrito ao styleguide.
+
+### Famílias representadas
+
+- Button: tamanhos, fill, outline, ghost, semânticos, icon-only, ícones à esquerda/direita, link, loading e button group.
+- Forms: inputs simples e com ícone, estados, select, textarea, checkbox, radio, toggle, combobox e validação.
+- File uploader: vazio, drag ativo, selecionado, progresso, sucesso, erro e desabilitado.
+- Selection Controls & Sliders: switches, checkboxes e variações de sliders e barras de progresso (dot-only thumb, ícones, métricas, marcações).
+- Feedback & Avatars: alertas, badges, e avatares fotográficos genéricos com indicadores de notificação "dot-only".
+- Card: padrão, interativo e métrica, garantindo recorte correto e continuidade da borda chanfrada.
+- Images: variações geométricas de imagens aplicando recortes e bordas sobre fotos.
+- Overlays: dialog, popover e dropdown.
+- Navigation: top bar, bottom navigation, tabs e paginação separada.
+- Data e tempo: calendário e date picker.
+- Data display: métricas e tabela.
+- Compositions: page header, section header e empty state em seção própria.
+
+## Débitos antes de continuar
+
+- Existem cores literais e tokens experimentais locais, principalmente nos estados `warning`, foco e hover.
+- O tema escuro é apenas preview e ainda não foi revisado componente por componente.
+- Algumas matrizes reproduzem estados visualmente, mas não representam componentes ou APIs reais.
+- Os exemplos usam HTML semântico diretamente e não devem ser copiados para páginas de produto.
+- A acessibilidade precisa de auditoria de contraste, teclado, nomes acessíveis e estados disabled/loading.
+- `npm run build` está aprovado. O lint isolado do styleguide está aprovado.
+- `npm run lint` completo falha por problemas preexistentes em Convex e páginas fora deste plano.
+
+## Ponto de retomada
+
+Não iniciar a adaptação das primitives shadcn antes de concluir:
+
+1. Levantar todas as cores literais do laboratório e decidir quais viram tokens e quais são apenas amostras de escala.
+2. Revisar o laboratório em responsividade e nos modos claro e escuro.
+3. Fechar os comportamentos, padronizar espaçamentos e revisar a acessibilidade inicial.
+
 ## Descobertas
 
 - A branch visual quase não adapta as primitives `shadcn`; a identidade está majoritariamente repetida nas páginas.
 - Checklist, movimentações e recursos recentes não existem integralmente na referência visual, reforçando a necessidade de uma fundação antes das páginas.
+- A configuração anterior mantinha dois temas claros concorrentes, um tema escuro fora do escopo e tokens autorreferentes; a fundação foi reduzida a uma única fonte de verdade para o tema claro.
+- Manter o DesignSystemPage.tsx como arquivo único provou-se suficiente, eliminando a sobrecarga de gerenciar arquivos de "seções" prematuramente, focando apenas na ordem interna dos blocos.
+- Bordas CSS cortadas com `clip-path` não acompanham a aresta da caixa. Usar um contêiner (wrapper) com fundo cor-de-borda e `padding: 1px` é uma solução elegante e escalável.
 
 ## Próximo passo
 
-Revisar `src/index.css` e as primitives atuais para definir o conjunto mínimo de tokens e variantes antes de editar arquivos.
+Revisar uso de cores literais, testar responsividade e tema escuro do laboratório, validando assim os tokens antes da codificação final dos componentes UI base.
