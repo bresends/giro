@@ -23,6 +23,7 @@ import { GuaritaPage } from "./pages/GuaritaPage";
 import { MovementsPage } from "./pages/MovementsPage";
 import { ChecklistPage } from "./pages/ChecklistPage";
 import { AdminChecklistsPage } from "./pages/AdminChecklistsPage";
+import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
@@ -35,59 +36,93 @@ export default function App() {
       <Toaster />
       <Authenticated>
         <Routes>
+          {import.meta.env.DEV && (
+            <Route path="/design-system" element={<DesignSystemPage />} />
+          )}
           <Route path="/" element={<Navigate to="/guarita" replace />} />
 
           {/* Rotas do Guarita - Sistema separado sem sidebar */}
-          <Route path="/guarita" element={
-            <GuaritaLayout>
-              <GuaritaPage />
-            </GuaritaLayout>
-          } />
+          <Route
+            path="/guarita"
+            element={
+              <GuaritaLayout>
+                <GuaritaPage />
+              </GuaritaLayout>
+            }
+          />
 
           {/* Rota do Checklist - Sistema separado para militares */}
-          <Route path="/checklist" element={
-            <GuaritaLayout>
-              <ChecklistPage />
-            </GuaritaLayout>
-          } />
+          <Route
+            path="/checklist"
+            element={
+              <GuaritaLayout>
+                <ChecklistPage />
+              </GuaritaLayout>
+            }
+          />
 
           {/* Rotas do Admin - Com sidebar e layout padrão */}
-          <Route path="/*" element={
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Navigate to="/admin" replace />} />
-                <Route path="/admin" element={<DashboardPage />} />
+          <Route
+            path="/*"
+            element={
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Navigate to="/admin" replace />} />
+                  <Route path="/admin" element={<DashboardPage />} />
 
-                {/* Rotas de Checklists */}
-                <Route path="/admin/checklists" element={<AdminChecklistsPage />} />
+                  {/* Rotas de Checklists */}
+                  <Route
+                    path="/admin/checklists"
+                    element={<AdminChecklistsPage />}
+                  />
 
-                {/* Rotas de Viaturas */}
-                <Route path="/vehicles" element={<VehiclesPage />} />
-                <Route path="/vehicles/new" element={<VehicleFormPage />} />
-                <Route path="/vehicles/:id" element={<VehicleDetailPage />} />
-                <Route path="/vehicles/:id/edit" element={<VehicleFormPage />} />
+                  {/* Rotas de Viaturas */}
+                  <Route path="/vehicles" element={<VehiclesPage />} />
+                  <Route path="/vehicles/new" element={<VehicleFormPage />} />
+                  <Route path="/vehicles/:id" element={<VehicleDetailPage />} />
+                  <Route
+                    path="/vehicles/:id/edit"
+                    element={<VehicleFormPage />}
+                  />
 
-                {/* Rotas de Movimentações */}
-                <Route path="/movements" element={<MovementsPage />} />
+                  {/* Rotas de Movimentações */}
+                  <Route path="/movements" element={<MovementsPage />} />
 
-                {/* Rotas de Manutenções */}
-                <Route path="/maintenance" element={<MaintenancesPage />} />
-                <Route path="/maintenance/new" element={<MaintenanceFormPage />} />
-                <Route path="/maintenance/:id" element={<MaintenanceDetailPage />} />
-                <Route path="/maintenance/:id/edit" element={<MaintenanceFormPage />} />
+                  {/* Rotas de Manutenções */}
+                  <Route path="/maintenance" element={<MaintenancesPage />} />
+                  <Route
+                    path="/maintenance/new"
+                    element={<MaintenanceFormPage />}
+                  />
+                  <Route
+                    path="/maintenance/:id"
+                    element={<MaintenanceDetailPage />}
+                  />
+                  <Route
+                    path="/maintenance/:id/edit"
+                    element={<MaintenanceFormPage />}
+                  />
 
-                {/* Rotas de Problemas */}
-                <Route path="/issues" element={<IssuesPage />} />
-                <Route path="/issues/new" element={<IssueFormPage />} />
-                <Route path="/issues/:id" element={<IssueDetailPage />} />
-                <Route path="/issues/:id/edit" element={<IssueFormPage />} />
+                  {/* Rotas de Problemas */}
+                  <Route path="/issues" element={<IssuesPage />} />
+                  <Route path="/issues/new" element={<IssueFormPage />} />
+                  <Route path="/issues/:id" element={<IssueDetailPage />} />
+                  <Route path="/issues/:id/edit" element={<IssueFormPage />} />
 
-                <Route path="/settings" element={<div className="text-2xl font-bold">Configurações - Em construção</div>} />
+                  <Route
+                    path="/settings"
+                    element={
+                      <div className="text-2xl font-bold">
+                        Configurações - Em construção
+                      </div>
+                    }
+                  />
 
-                <Route path="*" element={<Navigate to="/admin" replace />} />
-              </Routes>
-            </Layout>
-          } />
+                  <Route path="*" element={<Navigate to="/admin" replace />} />
+                </Routes>
+              </Layout>
+            }
+          />
         </Routes>
       </Authenticated>
       <Unauthenticated>
@@ -148,7 +183,9 @@ function LoginPage() {
       formData.set("flow", flow);
       await signIn("password", formData);
     } catch (error) {
-      setAuthError(error instanceof Error ? error.message : "Erro ao autenticar");
+      setAuthError(
+        error instanceof Error ? error.message : "Erro ao autenticar",
+      );
     }
   }
 
@@ -165,7 +202,11 @@ function LoginPage() {
 
         <div className="bg-card rounded-lg shadow-lg p-8 border">
           {flow === "signIn" ? (
-            <form key="signin-form" onSubmit={signInForm.handleSubmit(onSubmit)} className="space-y-4">
+            <form
+              key="signin-form"
+              onSubmit={signInForm.handleSubmit(onSubmit)}
+              className="space-y-4"
+            >
               <Controller
                 name="email"
                 control={signInForm.control}
@@ -180,7 +221,9 @@ function LoginPage() {
                       aria-invalid={fieldState.invalid}
                       className="bg-white dark:bg-input border-2 border-border hover:border-ring/50 transition-colors"
                     />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
                   </Field>
                 )}
               />
@@ -198,7 +241,9 @@ function LoginPage() {
                       aria-invalid={fieldState.invalid}
                       className="bg-white dark:bg-input border-2 border-border hover:border-ring/50 transition-colors"
                     />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
                   </Field>
                 )}
               />
@@ -208,7 +253,9 @@ function LoginPage() {
               </Button>
 
               <div className="text-center text-sm">
-                <span className="text-muted-foreground">Não tem uma conta?</span>{" "}
+                <span className="text-muted-foreground">
+                  Não tem uma conta?
+                </span>{" "}
                 <Button
                   type="button"
                   variant="link"
@@ -230,7 +277,11 @@ function LoginPage() {
               )}
             </form>
           ) : (
-            <form key="signup-form" onSubmit={signUpForm.handleSubmit(onSubmit)} className="space-y-4">
+            <form
+              key="signup-form"
+              onSubmit={signUpForm.handleSubmit(onSubmit)}
+              className="space-y-4"
+            >
               <Controller
                 name="email"
                 control={signUpForm.control}
@@ -245,7 +296,9 @@ function LoginPage() {
                       aria-invalid={fieldState.invalid}
                       className="bg-white dark:bg-input border-2 border-border hover:border-ring/50 transition-colors"
                     />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
                   </Field>
                 )}
               />
@@ -263,7 +316,9 @@ function LoginPage() {
                       aria-invalid={fieldState.invalid}
                       className="bg-white dark:bg-input border-2 border-border hover:border-ring/50 transition-colors"
                     />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
                   </Field>
                 )}
               />
@@ -283,7 +338,9 @@ function LoginPage() {
                       aria-invalid={fieldState.invalid}
                       className="bg-white dark:bg-input border-2 border-border hover:border-ring/50 transition-colors"
                     />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
                   </Field>
                 )}
               />
@@ -320,4 +377,3 @@ function LoginPage() {
     </div>
   );
 }
-

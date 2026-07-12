@@ -8,10 +8,17 @@ Este é o ponto de entrada para entender o estado atual do GIRO. Detalhes de exe
 
 ### Design system Velocity Light
 
-- **Estado:** planejando
+- **Estado:** em andamento
 - **Plano:** [Design system Velocity Light](planos/2026-07-11-design-system-velocity-light.md)
-- **Etapa atual:** consolidar tokens e estilos-base em `src/index.css`.
+- **Etapa atual:** Fechar tokens e comportamentos após validar o laboratório em tema claro, tema escuro, desktop e mobile.
 - **Resultado esperado:** design system interno validado e pronto para ser consumido pelas páginas.
+
+### Retomada
+
+1. Ler a seção `Ponto de retomada` do plano atual.
+2. Levantar cores literais no arquivo único `DesignSystemPage.tsx`.
+3. Validar modos claro/escuro e responsividade.
+4. Finalizar tokens antes de iniciar a adaptação dos componentes UI base.
 
 ## Próximos planos
 
@@ -27,7 +34,8 @@ Este é o ponto de entrada para entender o estado atual do GIRO. Detalhes de exe
 
 ## Bloqueios
 
-Nenhum bloqueio conhecido.
+- O laboratório cresceu em um único arquivo e precisa ser modularizado antes de continuar com segurança.
+- `npm run lint` possui erros preexistentes fora do escopo do design system; o lint isolado do styleguide está aprovado.
 
 ## Referências rápidas
 
