@@ -24,6 +24,7 @@ import { MovementsPage } from "./pages/MovementsPage";
 import { ChecklistPage } from "./pages/ChecklistPage";
 import { AdminChecklistsPage } from "./pages/AdminChecklistsPage";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
+import { DesignSystemButtonPage } from "./pages/DesignSystemButtonPage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
@@ -37,7 +38,13 @@ export default function App() {
       <Authenticated>
         <Routes>
           {import.meta.env.DEV && (
-            <Route path="/design-system" element={<DesignSystemPage />} />
+            <>
+              <Route path="/design-system" element={<DesignSystemPage />} />
+              <Route
+                path="/design-system/button"
+                element={<DesignSystemButtonPage />}
+              />
+            </>
           )}
           <Route path="/" element={<Navigate to="/guarita" replace />} />
 
