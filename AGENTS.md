@@ -17,3 +17,17 @@ Durante e ao concluir o trabalho:
 7. Ao encerrar uma iniciativa, siga o processo de arquivamento descrito em `docs/02-guia-de-documentacao.md`.
 
 A documentação em `docs/` é a fonte de verdade para prioridades e planos do projeto.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and specs are tracked in GitHub Issues. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Triage uses the five canonical Matt Pocock skill labels. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Domain documentation uses a single-context layout. See `docs/agents/domain.md`.
