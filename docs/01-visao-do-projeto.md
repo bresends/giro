@@ -25,6 +25,7 @@ O GIRO é uma aplicação de gestão de frota do CBMGO. Ela concentra o cadastro
 - React 19 e TypeScript.
 - Vite e Tailwind CSS 4.
 - Componentes shadcn mantidos localmente.
+- Especificação visual do design system versionada em Pencil (`design/design-system.pen`).
 - Convex para dados, funções de servidor e autenticação.
 - React Router para navegação.
 
@@ -34,4 +35,5 @@ O GIRO é uma aplicação de gestão de frota do CBMGO. Ela concentra o cadastro
 - Preferir os padrões e componentes já adotados pelo repositório.
 - Migrar fluxos completos para evitar experiências parcialmente remodeladas.
 - Tratar acessibilidade, responsividade e estados de interação como critérios de aceite.
+- Separar decisão visual, tokens implementados e comportamento: Pencil orienta aparência, CSS fornece tokens e componentes UI governam o runtime.
 - Manter documentação suficiente para que uma nova sessão de trabalho retome o contexto sem reconstruir decisões anteriores.

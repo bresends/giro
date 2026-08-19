@@ -70,15 +70,25 @@ Sombras não definem a estrutura. Superfícies usam borda sutil; sombra moderada
 
 O significado deve ser representado por variantes como `success`, `warning`, `danger`, `info` e `neutral`. Componentes de domínio fazem o mapeamento entre seus estados e esses tons.
 
-## Comportamento e acessibilidade
+## Temas, comportamento e acessibilidade
 
-- Tema claro é o único tema da primeira entrega.
+- Tema claro e tema escuro fazem parte da entrega do design system.
+- A preferência deve oferecer `claro`, `escuro` e `sistema`, com persistência e sem flash perceptível do tema incorreto.
+- Tokens semânticos mantêm o mesmo papel entre temas; valores literais não devem ser espalhados pelos componentes.
 - Foco visível deve ser mantido em todos os controles.
 - Cor não pode ser o único indicador de estado.
 - Áreas interativas devem manter tamanho adequado para toque.
 - Conteúdo longo não pode deslocar controles nem ultrapassar seus containers.
 - Fluxos administrativos devem privilegiar leitura, comparação e ações repetidas.
 - As fontes serão carregadas pelo Google Fonts, com fallbacks locais funcionais.
+
+## Relação entre design e implementação
+
+- `design/design-system.pen` registra a especificação visual, matrizes de variantes e comparação Light/Dark.
+- `src/index.css` contém os tokens efetivamente disponíveis no frontend.
+- `src/components/ui/` contém as APIs, o comportamento e a acessibilidade dos componentes reais.
+- As rotas `/design-system` validam a implementação e não substituem o Pencil como canvas de exploração.
+- Nenhuma sincronização Pencil → código deve ser aceita sem revisão de diff e validação no navegador.
 
 ## Uso da branch de referência
 
