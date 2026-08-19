@@ -1,6 +1,6 @@
 # Painel do projeto
 
-**Última atualização:** 2026-07-11
+**Última atualização:** 2026-08-19
 
 Este é o ponto de entrada para entender o estado atual do GIRO. Detalhes de execução e decisões ficam nos planos vinculados, sem duplicação neste painel.
 
@@ -10,15 +10,16 @@ Este é o ponto de entrada para entender o estado atual do GIRO. Detalhes de exe
 
 - **Estado:** em andamento
 - **Plano:** [Design system Velocity Light](planos/2026-07-11-design-system-velocity-light.md)
-- **Etapa atual:** Fechar tokens e comportamentos após validar o laboratório em tema claro, tema escuro, desktop e mobile.
-- **Resultado esperado:** design system interno validado e pronto para ser consumido pelas páginas.
+- **Etapa atual:** Implementar a [issue #13](https://github.com/bresends/giro/issues/13), ativando temas globais e alinhando os tokens usados pelo piloto `/vehicles`.
+- **Resultado esperado:** design system interno validado na listagem de viaturas e pronto para orientar as próximas páginas.
 
 ### Retomada
 
 1. Ler a seção `Ponto de retomada` do plano atual.
-2. Levantar cores literais no arquivo único `DesignSystemPage.tsx`.
-3. Validar modos claro/escuro e responsividade.
-4. Finalizar tokens antes de iniciar a adaptação dos componentes UI base.
+2. Executar `implement` sobre a issue #13.
+3. Seguir para a issue #14 quando a #13 estiver concluída.
+4. Executar as issues #15, #16 e #17 após a #14.
+5. Integrar e validar o piloto na issue #18.
 
 ## Próximos planos
 
@@ -34,7 +35,8 @@ Este é o ponto de entrada para entender o estado atual do GIRO. Detalhes de exe
 
 ## Bloqueios
 
-- O laboratório cresceu em um único arquivo e precisa ser modularizado antes de continuar com segurança.
+- Pencil e frontend ainda divergem em alguns tokens; `info-foreground` Light é o caso conhecido.
+- O laboratório React legado ainda duplica especificações que estão migrando para o Pencil.
 - `npm run lint` possui erros preexistentes fora do escopo do design system; o lint isolado do styleguide está aprovado.
 
 ## Referências rápidas
@@ -42,3 +44,4 @@ Este é o ponto de entrada para entender o estado atual do GIRO. Detalhes de exe
 - [Visão do projeto](01-visao-do-projeto.md)
 - [Guia de documentação](02-guia-de-documentacao.md)
 - [Referência Velocity Light](referencias/01-velocity-light.md)
+- Especificação visual versionada: `design/design-system.pen`
