@@ -254,7 +254,7 @@ const borderColors = [
   ["Forte", "rgb(0 0 0 / 16%)", "Ênfase e hover neutro"],
   ["Foco", "#ef4444", "Foco visível e seleção"],
   ["Sucesso", "#16a34a", "Confirmação e estado positivo"],
-  ["Atenção", "#e0b400", "Pendência e advertência"],
+  ["Atenção", "#facc15", "Pendência e advertência"],
   ["Informação", "#60a5fa", "Dados e orientação"],
   ["Perigo", "#b91c1c", "Erro e ação destrutiva"],
 ] as const;
@@ -352,7 +352,7 @@ export function DesignSystemPage() {
 
   return (
     <StyleguideLayout>
-      <main className="min-h-screen bg-background text-foreground [--warning-foreground:#7a5700] [--warning-on-strong:#5c4500] [--warning-strong:#e0b400] [--warning:#fff3c4] dark:[--warning-foreground:#fde047] dark:[--warning-on-strong:#422006] dark:[--warning-strong:#facc15] dark:[--warning:rgb(250_204_21/14%)]">
+      <main className="min-h-screen bg-background text-foreground [--warning-foreground:#7a5700] [--warning-on-strong:#5c4500] [--warning-strong:#facc15] [--warning:#fff3c4] dark:[--warning-foreground:#fde047] dark:[--warning-on-strong:#422006] dark:[--warning-strong:#facc15] dark:[--warning:rgb(250_204_21/14%)]">
         <div className="border-b border-border bg-card">
           <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3">
@@ -2031,7 +2031,9 @@ export function DesignSystemPage() {
                             {state}
                           </span>
                           <span className="flex items-center gap-3">
-                            <span className="relative h-6 w-11 rounded-full border border-border bg-muted after:absolute after:left-1 after:top-1 after:size-4 after:rounded-full after:bg-card" />
+                            <span
+                              className={`relative h-6 w-11 rounded-full border bg-muted after:absolute after:left-1 after:top-1 after:size-4 after:rounded-full after:bg-card ${state === "Hover" ? "border-primary bg-accent dark:border-primary/50 dark:bg-accent/50" : "border-border"}`}
+                            />
                             <span
                               className={`relative h-6 w-11 rounded-full ${active} after:absolute after:right-1 after:top-1 after:size-4 after:rounded-full after:bg-white`}
                             />
