@@ -31,7 +31,7 @@ export function ChecklistPage() {
   const vehicles = useQuery(api.vehicles.list, {});
   const shiftWindow = useMemo(() => shiftWindowAt(), []);
   const dailyStatus = useQuery(api.vehicleChecklists.listDailyStatus, shiftWindow);
-  const viewer = useQuery(api.auth.viewer);
+  const viewer = useQuery(api.users.viewer);
   const submitChecklist = useMutation(api.vehicleChecklists.submitChecklist);
 
   const [step, setStep] = useState<Step>("identificar");

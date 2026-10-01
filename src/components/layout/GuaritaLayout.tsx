@@ -12,7 +12,7 @@ interface GuaritaLayoutProps {
 export function GuaritaLayout({ children }: GuaritaLayoutProps) {
   const { signOut } = useAuthActions();
   const location = useLocation();
-  const viewer = useQuery(api.auth.viewer);
+  const viewer = useQuery(api.users.viewer);
 
   // A direção "Placar" só tem valores Light por enquanto
   useLayoutEffect(() => {
@@ -34,6 +34,7 @@ export function GuaritaLayout({ children }: GuaritaLayoutProps) {
       <GuaritaTopBar
         current={isChecklistRoute ? "checklist" : "guarita"}
         userLabel={userLabel}
+        userImage={viewer?.image ?? null}
         onSignOut={() => void signOut()}
       />
 

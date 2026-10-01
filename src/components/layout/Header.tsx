@@ -2,6 +2,7 @@ import { useConvexAuth } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Button } from "@/components/ui/button";
 import { Truck, LogOut } from "lucide-react";
+import { UserAvatar } from "./UserAvatar";
 
 export function Header() {
   const { isAuthenticated } = useConvexAuth();
@@ -22,10 +23,13 @@ export function Header() {
           </div>
         </div>
         {isAuthenticated && (
-          <Button variant="ghost" onClick={() => void signOut()}>
-            <LogOut className="w-4 h-4 mr-2" />
-            Sair
-          </Button>
+          <div className="flex items-center gap-3">
+            <UserAvatar />
+            <Button variant="ghost" onClick={() => void signOut()}>
+              <LogOut className="w-4 h-4 mr-2" />
+              Sair
+            </Button>
+          </div>
         )}
       </div>
     </header>
