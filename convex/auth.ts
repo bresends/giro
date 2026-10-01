@@ -1,9 +1,9 @@
 import { convexAuth, getAuthUserId } from "@convex-dev/auth/server";
+import Google from "@auth/core/providers/google";
 import { query } from "./_generated/server";
-import { Password } from "@convex-dev/auth/providers/Password";
 
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
-  providers: [Password],
+  providers: [Google],
 });
 
 // Query: Usuário autenticado (nome e e-mail) para a topbar e o resumo do checklist
