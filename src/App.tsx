@@ -4,9 +4,6 @@ import { Authenticated, Unauthenticated } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
 import { Layout } from "./components/layout/Layout";
 import { GuaritaLayout } from "./components/layout/GuaritaLayout";
 import { DashboardPage } from "./pages/DashboardPage";
@@ -24,8 +21,6 @@ import { MovementsPage } from "./pages/MovementsPage";
 import { ChecklistPage } from "./pages/ChecklistPage";
 import { AdminChecklistsPage } from "./pages/AdminChecklistsPage";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Truck } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -99,56 +94,20 @@ export default function App() {
   );
 }
 
-// Schemas de validação
-const signInSchema = z.object({
-  email: z.string().email("Digite um email válido"),
-  password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
-});
-
-const signUpSchema = z
-  .object({
-    email: z.string().email("Digite um email válido"),
-    password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "As senhas não coincidem",
-    path: ["confirmPassword"],
-  });
-
-// Página de Login - usando React Hook Form e Zod
+// Página de Login - autenticação via Google
 function LoginPage() {
   const { signIn } = useAuthActions();
-  const [flow, setFlow] = useState<"signIn" | "signUp">("signIn");
   const [authError, setAuthError] = useState<string | null>(null);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
-  const signInForm = useForm<z.infer<typeof signInSchema>>({
-    resolver: zodResolver(signInSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  const signUpForm = useForm<z.infer<typeof signUpSchema>>({
-    resolver: zodResolver(signUpSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
-
-  async function onSubmit(data: any) {
+  async function onGoogleSignIn() {
     setAuthError(null);
+    setIsRedirecting(true);
     try {
-      const formData = new FormData();
-      formData.set("email", data.email);
-      formData.set("password", data.password);
-      formData.set("flow", flow);
-      await signIn("password", formData);
+      await signIn("google");
     } catch (error) {
       setAuthError(error instanceof Error ? error.message : "Erro ao autenticar");
+      setIsRedirecting(false);
     }
   }
 
@@ -163,157 +122,22 @@ function LoginPage() {
           <p className="text-muted-foreground">Gestão de Frota CBMGO</p>
         </div>
 
-        <div className="bg-card rounded-lg shadow-lg p-8 border">
-          {flow === "signIn" ? (
-            <form key="signin-form" onSubmit={signInForm.handleSubmit(onSubmit)} className="space-y-4">
-              <Controller
-                name="email"
-                control={signInForm.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="email">Email</FieldLabel>
-                    <Input
-                      {...field}
-                      id="email"
-                      type="email"
-                      placeholder="seu@email.com"
-                      aria-invalid={fieldState.invalid}
-                      className="bg-white dark:bg-input border-2 border-border hover:border-ring/50 transition-colors"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
+        <div className="bg-card rounded-lg shadow-lg p-8 border space-y-4">
+          <Button
+            className="w-full"
+            variant="outline"
+            type="button"
+            disabled={isRedirecting}
+            onClick={() => void onGoogleSignIn()}
+          >
+            <GoogleIcon />
+            {isRedirecting ? "Redirecionando..." : "Entrar com Google"}
+          </Button>
 
-              <Controller
-                name="password"
-                control={signInForm.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="password">Senha</FieldLabel>
-                    <Input
-                      {...field}
-                      id="password"
-                      type="password"
-                      aria-invalid={fieldState.invalid}
-                      className="bg-white dark:bg-input border-2 border-border hover:border-ring/50 transition-colors"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              <Button className="w-full mt-2" type="submit">
-                Entrar
-              </Button>
-
-              <div className="text-center text-sm">
-                <span className="text-muted-foreground">Não tem uma conta?</span>{" "}
-                <Button
-                  type="button"
-                  variant="link"
-                  className="p-0 h-auto"
-                  onClick={() => {
-                    setFlow("signUp");
-                    setAuthError(null);
-                    signInForm.reset();
-                  }}
-                >
-                  Criar conta
-                </Button>
-              </div>
-
-              {authError && (
-                <div className="bg-destructive/10 border border-destructive rounded-md p-3">
-                  <p className="text-sm text-destructive">{authError}</p>
-                </div>
-              )}
-            </form>
-          ) : (
-            <form key="signup-form" onSubmit={signUpForm.handleSubmit(onSubmit)} className="space-y-4">
-              <Controller
-                name="email"
-                control={signUpForm.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="email-signup">Email</FieldLabel>
-                    <Input
-                      {...field}
-                      id="email-signup"
-                      type="email"
-                      placeholder="seu@email.com"
-                      aria-invalid={fieldState.invalid}
-                      className="bg-white dark:bg-input border-2 border-border hover:border-ring/50 transition-colors"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              <Controller
-                name="password"
-                control={signUpForm.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="password-signup">Senha</FieldLabel>
-                    <Input
-                      {...field}
-                      id="password-signup"
-                      type="password"
-                      aria-invalid={fieldState.invalid}
-                      className="bg-white dark:bg-input border-2 border-border hover:border-ring/50 transition-colors"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              <Controller
-                name="confirmPassword"
-                control={signUpForm.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="confirmPassword">
-                      Confirmar Senha
-                    </FieldLabel>
-                    <Input
-                      {...field}
-                      id="confirmPassword"
-                      type="password"
-                      aria-invalid={fieldState.invalid}
-                      className="bg-white dark:bg-input border-2 border-border hover:border-ring/50 transition-colors"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              <Button className="w-full mt-2" type="submit">
-                Criar Conta
-              </Button>
-
-              <div className="text-center text-sm">
-                <span className="text-muted-foreground">Já tem uma conta?</span>{" "}
-                <Button
-                  type="button"
-                  variant="link"
-                  className="p-0 h-auto"
-                  onClick={() => {
-                    setFlow("signIn");
-                    setAuthError(null);
-                    signUpForm.reset();
-                  }}
-                >
-                  Fazer login
-                </Button>
-              </div>
-
-              {authError && (
-                <div className="bg-destructive/10 border border-destructive rounded-md p-3">
-                  <p className="text-sm text-destructive">{authError}</p>
-                </div>
-              )}
-            </form>
+          {authError && (
+            <div className="bg-destructive/10 border border-destructive rounded-md p-3">
+              <p className="text-sm text-destructive">{authError}</p>
+            </div>
           )}
         </div>
       </div>
@@ -321,3 +145,25 @@ function LoginPage() {
   );
 }
 
+function GoogleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="w-4 h-4" aria-hidden="true">
+      <path
+        fill="#4285F4"
+        d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.98-3.09z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"
+      />
+    </svg>
+  );
+}
