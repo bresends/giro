@@ -3,6 +3,7 @@ import { LogOut, ShieldCheck, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLayoutEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { UserAvatar } from "./UserAvatar";
 
 interface GuaritaLayoutProps {
   children: React.ReactNode;
@@ -62,6 +63,8 @@ export function GuaritaLayout({ children }: GuaritaLayoutProps) {
                   </Button>
                 </Link>
               )}
+
+              <UserAvatar />
 
               <Button variant="outline" onClick={() => void signOut()} className="px-2.5 sm:px-4">
                 <LogOut className="w-4 h-4 sm:mr-2" />
