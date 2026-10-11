@@ -1,7 +1,17 @@
 import { useMutation } from "convex/react";
 import { useEffect, useState } from "react";
 import { ConvexError } from "convex/values";
-import { Button } from "@/components/ui/button";
+import { PersonPlus } from "@gravity-ui/icons";
+import { GiroButton } from "@/components/giro/giro-button";
+import {
+  giroDialog,
+  giroDialogDescription,
+  giroDialogTitle,
+  giroErrorBox,
+  giroField,
+  giroLabel,
+} from "@/components/giro/styles";
+import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -87,25 +97,24 @@ export function PersonnelQuickAddModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md light text-foreground">
+      <DialogContent className={cn(giroDialog, "sm:max-w-md")}>
         <DialogHeader>
-          <DialogTitle>Cadastrar Novo Militar</DialogTitle>
-          <DialogDescription>
-            Adicione um novo militar ao sistema para registrar saídas de
-            viaturas.
+          <DialogTitle className={giroDialogTitle}>Cadastrar militar</DialogTitle>
+          <DialogDescription className={giroDialogDescription}>
+            Adicione um militar para poder registrar saídas com ele como motorista.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-md p-3">
-              <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+            <div role="alert" className={giroErrorBox}>
+              {error}
             </div>
           )}
 
-          <div className="space-y-2">
-            <Label htmlFor="rank">
-              Posto/Graduação <span className="text-red-500">*</span>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="rank" className={giroLabel}>
+              Posto/graduação <span className="text-giro-accent">*</span>
             </Label>
             <Input
               id="rank"
@@ -115,16 +124,18 @@ export function PersonnelQuickAddModal({
               }
               placeholder="Ex: SD, CB, SGT, TEN, CAP"
               required
+              className={giroField}
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="rg">
-              RG <span className="text-red-500">*</span>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="rg" className={giroLabel}>
+              RG <span className="text-giro-accent">*</span>
             </Label>
             <Input
               id="rg"
               type="number"
+              inputMode="numeric"
               value={formData.rg || ""}
               onChange={(e) =>
                 setFormData({ ...formData, rg: parseInt(e.target.value) || 0 })
@@ -132,12 +143,13 @@ export function PersonnelQuickAddModal({
               placeholder="Ex: 3892"
               required
               min={1000}
+              className={giroField}
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="name">
-              Nome Completo <span className="text-red-500">*</span>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="name" className={giroLabel}>
+              Nome completo <span className="text-giro-accent">*</span>
             </Label>
             <Input
               id="name"
@@ -147,21 +159,24 @@ export function PersonnelQuickAddModal({
               }
               placeholder="Ex: João da Silva"
               required
+              className={giroField}
             />
           </div>
 
-          <DialogFooter>
-            <Button
+          <DialogFooter className="pt-1">
+            <GiroButton
               type="button"
               variant="secondary"
+              size="lg"
               onClick={() => onOpenChange(false)}
               disabled={isSubmitting}
             >
               Cancelar
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            </GiroButton>
+            <GiroButton type="submit" variant="primary" size="lg" disabled={isSubmitting}>
+              <PersonPlus />
               {isSubmitting ? "Cadastrando..." : "Cadastrar"}
-            </Button>
+            </GiroButton>
           </DialogFooter>
         </form>
       </DialogContent>

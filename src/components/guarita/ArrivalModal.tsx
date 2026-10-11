@@ -10,10 +10,20 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Car } from "lucide-react";
+import { ArrowRightToSquare } from "@gravity-ui/icons";
+import { GiroButton } from "@/components/giro/giro-button";
+import {
+  giroDialog,
+  giroDialogDescription,
+  giroDialogTitle,
+  giroErrorBox,
+  giroField,
+  giroInfoBox,
+  giroLabel,
+} from "@/components/giro/styles";
+import { cn } from "@/lib/utils";
 
 interface Movement {
   _id: Id<"vehicleMovements">;
@@ -115,78 +125,79 @@ export function ArrivalModal({
   if (!movement) return null;
 
   const kmTraveled = formData.arrivalKm - movement.departureKm;
-  const kmSuspicious = kmTraveled > 1000;
+  // Mesmo limite da confirmação em handleSubmit
+  const kmSuspicious = kmTraveled > 500;
+  const kmInvalid = formData.arrivalKm < movement.departureKm;
+  const fmt = (n: number) => new Intl.NumberFormat("pt-BR").format(n);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl light text-foreground">
+      <DialogContent className={cn(giroDialog, "sm:max-w-xl")}>
         <DialogHeader>
-          <DialogTitle>Registrar Chegada de Viatura</DialogTitle>
-          <DialogDescription>
-            Registre a chegada da viatura informando a quilometragem atual.
+          <DialogTitle className={giroDialogTitle}>
+            Registrar chegada · {movement.vehicle?.operationalPrefix}
+          </DialogTitle>
+          <DialogDescription className={giroDialogDescription}>
+            Informe a quilometragem do painel. O horário é registrado automaticamente.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-md p-3">
-              <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+            <div role="alert" className={giroErrorBox}>
+              {error}
             </div>
           )}
 
-          {/* Departure Info Card */}
-          <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-            <div className="flex items-center gap-2 pb-2 border-b">
-              <Car className="w-5 h-5" />
-              <h3 className="font-semibold">Informações da Saída</h3>
+          <dl className={cn(giroInfoBox, "grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3")}>
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <dt className="text-xs text-giro-muted">Viatura</dt>
+              <dd className="truncate text-sm font-semibold">
+                {movement.vehicle?.operationalPrefix} · {movement.vehicle?.plate}
+              </dd>
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-xs text-muted-foreground">Viatura</p>
-                <p className="font-semibold">
-                  {movement.vehicle?.operationalPrefix} - {movement.vehicle?.plate}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs text-muted-foreground">Motorista</p>
-                <p className="font-semibold">
-                  {movement.personnel?.rank} {movement.personnel?.name}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs text-muted-foreground">Destino</p>
-                <p className="font-semibold">{movement.destination}</p>
-              </div>
-
-              <div>
-                <p className="text-xs text-muted-foreground">Horário de Saída</p>
-                <p className="font-semibold">
-                  {new Date(movement.departureTime).toLocaleTimeString("pt-BR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs text-muted-foreground">KM de Saída</p>
-                <p className="font-semibold">
-                  {new Intl.NumberFormat("pt-BR").format(movement.departureKm)} km
-                </p>
-              </div>
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <dt className="text-xs text-giro-muted">Motorista</dt>
+              <dd className="truncate text-sm font-semibold">
+                {movement.personnel?.rank} {movement.personnel?.name}
+              </dd>
             </div>
-          </div>
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <dt className="text-xs text-giro-muted">Destino</dt>
+              <dd className="truncate text-sm font-semibold">{movement.destination}</dd>
+            </div>
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <dt className="text-xs text-giro-muted">Saída</dt>
+              <dd className="text-sm font-semibold tabular-nums">
+                {new Date(movement.departureTime).toLocaleTimeString("pt-BR", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </dd>
+            </div>
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <dt className="text-xs text-giro-muted">KM de saída</dt>
+              <dd className="text-sm font-semibold tabular-nums">{fmt(movement.departureKm)} km</dd>
+            </div>
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <dt className="text-xs text-giro-muted">Chegada</dt>
+              <dd className="text-sm font-semibold tabular-nums">
+                {new Date().toLocaleTimeString("pt-BR", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </dd>
+            </div>
+          </dl>
 
-          <div className="space-y-2">
-            <Label htmlFor="arrivalKm">
-              KM de Chegada <span className="text-red-500">*</span>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="arrivalKm" className={giroLabel}>
+              KM de chegada <span className="text-giro-accent">*</span>
             </Label>
             <Input
               id="arrivalKm"
               type="number"
+              inputMode="numeric"
               value={formData.arrivalKm}
               onChange={(e) => {
                 setFormData({
@@ -197,87 +208,73 @@ export function ArrivalModal({
               }}
               min={movement.departureKm}
               required
-              className={`text-2xl font-bold h-16 ${
-                formData.arrivalKm < movement.departureKm
-                  ? "border-red-500 focus-visible:ring-red-500"
-                  : ""
-              }`}
+              aria-invalid={kmInvalid}
+              aria-describedby="arrivalKm-hint"
+              className={cn(
+                giroField,
+                "h-16 text-[28px] font-bold tracking-[-0.5px] tabular-nums md:text-[28px]",
+                kmInvalid && "border-giro-accent focus-visible:ring-giro-accent/30",
+              )}
               autoFocus
             />
-            {formData.arrivalKm < movement.departureKm ? (
-              <p className="text-xs text-red-600 font-medium">
-                ⚠️ KM de chegada deve ser maior ou igual ao KM de saída ({new Intl.NumberFormat("pt-BR").format(movement.departureKm)} km)
-              </p>
-            ) : (
-              <p className="text-xs text-muted-foreground">
-                Valor mínimo: {new Intl.NumberFormat("pt-BR").format(movement.departureKm)} km
-              </p>
-            )}
-          </div>
-
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-4 rounded-md">
-            <p className="text-sm text-muted-foreground mb-1">Horário de Chegada:</p>
-            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-              {new Date().toLocaleTimeString("pt-BR", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              Horário será registrado automaticamente
+            <p
+              id="arrivalKm-hint"
+              className={cn("text-xs", kmInvalid ? "font-medium text-giro-accent" : "text-giro-muted")}
+            >
+              {kmInvalid
+                ? `O KM de chegada deve ser maior ou igual ao KM de saída (${fmt(movement.departureKm)} km).`
+                : `Valor mínimo: ${fmt(movement.departureKm)} km`}
             </p>
           </div>
 
           {kmTraveled >= 0 && (
             <div
-              className={`p-3 rounded-md border ${
-                kmTraveled > 1000
-                  ? "bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-800"
+              aria-live="polite"
+              className={cn(
+                "rounded-2xl px-4 py-3 text-sm",
+                kmSuspicious
+                  ? "bg-giro-accent-soft text-giro-accent-soft-foreground"
                   : kmTraveled === 0
-                    ? "bg-yellow-50 dark:bg-yellow-900/20 border-yellow-300 dark:border-yellow-800"
-                    : "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
-              }`}
+                    ? "bg-giro-warning-soft text-giro-warning-soft-foreground"
+                    : "bg-giro-success-soft text-giro-success-soft-foreground",
+              )}
             >
-              <p
-                className={`text-sm ${
-                  kmTraveled > 1000
-                    ? "text-red-800 dark:text-red-200"
-                    : kmTraveled === 0
-                      ? "text-yellow-800 dark:text-yellow-200"
-                      : "text-green-800 dark:text-green-200"
-                }`}
-              >
-                <strong>Distancia percorrida:</strong>{" "}
-                {new Intl.NumberFormat("pt-BR").format(kmTraveled)} km
+              <p>
+                <span className="font-semibold">Distância percorrida:</span>{" "}
+                <span className="tabular-nums">{fmt(kmTraveled)} km</span>
               </p>
-              {kmTraveled > 1000 && (
-                <p className="text-sm text-red-700 dark:text-red-300 mt-1 font-semibold">
-                  Distancia muito alta! Verifique se o KM esta correto.
-                </p>
+              {kmSuspicious && (
+                <p className="mt-1 font-semibold">Distância muito alta. Confira o KM no painel.</p>
+              )}
+              {kmTraveled === 0 && (
+                <p className="mt-1">Mesma quilometragem da saída.</p>
               )}
             </div>
           )}
 
-          <DialogFooter>
-            <Button
+          <DialogFooter className="pt-1">
+            <GiroButton
               type="button"
               variant="secondary"
+              size="lg"
               onClick={() => onOpenChange(false)}
               disabled={isSubmitting}
             >
               Cancelar
-            </Button>
-            <Button
+            </GiroButton>
+            <GiroButton
               type="submit"
-              disabled={isSubmitting || formData.arrivalKm < movement.departureKm}
-              variant={kmSuspicious && warningConfirmed ? "destructive" : "default"}
+              variant="primary"
+              size="lg"
+              disabled={isSubmitting || kmInvalid}
             >
+              <ArrowRightToSquare />
               {isSubmitting
                 ? "Registrando..."
                 : kmSuspicious && warningConfirmed
                   ? "Confirmar mesmo assim"
-                  : "Registrar Chegada"}
-            </Button>
+                  : "Registrar chegada"}
+            </GiroButton>
           </DialogFooter>
         </form>
       </DialogContent>

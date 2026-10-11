@@ -1,22 +1,20 @@
-import { useMutation, useQuery } from "convex/react";
 import {
-  AlertTriangle,
   ArrowLeft,
-  CheckCircle,
-  ClipboardList,
-  ShieldAlert,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+  ArrowRight,
+  Check,
+  ChevronDown,
+  CircleCheckFill,
+  PaperPlane,
+  QrCode,
+} from "@gravity-ui/icons";
+import { useMutation, useQuery } from "convex/react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { parseRoteiro } from "@/components/checklist/parseRoteiro";
+import { GiroButton } from "@/components/giro/giro-button";
+import { giroCombobox } from "@/components/giro/styles";
+import { VehicleIllustration } from "@/components/giro/VehicleIllustration";
 import {
   Combobox,
   ComboboxContent,
@@ -25,451 +23,553 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox";
+import { formatKm, formatTime, shiftWindowAt } from "@/lib/giro";
+import { cn } from "@/lib/utils";
 import { api } from "../../convex/_generated/api";
-import { Id } from "../../convex/_generated/dataModel";
+import type { Id } from "../../convex/_generated/dataModel";
 import { RichTextRenderer } from "../components/common/RichTextRenderer";
-import { SimpleSelect } from "../components/common/SimpleSelect";
+
+type Role = "motorista" | "comandante";
+type Step = "identificar" | "conferir" | "enviado";
+
+const ROLE_LABEL: Record<Role, string> = { comandante: "Comandante", motorista: "Motorista" };
+
+interface VehicleInfo {
+  prefix: string;
+  plate: string;
+  model: string;
+  subtitle: string | null;
+  type: string | null;
+  currentKm: number | null;
+  nextMaintenanceKm: number | null;
+  situation: string;
+}
+
+function VehicleCard({ vehicle }: { vehicle: VehicleInfo }) {
+  return (
+    <div className="flex flex-col gap-3.5 rounded-[20px] bg-giro-neutral p-4 text-giro-neutral-foreground">
+      <div className="flex items-center justify-between gap-2">
+        <span className="rounded-lg border border-giro-separator bg-white px-2 py-1 text-[13px] font-bold tracking-[0.5px]">
+          {vehicle.prefix}
+        </span>
+        <span className="text-xs text-giro-neutral-muted">Placa {vehicle.plate}</span>
+      </div>
+      <div className="flex items-end justify-between gap-2">
+        <div className="flex min-w-0 flex-col gap-0.5">
+          <span className="truncate text-[30px] leading-tight font-bold tracking-[-0.8px]">{vehicle.model}</span>
+          {vehicle.subtitle && <span className="text-xs text-giro-neutral-muted">{vehicle.subtitle}</span>}
+        </div>
+        <VehicleIllustration type={vehicle.type} className="h-[72px] w-24 shrink-0" />
+      </div>
+      <dl className="grid grid-cols-3 gap-3 border-t border-[#16191C1A] pt-3">
+        {[
+          ["KM atual", formatKm(vehicle.currentKm)],
+          ["Próx. manutenção", vehicle.nextMaintenanceKm != null ? formatKm(vehicle.nextMaintenanceKm, true) : "—"],
+          ["Situação", vehicle.situation],
+        ].map(([label, value]) => (
+          <div key={label} className="flex min-w-0 flex-col gap-0.5">
+            <dt className="text-[11px] text-giro-neutral-muted">{label}</dt>
+            <dd className="truncate text-sm font-semibold tabular-nums">{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
+
+/** Rodapé fixo das telas do celular, com a ação principal. */
+function StickyFooter({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="sticky bottom-0 z-10 -mx-4 mt-auto flex flex-col items-center gap-3 border-t border-giro-separator bg-white px-4 pt-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:-mx-6 sm:px-6">
+      {children}
+    </div>
+  );
+}
+
+function RadioCard({
+  name,
+  checked,
+  onChange,
+  label,
+  sub,
+  subClassName,
+  tone = "neutral",
+}: {
+  name: string;
+  checked: boolean;
+  onChange: () => void;
+  label: string;
+  sub: string;
+  subClassName?: string;
+  tone?: "neutral" | "warning";
+}) {
+  const warning = tone === "warning" && checked;
+  return (
+    <label
+      className={cn(
+        "flex min-h-16 cursor-pointer items-center gap-3.5 rounded-[18px] px-4 py-3.5 transition-colors duration-150 has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-giro-accent/30",
+        warning
+          ? "bg-giro-warning text-giro-warning-foreground"
+          : checked
+            ? "bg-white ring-2 ring-giro-fg ring-inset"
+            : "bg-white ring-1 ring-giro-default ring-inset hover:ring-giro-muted/40",
+      )}
+    >
+      <input type="radio" name={name} checked={checked} onChange={onChange} className="sr-only" />
+      <span
+        aria-hidden="true"
+        className={cn(
+          "inline-flex size-[22px] shrink-0 items-center justify-center rounded-full",
+          warning
+            ? "bg-giro-warning-foreground text-giro-warning"
+            : checked
+              ? "border-[7px] border-giro-fg"
+              : "border-2 border-giro-default",
+        )}
+      >
+        {warning && <Check className="size-3.5" />}
+      </span>
+      <span className="flex min-w-0 flex-col gap-0.5">
+        <span className="text-base font-semibold">{label}</span>
+        <span className={cn("text-[13px]", warning ? "text-giro-warning-foreground" : "text-giro-muted", subClassName)}>
+          {sub}
+        </span>
+      </span>
+    </label>
+  );
+}
+
+function SeiNotice({ after }: { after?: boolean }) {
+  return (
+    <div className="flex flex-col gap-[3px] rounded-2xl bg-giro-warning-soft px-4 py-3.5 text-giro-warning-soft-foreground">
+      <p className="text-sm font-semibold">Próximo passo: documento no SEI</p>
+      <p className="text-[13px]">
+        {after
+          ? "Relate as alterações no SEI e encaminhe ao Chefe da SGP. A administração acompanha o processo a partir deste envio."
+          : "Depois de enviar, relate as alterações no SEI e encaminhe ao Chefe da SGP."}
+      </p>
+    </div>
+  );
+}
+
+function Guidelines() {
+  return (
+    <details className="group rounded-[20px] bg-white">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-[20px] px-[18px] py-3.5 outline-none focus-visible:ring-[3px] focus-visible:ring-giro-accent/30 [&::-webkit-details-marker]:hidden">
+        <span className="text-[15px] font-semibold">Orientações gerais</span>
+        <ChevronDown aria-hidden="true" className="size-[18px] text-giro-muted transition-transform group-open:rotate-180" />
+      </summary>
+      <div className="flex flex-col gap-3 px-[18px] pb-4 text-sm leading-relaxed">
+        <p>Fica estabelecido que o presente Check List de Viatura terá caráter exclusivamente descritivo.</p>
+        <p>
+          Caso sejam identificadas inconsistências, ausências, avarias, extravios, substituições ou quaisquer divergências
+          durante a conferência, deverá ser <strong>obrigatoriamente</strong> confeccionado documento oficial via Sistema
+          Eletrônico de Informações (SEI), encaminhado ao Chefe da SGP para ciência e providências cabíveis.
+        </p>
+        <p>
+          Cada constatação de alteração, inconsistência, ausência ou avaria deverá ser formalizada em{" "}
+          <strong>novo processo</strong> SEI específico, destinado ao Chefe da SGP.
+        </p>
+        <p>
+          O procedimento tem por finalidade facilitar o controle individualizado das alterações constatadas pelos
+          militares durante o serviço operacional.
+        </p>
+        <p>
+          Não havendo alterações ou inconsistências, será suficiente o registro da expressão{" "}
+          <strong>“Sem alterações”</strong> no campo correspondente ao final do Check List.
+        </p>
+      </div>
+    </details>
+  );
+}
 
 export function ChecklistPage() {
   const [searchParams] = useSearchParams();
-  const opFunctions = useQuery(api.vehicleChecklists.listOperationalFunctions, {
-    activeOnly: true,
-  });
+  const opFunctions = useQuery(api.vehicleChecklists.listOperationalFunctions, { activeOnly: true });
+  const vehicles = useQuery(api.vehicles.list, {});
+  const shiftWindow = useMemo(() => shiftWindowAt(), []);
+  const dailyStatus = useQuery(api.vehicleChecklists.listDailyStatus, shiftWindow);
+  const viewer = useQuery(api.auth.viewer);
   const submitChecklist = useMutation(api.vehicleChecklists.submitChecklist);
 
-  const [formData, setFormData] = useState({
-    operationalFunctionId: "" as Id<"operationalFunctions"> | "",
-    role: "" as "motorista" | "comandante" | "",
-    hasAlterations: false,
-  });
-
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [step, setStep] = useState<Step>("identificar");
+  // null = ainda segue o QR code; "" = escolha manual vazia
+  const [manualFunctionId, setManualFunctionId] = useState<Id<"operationalFunctions"> | "" | null>(null);
+  const [role, setRole] = useState<Role | "">("");
+  const [hasAlterations, setHasAlterations] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittedAt, setSubmittedAt] = useState<number | null>(null);
 
-  // Find the selected function details
-  const selectedFunction = opFunctions?.find(
-    (f) => f._id === formData.operationalFunctionId,
+  // Função vinculada à viatura do QR code (?vehicleId=)
+  const qrVehicleId = searchParams.get("vehicleId");
+  const qrFunction = useMemo(
+    () => (qrVehicleId && opFunctions ? opFunctions.find((f) => f.currentVehicleId === qrVehicleId) ?? null : null),
+    [qrVehicleId, opFunctions],
   );
+  const fromQr = manualFunctionId === null && qrFunction !== null;
+  const functionId = manualFunctionId ?? qrFunction?._id ?? "";
+
+  useEffect(() => {
+    if (qrVehicleId && opFunctions && !qrFunction) {
+      toast.error("Nenhuma função operacional ativa está vinculada a esta viatura no momento.");
+    }
+  }, [qrVehicleId, opFunctions, qrFunction]);
+
+  const selectedFunction = opFunctions?.find((f) => f._id === functionId);
   const isVehicleLinked = !!selectedFunction?.vehicle;
 
-  // Pre-select function if vehicleId is passed in search params (e.g., from QR code)
   useEffect(() => {
-    const paramVehicleId = searchParams.get("vehicleId");
-    if (paramVehicleId && opFunctions) {
-      const matchedFunction = opFunctions.find(
-        (f) => f.currentVehicleId === paramVehicleId,
-      );
-      if (matchedFunction) {
-        setFormData((prev) => ({
-          ...prev,
-          operationalFunctionId: matchedFunction._id,
-        }));
-        toast.success(
-          `Função ${matchedFunction.name} identificada para a viatura escaneada.`,
-        );
-      } else {
-        toast.error(
-          "Nenhuma função operacional ativa está vinculada a esta viatura no momento.",
-        );
-      }
-    }
-  }, [searchParams, opFunctions]);
+    window.scrollTo({ top: 0 });
+  }, [step]);
 
-  // Query template for selected function and role
   const template = useQuery(
     api.vehicleChecklists.getTemplate,
-    formData.operationalFunctionId && formData.role
-      ? {
-          operationalFunctionId: formData.operationalFunctionId,
-          role: formData.role,
-        }
-      : "skip",
+    functionId && role ? { operationalFunctionId: functionId, role } : "skip",
   );
+  const roteiro = useMemo(() => (template ? parseRoteiro(template.content) : null), [template]);
+  const itemTotal = roteiro?.reduce((sum, s) => sum + s.items.length, 0) ?? 0;
 
-  const opFunctionOptions = (opFunctions || []).map((f) => {
-    const vehicleText = f.vehicle
-      ? ` - Viatura: ${f.vehicle.operationalPrefix} (${f.vehicle.plate})`
-      : " - (Sem Viatura Vinculada)";
+  const vehicleInfo: VehicleInfo | null = useMemo(() => {
+    const v = selectedFunction?.vehicle;
+    if (!v) return null;
+    const full = vehicles?.find((x) => x._id === v._id);
     return {
-      value: f._id,
-      label: `${f.name}${vehicleText}`,
+      prefix: v.operationalPrefix,
+      plate: v.plate,
+      model: v.model,
+      subtitle: full ? `${full.brand} · ${full.year}` : null,
+      type: full?.type?.name ?? null,
+      currentKm: full?.currentKm ?? null,
+      nextMaintenanceKm: full?.nextMaintenanceKm ?? null,
+      situation: full?.inMaintenance ? "Em manutenção" : full?.serviceType === "backup" ? "Reserva" : "Operacional",
     };
-  });
+  }, [selectedFunction, vehicles]);
 
-  const roleOptions = [
-    { value: "motorista", label: "Motorista" },
-    { value: "comandante", label: "Comandante" },
-  ];
+  const status = dailyStatus?.find((d) => d.operationalFunctionId === functionId);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.operationalFunctionId || !formData.role) {
-      toast.error("Selecione a função e o papel de serviço");
+  const functionItems = (opFunctions ?? []).map((f) => ({
+    value: f._id,
+    label: f.vehicle ? `${f.name} · ${f.vehicle.operationalPrefix}` : `${f.name} · sem viatura vinculada`,
+  }));
+
+  const handleSubmit = async () => {
+    if (!functionId || !role) {
+      toast.error("Selecione a viatura e o papel de serviço");
       return;
     }
-
     if (!isVehicleLinked) {
-      toast.error(
-        "Não é possível enviar o checklist sem uma viatura vinculada.",
-      );
+      toast.error("Não é possível enviar o checklist sem uma viatura vinculada.");
       return;
     }
-
     setIsSubmitting(true);
     try {
-      await submitChecklist({
-        operationalFunctionId: formData.operationalFunctionId,
-        role: formData.role,
-        hasAlterations: formData.hasAlterations,
-      });
-      toast.success("Checklist enviado com sucesso!");
-      setIsSubmitted(true);
+      await submitChecklist({ operationalFunctionId: functionId, role, hasAlterations });
+      setSubmittedAt(Date.now());
+      setStep("enviado");
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Erro ao enviar checklist",
-      );
+      toast.error(error instanceof Error ? error.message : "Erro ao enviar checklist");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (isSubmitted) {
+  const restart = () => {
+    setRole("");
+    setHasAlterations(false);
+    setSubmittedAt(null);
+    setStep("identificar");
+  };
+
+  const column = "mx-auto flex min-h-[calc(100dvh-3.5rem)] w-full max-w-md flex-col px-4 sm:px-6 lg:min-h-[calc(100dvh-4rem)]";
+
+  // ── Passo 3: enviado ───────────────────────────────────────────────
+  if (step === "enviado" && vehicleInfo && role) {
     return (
-      <div className="max-w-md mx-auto py-8 px-4 text-center">
-        <Card className="border-t-4 border-t-green-500 shadow-md">
-          <CardContent className="pt-6 space-y-6">
-            <div className="flex justify-center">
-              <CheckCircle className="w-16 h-16 text-green-500" />
+      <div className={column}>
+        <div className="flex flex-col gap-7 pt-5 pb-7">
+          <div className="flex flex-col gap-3.5 rounded-3xl bg-giro-neutral p-[18px] text-giro-neutral-foreground motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-200">
+            <span className="inline-flex h-7 w-fit items-center gap-1.5 rounded-full bg-white pr-3 pl-2 text-[13px] font-semibold">
+              <CircleCheckFill className="size-4 text-giro-success" />
+              Enviado às {submittedAt ? formatTime(submittedAt) : "—"}
+            </span>
+            <div className="flex items-end justify-between gap-2">
+              <div className="flex min-w-0 flex-col gap-1">
+                <h1 className="text-[28px] leading-tight font-bold tracking-[-0.6px]">Checklist enviado</h1>
+                <p className="text-sm text-giro-neutral-muted">
+                  {vehicleInfo.prefix} · {ROLE_LABEL[role]}
+                </p>
+              </div>
+              <VehicleIllustration type={vehicleInfo.type} className="h-[90px] w-[120px] shrink-0" />
             </div>
-            <div className="space-y-2">
-              <CardTitle className="text-2xl font-bold text-green-600">
-                Checklist Registrado!
-              </CardTitle>
-              <CardDescription className="text-base text-muted-foreground">
-                A conferência da função{" "}
-                <strong>{selectedFunction?.name}</strong> (Viatura:{" "}
-                {selectedFunction?.vehicle?.operationalPrefix || "N/A"}) para{" "}
-                <strong>
-                  {formData.role === "motorista" ? "Motorista" : "Comandante"}
-                </strong>{" "}
-                foi salva com sucesso no sistema.
-              </CardDescription>
-            </div>
+          </div>
 
-            {formData.hasAlterations ? (
-              <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg p-4 text-left space-y-2">
-                <div className="flex items-center gap-2 text-amber-800 dark:text-amber-400 font-semibold text-sm">
-                  <AlertTriangle className="w-4 h-4 shrink-0" />
-                  <span>Ação Obrigatória do SEI</span>
+          <section aria-labelledby="resumo-envio" className="flex flex-col gap-3">
+            <h2 id="resumo-envio" className="text-[17px] font-semibold">Resumo</h2>
+            <dl className="rounded-[20px] bg-white px-[18px] py-2">
+              {[
+                ["Viatura", `${vehicleInfo.prefix} · ${vehicleInfo.model}`],
+                ["Papel", ROLE_LABEL[role]],
+                ["Militar", viewer?.name || viewer?.email || "—"],
+              ].map(([label, value]) => (
+                <div key={label} className="flex items-center justify-between gap-3 border-b border-giro-separator py-2.5">
+                  <dt className="text-sm text-giro-muted">{label}</dt>
+                  <dd className="truncate text-[15px] font-semibold">{value}</dd>
                 </div>
-                <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
-                  Como você registrou <strong>COM ALTERAÇÕES</strong>, é
-                  obrigatório confeccionar o documento oficial no SEI relatando
-                  todas as inconsistências e encaminhar ao Chefe da SGP.
-                </p>
+              ))}
+              <div className="flex items-center justify-between gap-3 py-2.5">
+                <dt className="text-sm text-giro-muted">Resultado</dt>
+                <dd
+                  className={cn(
+                    "inline-flex h-[26px] items-center rounded-full px-3 text-[13px] font-semibold",
+                    hasAlterations
+                      ? "bg-giro-warning text-giro-warning-foreground"
+                      : "bg-giro-success-soft text-giro-success-soft-foreground",
+                  )}
+                >
+                  {hasAlterations ? "Com alterações" : "Sem alterações"}
+                </dd>
               </div>
-            ) : (
-              <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-900 rounded-lg p-4 text-left">
-                <p className="text-xs text-green-800 dark:text-green-300 text-center font-medium">
-                  Procedimento concluído. Viatura liberada sem alterações!
-                </p>
-              </div>
-            )}
+            </dl>
+          </section>
 
-            <div className="pt-2">
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    hasAlterations: false,
-                  }));
-                  setIsSubmitted(false);
-                }}
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Voltar / Novo Registro
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+          {hasAlterations ? (
+            <SeiNotice after />
+          ) : (
+            <p className="rounded-2xl bg-giro-success-soft px-4 py-3.5 text-sm font-medium text-giro-success-soft-foreground">
+              Procedimento concluído. Viatura liberada sem alterações.
+            </p>
+          )}
+        </div>
+
+        <StickyFooter>
+          <GiroButton variant="primary" size="xl" className="w-full" onClick={restart}>
+            Concluir
+          </GiroButton>
+        </StickyFooter>
       </div>
     );
   }
 
-  return (
-    <div className="max-w-xl mx-auto px-0 sm:px-4 py-6 space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="p-2 bg-primary/10 rounded-lg">
-          <ClipboardList className="w-6 h-6 text-primary" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            Checklist de Viatura
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Conferência descritiva diária de materiais
-          </p>
-        </div>
-      </div>
+  // ── Passo 2: conferência ───────────────────────────────────────────
+  if (step === "conferir" && vehicleInfo && role) {
+    return (
+      <div className={column}>
+        <div className="flex flex-col gap-7 pt-5 pb-7">
+          <div className="flex flex-col gap-3.5">
+            <GiroButton variant="secondary" size="sm" className="w-fit pr-3.5 pl-2.5 text-sm" onClick={() => setStep("identificar")}>
+              <ArrowLeft />
+              Voltar
+            </GiroButton>
+            <div className="flex flex-col gap-1">
+              <h1 className="text-[30px] leading-tight font-semibold tracking-[-0.6px]">Conferência</h1>
+              <p className="text-sm text-giro-muted">Conferência do {ROLE_LABEL[role].toLowerCase()}</p>
+            </div>
+          </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <Card className="shadow-xs border-border">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-lg">
-              Função Operacional e Papel
-            </CardTitle>
-            <CardDescription>
-              Selecione a viatura e função que está assumindo no serviço
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2 flex flex-col">
-              <label className="text-sm font-medium leading-none">
-                Viatura <span className="text-red-500">*</span>
-              </label>
-              <Combobox
-                items={opFunctionOptions}
-                value={
-                  opFunctionOptions.find(
-                    (v) => v.value === formData.operationalFunctionId,
-                  ) || null
-                }
-                onValueChange={(v) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    operationalFunctionId: v
-                      ? (v.value as Id<"operationalFunctions">)
-                      : "",
-                  }))
-                }
-              >
-                <ComboboxInput placeholder="Selecione a viatura" />
-                <ComboboxContent>
-                  <ComboboxEmpty>Nenhuma função encontrada.</ComboboxEmpty>
-                  <ComboboxList>
-                    {(v) => (
-                      <ComboboxItem key={v.value} value={v}>
-                        {v.label}
-                      </ComboboxItem>
-                    )}
-                  </ComboboxList>
-                </ComboboxContent>
-              </Combobox>
+          <VehicleCard vehicle={vehicleInfo} />
+
+          <Guidelines />
+
+          <section aria-labelledby="roteiro-titulo" className="flex flex-col gap-3">
+            <div className="flex items-center gap-2.5">
+              <h2 id="roteiro-titulo" className="text-[17px] font-semibold">Roteiro</h2>
+              {roteiro && (
+                <span className="inline-flex h-[22px] items-center rounded-full bg-giro-default px-2 text-xs font-semibold">
+                  {itemTotal} {itemTotal === 1 ? "item" : "itens"}
+                </span>
+              )}
             </div>
 
-            {formData.operationalFunctionId && !isVehicleLinked && (
-              <div className="flex gap-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg p-4 text-red-800 dark:text-red-400">
-                <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5" />
-                <div className="space-y-1">
-                  <h4 className="font-bold text-sm">
-                    Vincular Viatura Pendente
-                  </h4>
-                  <p className="text-xs leading-relaxed text-red-800/95 dark:text-red-300">
-                    Esta função ({selectedFunction?.name}) não possui nenhuma
-                    viatura física vinculada. Entre em contato com a SGP. O
-                    preenchimento do checklist está bloqueado.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {formData.operationalFunctionId && isVehicleLinked && (
-              <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-lg p-4 space-y-1 text-blue-800 dark:text-blue-300">
-                <span className="text-xs font-semibold uppercase tracking-wider block">
-                  Viatura Vinculada:
-                </span>
-                <p className="text-sm font-medium">
-                  {selectedFunction?.vehicle?.operationalPrefix} (
-                  {selectedFunction?.vehicle?.model} - Placa:{" "}
-                  {selectedFunction?.vehicle?.plate})
-                </p>
-              </div>
-            )}
-
-            <SimpleSelect
-              label="Função"
-              placeholder="Selecione sua função"
-              options={roleOptions}
-              value={formData.role}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  role: e.target.value as "motorista" | "comandante" | "",
-                }))
-              }
-              required
-            />
-          </CardContent>
-        </Card>
-
-        {/* General Guidelines */}
-        <Card className="shadow-xs border-amber-200 dark:border-amber-900 border-l-4 border-l-amber-500 bg-amber-50/40 dark:bg-amber-950/10">
-          <CardHeader className="pb-2 flex flex-row items-center gap-2.5">
-            <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
-            <CardTitle className="text-base font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
-              Orientações Gerais
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm space-y-3 leading-relaxed text-amber-900 dark:text-amber-300">
-            <p>
-              Fica estabelecido que o presente Check List de Viatura terá caráter exclusivamente descritivo.
-            </p>
-            <p>
-              Caso sejam identificadas inconsistências, ausências, avarias, extravios, substituições ou quaisquer divergências durante a conferência, deverá ser <strong className="text-amber-950 dark:text-amber-200 font-extrabold underline decoration-amber-500/50">OBRIGATORIAMENTE</strong> confeccionado documento oficial via Sistema Eletrônico de Informações (SEI), encaminhado ao Chefe da SGP para ciência e providências cabíveis.
-            </p>
-            <p>
-              Cada constatação de alteração, inconsistência, ausência ou avaria deverá ser formalizada em <strong className="text-amber-950 dark:text-amber-200 font-extrabold">NOVO PROCESSO</strong> SEI específico, destinado ao Chefe da SGP.
-            </p>
-            <p>
-              O procedimento tem por finalidade facilitar o controle individualizado das alterações constatadas pelos militares durante o serviço operacional.
-            </p>
-            <p>
-              Não havendo alterações ou inconsistências, será suficiente o registro da expressão <strong className="text-amber-950 dark:text-amber-200 font-extrabold">“SEM ALTERAÇÕES”</strong> no campo correspondente ao final do Check List.
-            </p>
-          </CardContent>
-        </Card>
-
-
-        {/* Display Materials Template */}
-        <Card className="shadow-xs border-border">
-          <CardHeader>
-            <CardTitle className="text-lg">Lista de Materiais</CardTitle>
-            <CardDescription>
-              Verifique fisicamente a presença e estado dos itens listados
-              abaixo
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="min-h-32 flex flex-col justify-center bg-muted/20 dark:bg-muted/5 rounded-lg p-4">
-            {!formData.operationalFunctionId || !formData.role ? (
-              <p className="text-sm text-muted-foreground text-center">
-                Selecione a função e o papel de serviço para carregar a lista de
-                materiais.
-              </p>
-            ) : !isVehicleLinked ? (
-              <p className="text-sm text-destructive dark:text-red-400 text-center font-medium">
-                Viatura física não vinculada a esta função. Vinculação
-                necessária para preencher.
-              </p>
-            ) : template === undefined ? (
-              <p className="text-sm text-muted-foreground text-center">
-                Carregando lista de materiais...
-              </p>
+            {template === undefined ? (
+              <p className="rounded-[20px] bg-white px-[18px] py-6 text-sm text-giro-muted">Carregando roteiro...</p>
             ) : template === null ? (
-              <p className="text-sm text-destructive dark:text-red-400 text-center font-medium">
-                Nenhum checklist cadastrado para esta função operacional e papel
-                de serviço.
+              <p className="rounded-[20px] bg-giro-accent-soft px-[18px] py-4 text-sm font-medium text-giro-accent-soft-foreground">
+                Nenhum checklist cadastrado para esta função e papel. Fale com a SGP antes de enviar.
               </p>
+            ) : roteiro ? (
+              roteiro.map((section, si) => {
+                const offset = roteiro.slice(0, si).reduce((sum, s) => sum + s.items.length, 0);
+                return (
+                  <div key={`${section.title}-${si}`} className="overflow-hidden rounded-[20px] bg-white">
+                    <div className="flex items-center justify-between gap-2 bg-giro-neutral px-[18px] py-3.5 text-giro-neutral-foreground">
+                      <h3 className="text-base font-semibold">{section.title}</h3>
+                      <span className="shrink-0 text-[13px] text-giro-neutral-muted">
+                        {section.items.length} {section.items.length === 1 ? "item" : "itens"}
+                      </span>
+                    </div>
+                    <ol className="px-[18px] py-0.5">
+                      {section.items.map((item, ii) => (
+                        <li key={ii} className="flex gap-3.5 border-b border-giro-separator py-3.5 last:border-b-0">
+                          <span className="w-5 shrink-0 text-[13px] font-semibold text-giro-muted tabular-nums">
+                            {String(offset + ii + 1).padStart(2, "0")}
+                          </span>
+                          <span className="min-w-0 text-[15px]">{item}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                );
+              })
             ) : (
-              <div className="space-y-4">
-                <div className="bg-blue-50 dark:bg-blue-950/20 text-blue-800 dark:text-blue-300 text-xs p-3 rounded-lg border border-blue-100 dark:border-blue-900 text-center">
-                  <span>
-                    📅 <strong>Última atualização do checklist:</strong>{" "}
-                    {new Date(template.updatedAt).toLocaleDateString("pt-BR")}{" "}
-                    às{" "}
-                    {new Date(template.updatedAt).toLocaleTimeString("pt-BR", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                    h
-                  </span>
-                </div>
+              <div className="rounded-[20px] bg-white px-[18px] py-4">
                 <RichTextRenderer content={template.content} />
               </div>
             )}
-          </CardContent>
-        </Card>
+            {template && (
+              <p className="px-1 text-xs text-giro-muted">
+                Roteiro atualizado em {new Date(template.updatedAt).toLocaleDateString("pt-BR")} às{" "}
+                {formatTime(template.updatedAt)}
+              </p>
+            )}
+          </section>
 
-        {/* Alteration Selector */}
-        {formData.operationalFunctionId &&
-          formData.role &&
-          template &&
-          isVehicleLinked && (
-            <Card className="shadow-xs border-border">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg">
-                  Resultado da Conferência
-                </CardTitle>
-                <CardDescription>
-                  Existem materiais faltantes, danificados ou divergências?
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        hasAlterations: false,
-                      }))
-                    }
-                    className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all cursor-pointer ${
-                      !formData.hasAlterations
-                        ? "border-green-500 bg-green-50/50 dark:bg-green-950/10 text-green-700 dark:text-green-400"
-                        : "border-border hover:bg-muted/50"
-                    }`}
-                  >
-                    <CheckCircle className="w-8 h-8 mb-2" />
-                    <span className="font-semibold text-sm">
-                      Sem Alterações
-                    </span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setFormData((prev) => ({ ...prev, hasAlterations: true }))
-                    }
-                    className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all cursor-pointer ${
-                      formData.hasAlterations
-                        ? "border-red-500 bg-red-50/50 dark:bg-red-950/10 text-red-700 dark:text-red-400 font-semibold"
-                        : "border-border hover:bg-muted/50"
-                    }`}
-                  >
-                    <AlertTriangle className="w-8 h-8 mb-2" />
-                    <span className="font-semibold text-sm">
-                      Com Alterações
-                    </span>
-                  </button>
-                </div>
-
-                {formData.hasAlterations && (
-                  <div className="flex gap-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg p-4 text-red-800 dark:text-red-400">
-                    <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5" />
-                    <div className="space-y-1">
-                      <h4 className="font-bold text-sm">
-                        Registro de Processo Obrigatório
-                      </h4>
-                      <p className="text-xs leading-relaxed text-red-800/95 dark:text-red-300">
-                        Caso sejam identificadas inconsistências, avarias,
-                        extravios, substituições ou ausência de materiais, você
-                        deve <strong>obrigatoriamente</strong> abrir um novo
-                        processo no SEI direcionado ao Chefe da SGP relatando a
-                        situação.
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+          {template && (
+            <section aria-labelledby="resultado-titulo" className="flex flex-col gap-3">
+              <h2 id="resultado-titulo" className="text-[17px] font-semibold">Resultado</h2>
+              <div role="radiogroup" aria-labelledby="resultado-titulo" className="flex flex-col gap-2.5">
+                <RadioCard
+                  name="resultado"
+                  checked={!hasAlterations}
+                  onChange={() => setHasAlterations(false)}
+                  label="Sem alterações"
+                  sub="Tudo conforme o roteiro"
+                />
+                <RadioCard
+                  name="resultado"
+                  checked={hasAlterations}
+                  onChange={() => setHasAlterations(true)}
+                  label="Com alterações"
+                  sub="Algo diferente do roteiro"
+                  tone="warning"
+                />
+              </div>
+              {hasAlterations && <SeiNotice />}
+            </section>
           )}
+        </div>
 
-        <Button
-          type="submit"
-          className="w-full text-base py-6 font-semibold"
-          disabled={
-            isSubmitting ||
-            !formData.operationalFunctionId ||
-            !formData.role ||
-            !template ||
-            !isVehicleLinked
-          }
+        <StickyFooter>
+          <GiroButton
+            variant="primary"
+            size="xl"
+            className="w-full"
+            onClick={() => void handleSubmit()}
+            disabled={isSubmitting || !template || !isVehicleLinked}
+          >
+            <PaperPlane />
+            {isSubmitting ? "Enviando..." : "Enviar checklist"}
+          </GiroButton>
+        </StickyFooter>
+      </div>
+    );
+  }
+
+  // ── Passo 1: viatura e papel ───────────────────────────────────────
+  const showPicker = !fromQr || !functionId;
+
+  return (
+    <div className={column}>
+      <div className="flex flex-col gap-4 pt-5 pb-7">
+        {fromQr && functionId ? (
+          <p className="flex items-center gap-1.5 text-[13px] font-medium text-giro-success-soft-foreground">
+            <QrCode className="size-4 text-giro-success" />
+            Viatura identificada pelo QR code
+          </p>
+        ) : (
+          <div className="flex flex-col gap-1">
+            <h1 className="text-[26px] leading-tight font-semibold tracking-[-0.5px]">Checklist de viatura</h1>
+            <p className="text-sm text-giro-muted">Escolha a viatura que você vai conferir neste plantão.</p>
+          </div>
+        )}
+
+        {showPicker && (
+          <div className="flex flex-col gap-2">
+            <label className="text-[13px] font-medium" htmlFor="checklist-viatura">
+              Viatura
+            </label>
+            <Combobox
+              items={functionItems}
+              value={functionItems.find((f) => f.value === functionId) || null}
+              onValueChange={(v) => {
+                setManualFunctionId(v ? v.value : "");
+                setRole("");
+              }}
+            >
+              <ComboboxInput
+                id="checklist-viatura"
+                placeholder={opFunctions === undefined ? "Carregando..." : "Buscar viatura ou função"}
+                className={giroCombobox}
+              />
+              <ComboboxContent className="font-giro">
+                <ComboboxEmpty>Nenhuma viatura encontrada.</ComboboxEmpty>
+                <ComboboxList>
+                  {(v) => (
+                    <ComboboxItem key={v.value} value={v}>
+                      {v.label}
+                    </ComboboxItem>
+                  )}
+                </ComboboxList>
+              </ComboboxContent>
+            </Combobox>
+          </div>
+        )}
+
+        {functionId && !isVehicleLinked && (
+          <div role="alert" className="rounded-2xl bg-giro-accent-soft px-4 py-3.5 text-giro-accent-soft-foreground">
+            <p className="text-sm font-semibold">Viatura não vinculada</p>
+            <p className="text-[13px]">
+              A função {selectedFunction?.name} está sem viatura física vinculada. Fale com a SGP; o checklist fica
+              bloqueado até a vinculação.
+            </p>
+          </div>
+        )}
+
+        {vehicleInfo && <VehicleCard vehicle={vehicleInfo} />}
+
+        {vehicleInfo && (
+          <fieldset className="mt-1 flex flex-col gap-2.5">
+            <legend className="mb-2.5 text-[13px] font-semibold text-giro-muted">
+              Checklist de hoje · você vai conferir como
+            </legend>
+            {(["comandante", "motorista"] as const).map((r) => {
+              const sent = status?.[r];
+              return (
+                <RadioCard
+                  key={r}
+                  name="papel"
+                  checked={role === r}
+                  onChange={() => setRole(r)}
+                  label={ROLE_LABEL[r]}
+                  sub={sent ? `Enviado às ${formatTime(sent.createdAt)} por ${sent.userName}` : "Pendente"}
+                  subClassName={sent ? undefined : "font-semibold text-giro-amber"}
+                />
+              );
+            })}
+          </fieldset>
+        )}
+      </div>
+
+      <StickyFooter>
+        <GiroButton
+          variant="primary"
+          size="xl"
+          className="w-full"
+          disabled={!vehicleInfo || !role}
+          onClick={() => setStep("conferir")}
         >
-          {isSubmitting ? "Enviando..." : "Enviar Checklist"}
-        </Button>
-      </form>
+          Iniciar conferência
+          <ArrowRight />
+        </GiroButton>
+        {fromQr && functionId && (
+          <button
+            type="button"
+            onClick={() => setManualFunctionId(qrFunction?._id ?? "")}
+            className="rounded-full px-3 py-1 text-[13px] font-medium text-giro-muted outline-none hover:text-giro-fg focus-visible:ring-[3px] focus-visible:ring-giro-accent/30"
+          >
+            Não é esta viatura? Escolher manualmente
+          </button>
+        )}
+      </StickyFooter>
     </div>
   );
 }

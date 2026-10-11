@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -62,6 +62,41 @@
   --shadow-sm: var(--elevation-sm);
   --shadow-md: var(--elevation-md);
   --shadow-lg: var(--elevation-lg);
+}
+
+/* Direção "Placar" (test.pen): guarita e checklist. Valores Light; Dark ainda pendente. */
+@theme {
+  --color-giro-bg: #f5f7f9;
+  --color-giro-surface: #ffffff;
+  --color-giro-surface-2: #f1f3f5;
+  --color-giro-default: #e9ecef;
+  --color-giro-default-hover: #dde1e5;
+  --color-giro-separator: #e6e9ec;
+  --color-giro-fg: #16191c;
+  --color-giro-muted: #686d72;
+
+  --color-giro-brand: #dc2626;
+  --color-giro-accent: #c91b1f;
+  --color-giro-accent-hover: #b1171b;
+  --color-giro-accent-soft: #ffebea;
+  --color-giro-accent-soft-foreground: #991618;
+  --color-giro-accent-tint: #f6c2c1;
+
+  --color-giro-warning: #f8d659;
+  --color-giro-warning-foreground: #312409;
+  --color-giro-warning-soft: #fcefbd;
+  --color-giro-warning-soft-foreground: #312409;
+
+  --color-giro-neutral: #e4e7ea;
+  --color-giro-neutral-foreground: #16191c;
+  --color-giro-neutral-muted: #4f555b;
+
+  --color-giro-success: #148a24;
+  --color-giro-success-soft: #e2f2e4;
+  --color-giro-success-soft-foreground: #0d6816;
+  --color-giro-amber: #b45309;
+
+  --font-giro: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 :root {

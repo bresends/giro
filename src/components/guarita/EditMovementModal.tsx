@@ -11,6 +11,17 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { GiroButton } from "@/components/giro/giro-button";
+import {
+  giroDialog,
+  giroDialogDescription,
+  giroDialogTitle,
+  giroErrorBox,
+  giroField,
+  giroLabel,
+  giroSelect,
+} from "@/components/giro/styles";
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SimpleSelect } from "../common/SimpleSelect";
@@ -44,13 +55,54 @@ interface EditMovementModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   movement: Movement | null;
+  /** "giro" aplica a direção Placar (guarita); o admin usa o visual padrão. */
+  appearance?: "default" | "giro";
+}
+
+/** Data local no formato do input type="date" (toISOString usaria UTC). */
+function toLocalDateInput(date: Date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function Field({
+  id,
+  text,
+  isRequired,
+  giro,
+  children,
+}: {
+  id?: string;
+  text: string;
+  isRequired?: boolean;
+  giro: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <Label htmlFor={id} className={giro ? giroLabel : undefined}>
+        {text}{" "}
+        {isRequired && (
+          <span className={giro ? "text-giro-accent" : "text-red-500"}>*</span>
+        )}
+      </Label>
+      {children}
+    </div>
+  );
 }
 
 export function EditMovementModal({
   open,
   onOpenChange,
   movement,
+  appearance = "default",
 }: EditMovementModalProps) {
+  const giro = appearance === "giro";
+  const field = giro ? giroField : undefined;
+  const select = giro ? giroSelect : undefined;
+
   const vehicles = useQuery(api.vehicles.listSimple, {});
   const personnel = useQuery(api.personnel.list, { activeOnly: true });
   const updateMovement = useMutation(api.vehicleMovements.update);
@@ -76,11 +128,11 @@ export function EditMovementModal({
   useEffect(() => {
     if (open && movement) {
       const departureDate = new Date(movement.departureTime);
-      const departureDateStr = departureDate.toISOString().split("T")[0];
+      const departureDateStr = toLocalDateInput(departureDate);
       const departureTimeStr = departureDate.toTimeString().slice(0, 5);
 
       const arrivalDate = movement.arrivalTime ? new Date(movement.arrivalTime) : null;
-      const arrivalDateStr = arrivalDate ? arrivalDate.toISOString().split("T")[0] : "";
+      const arrivalDateStr = arrivalDate ? toLocalDateInput(arrivalDate) : "";
       const arrivalTimeStr = arrivalDate ? arrivalDate.toTimeString().slice(0, 5) : "";
 
       setFormData({
@@ -154,10 +206,14 @@ export function EditMovementModal({
 
   return (
     <Dialog open={open && movement !== null} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl light text-foreground">
+      <DialogContent
+        className={giro ? cn(giroDialog, "sm:max-w-2xl") : "max-w-2xl light text-foreground"}
+      >
         <DialogHeader>
-          <DialogTitle>Editar Movimentação</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className={giro ? giroDialogTitle : undefined}>
+            {giro ? "Editar movimentação" : "Editar Movimentação"}
+          </DialogTitle>
+          <DialogDescription className={giro ? giroDialogDescription : undefined}>
             Atualize as informações da saída da viatura.
           </DialogDescription>
         </DialogHeader>
@@ -165,77 +221,90 @@ export function EditMovementModal({
         {!movement ? (
           <p>Carregando...</p>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-md p-3">
-              <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+            <div
+              role="alert"
+              className={
+                giro
+                  ? giroErrorBox
+                  : "bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-md p-3 text-sm text-red-800 dark:text-red-200"
+              }
+            >
+              {error}
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-4">
-            <SimpleSelect
-              label="Viatura"
-              value={formData.vehicleId}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  vehicleId: e.target.value as Id<"vehicles">,
-                })
-              }
-              options={
-                vehicles?.map((v) => ({
-                  value: v._id,
-                  label: `${v.operationalPrefix} - ${v.plate}`,
-                })) || []
-              }
-              placeholder="Selecione a viatura"
-              required
-            />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <Field id="edit-vehicle" text="Viatura" isRequired giro={giro}>
+              <SimpleSelect
+                id="edit-vehicle"
+                value={formData.vehicleId}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    vehicleId: e.target.value as Id<"vehicles">,
+                  })
+                }
+                options={
+                  vehicles?.map((v) => ({
+                    value: v._id,
+                    label: `${v.operationalPrefix} - ${v.plate}`,
+                  })) || []
+                }
+                placeholder="Selecione a viatura"
+                required
+                className={select}
+              />
+            </Field>
 
-            <SimpleSelect
-              label="Motorista"
-              value={formData.personnelId}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  personnelId: e.target.value as Id<"personnel">,
-                })
-              }
-              options={
-                personnel?.map((p) => ({
-                  value: p._id,
-                  label: `${p.rank} ${p.name} - RG ${p.rg}`,
-                })) || []
-              }
-              placeholder="Selecione o motorista"
-              required
-            />
+            <Field id="edit-personnel" text="Motorista" isRequired giro={giro}>
+              <SimpleSelect
+                id="edit-personnel"
+                value={formData.personnelId}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    personnelId: e.target.value as Id<"personnel">,
+                  })
+                }
+                options={
+                  personnel?.map((p) => ({
+                    value: p._id,
+                    label: `${p.rank} ${p.name} - RG ${p.rg}`,
+                  })) || []
+                }
+                placeholder="Selecione o motorista"
+                required
+                className={select}
+              />
+            </Field>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <SimpleSelect
-              label="Tipo de Destino"
-              value={formData.destinationType}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  destinationType: e.target.value as typeof formData.destinationType,
-                })
-              }
-              options={[
-                { value: "ocorrencia", label: "Ocorrência" },
-                { value: "qrf", label: "QRF" },
-                { value: "ceman", label: "CEMAN" },
-                { value: "cal", label: "CAL" },
-                { value: "outro", label: "Outro" },
-              ]}
-              placeholder="Selecione o tipo"
-            />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <Field id="edit-destinationType" text="Tipo de destino" giro={giro}>
+              <SimpleSelect
+                id="edit-destinationType"
+                value={formData.destinationType}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    destinationType: e.target.value as typeof formData.destinationType,
+                  })
+                }
+                options={[
+                  { value: "ocorrencia", label: "Ocorrência" },
+                  { value: "qrf", label: "QRF" },
+                  { value: "ceman", label: "CEMAN" },
+                  { value: "cal", label: "CAL" },
+                  { value: "outro", label: "Outro" },
+                ]}
+                placeholder="Selecione o tipo"
+                className={select}
+              />
+            </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="destination">
-                Destino <span className="text-red-500">*</span>
-              </Label>
+            <Field id="destination" text="Destino" isRequired giro={giro}>
               <Input
                 id="destination"
                 value={formData.destination}
@@ -244,45 +313,43 @@ export function EditMovementModal({
                 }
                 placeholder="Ex: Av. Goiás, 123"
                 required
+                className={field}
               />
-            </div>
+            </Field>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="departureKm">
-                KM Saída <span className="text-red-500">*</span>
-              </Label>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <Field id="departureKm" text="KM saída" isRequired giro={giro}>
               <Input
                 id="departureKm"
                 type="number"
+                inputMode="numeric"
                 value={formData.departureKm}
                 onChange={(e) =>
                   setFormData({ ...formData, departureKm: Number(e.target.value) })
                 }
                 required
+                className={field}
               />
-            </div>
+            </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="arrivalKm">KM Chegada</Label>
+            <Field id="arrivalKm" text="KM chegada" giro={giro}>
               <Input
                 id="arrivalKm"
                 type="number"
+                inputMode="numeric"
                 value={formData.arrivalKm || ""}
                 onChange={(e) =>
                   setFormData({ ...formData, arrivalKm: Number(e.target.value) || 0 })
                 }
                 placeholder="Opcional"
+                className={field}
               />
-            </div>
+            </Field>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="departureDate">
-                Data Saída <span className="text-red-500">*</span>
-              </Label>
+            <Field id="departureDate" text="Data saída" isRequired giro={giro}>
               <Input
                 id="departureDate"
                 type="date"
@@ -291,13 +358,11 @@ export function EditMovementModal({
                   setFormData({ ...formData, departureDate: e.target.value })
                 }
                 required
+                className={field}
               />
-            </div>
+            </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="departureTime">
-                Horário Saída <span className="text-red-500">*</span>
-              </Label>
+            <Field id="departureTime" text="Horário saída" isRequired giro={giro}>
               <Input
                 id="departureTime"
                 type="time"
@@ -306,13 +371,13 @@ export function EditMovementModal({
                   setFormData({ ...formData, departureTime: e.target.value })
                 }
                 required
+                className={field}
               />
-            </div>
+            </Field>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="arrivalDate">Data Chegada</Label>
+            <Field id="arrivalDate" text="Data chegada" giro={giro}>
               <Input
                 id="arrivalDate"
                 type="date"
@@ -320,12 +385,11 @@ export function EditMovementModal({
                 onChange={(e) =>
                   setFormData({ ...formData, arrivalDate: e.target.value })
                 }
-                placeholder="Opcional"
+                className={field}
               />
-            </div>
+            </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="arrivalTime">Horário Chegada</Label>
+            <Field id="arrivalTime" text="Horário chegada" giro={giro}>
               <Input
                 id="arrivalTime"
                 type="time"
@@ -333,13 +397,12 @@ export function EditMovementModal({
                 onChange={(e) =>
                   setFormData({ ...formData, arrivalTime: e.target.value })
                 }
-                placeholder="Opcional"
+                className={field}
               />
-            </div>
+            </Field>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="notes">Observações</Label>
+          <Field id="notes" text="Observações" giro={giro}>
             <Input
               id="notes"
               value={formData.notes}
@@ -347,21 +410,41 @@ export function EditMovementModal({
                 setFormData({ ...formData, notes: e.target.value })
               }
               placeholder="Observações adicionais (opcional)"
+              className={field}
             />
-          </div>
+          </Field>
 
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => onOpenChange(false)}
-              disabled={isSubmitting}
-            >
-              Cancelar
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Atualizando..." : "Atualizar"}
-            </Button>
+          <DialogFooter className={giro ? "pt-1" : undefined}>
+            {giro ? (
+              <>
+                <GiroButton
+                  type="button"
+                  variant="secondary"
+                  size="lg"
+                  onClick={() => onOpenChange(false)}
+                  disabled={isSubmitting}
+                >
+                  Cancelar
+                </GiroButton>
+                <GiroButton type="submit" variant="primary" size="lg" disabled={isSubmitting}>
+                  {isSubmitting ? "Salvando..." : "Salvar alterações"}
+                </GiroButton>
+              </>
+            ) : (
+              <>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => onOpenChange(false)}
+                  disabled={isSubmitting}
+                >
+                  Cancelar
+                </Button>
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Atualizando..." : "Atualizar"}
+                </Button>
+              </>
+            )}
           </DialogFooter>
           </form>
         )}

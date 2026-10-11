@@ -1,6 +1,19 @@
 import { useMutation, useQuery } from "convex/react";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { ArrowRightFromSquare } from "@gravity-ui/icons";
+import { GiroButton } from "@/components/giro/giro-button";
+import {
+  giroCombobox,
+  giroDialog,
+  giroDialogDescription,
+  giroDialogTitle,
+  giroErrorBox,
+  giroField,
+  giroInfoBox,
+  giroLabel,
+  giroSelect,
+} from "@/components/giro/styles";
+import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -176,27 +189,23 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        ref={setContainer}
-        className="max-w-2xl light text-foreground"
-      >
+      <DialogContent ref={setContainer} className={cn(giroDialog, "sm:max-w-xl")}>
         <DialogHeader>
-          <DialogTitle>Registrar Saída de Viatura</DialogTitle>
-          <DialogDescription>
-            Registre a saída de uma viatura informando a viatura, o motorista e
-            o destino.
+          <DialogTitle className={giroDialogTitle}>Registrar saída</DialogTitle>
+          <DialogDescription className={giroDialogDescription}>
+            Informe a viatura, o motorista e o destino. KM e horário são registrados automaticamente.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-md p-3">
-              <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+            <div role="alert" className={giroErrorBox}>
+              {error}
             </div>
           )}
-          <div className="space-y-2 flex flex-col">
-            <Label>
-              Viatura <span className="text-red-500">*</span>
+          <div className="flex flex-col gap-2">
+            <Label className={giroLabel}>
+              Viatura <span className="text-giro-accent">*</span>
             </Label>
             <Combobox
               items={vehicleItems}
@@ -210,8 +219,8 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
                 })
               }
             >
-              <ComboboxInput placeholder="Selecione a viatura" />
-              <ComboboxContent container={container}>
+              <ComboboxInput placeholder="Selecione a viatura" className={giroCombobox} />
+              <ComboboxContent container={container} className="font-giro">
                 <ComboboxEmpty>Nenhuma viatura encontrada.</ComboboxEmpty>
                 <ComboboxList>
                   {(v) => (
@@ -224,9 +233,9 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
             </Combobox>
           </div>
 
-          <div className="space-y-2 flex flex-col">
-            <Label>
-              Motorista <span className="text-red-500">*</span>
+          <div className="flex flex-col gap-2">
+            <Label className={giroLabel}>
+              Motorista <span className="text-giro-accent">*</span>
             </Label>
             <Combobox
               items={personnelItems}
@@ -241,8 +250,8 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
                 })
               }
             >
-              <ComboboxInput placeholder="Selecione o motorista" />
-              <ComboboxContent container={container}>
+              <ComboboxInput placeholder="Selecione o motorista" className={giroCombobox} />
+              <ComboboxContent container={container} className="font-giro">
                 <ComboboxEmpty>Nenhum motorista encontrado.</ComboboxEmpty>
                 <ComboboxList>
                   {(p) => (
@@ -256,56 +265,57 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
           </div>
 
           {selectedVehicle && (
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-4 rounded-md">
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="text-muted-foreground">KM de Saída (atual):</p>
-                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                    {new Intl.NumberFormat("pt-BR").format(
-                      selectedVehicle.currentKm,
-                    )}{" "}
-                    km
-                  </p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Horário de Saída:</p>
-                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                    {new Date().toLocaleTimeString("pt-BR", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
-                </div>
+            <dl className={cn(giroInfoBox, "grid grid-cols-2 gap-4")}>
+              <div className="flex flex-col gap-0.5">
+                <dt className="text-xs text-giro-muted">KM de saída (atual)</dt>
+                <dd className="text-2xl font-bold tracking-[-0.5px] tabular-nums">
+                  {new Intl.NumberFormat("pt-BR").format(
+                    selectedVehicle.currentKm,
+                  )}{" "}
+                  km
+                </dd>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                KM e horário serão registrados automaticamente
-              </p>
-            </div>
+              <div className="flex flex-col gap-0.5">
+                <dt className="text-xs text-giro-muted">Horário de saída</dt>
+                <dd className="text-2xl font-bold tracking-[-0.5px] tabular-nums">
+                  {new Date().toLocaleTimeString("pt-BR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </dd>
+              </div>
+            </dl>
           )}
-          <div className="grid grid-cols-2 gap-4">
-            <SimpleSelect
-              label="Tipo de Destino"
-              value={formData.destinationType}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  destinationType: e.target
-                    .value as typeof formData.destinationType,
-                })
-              }
-              options={[
-                { value: "ocorrencia", label: "Ocorrência" },
-                { value: "qrf", label: "QRF" },
-                { value: "ceman", label: "CEMAN" },
-                { value: "cal", label: "CAL" },
-                { value: "outro", label: "Outro" },
-              ]}
-              placeholder="Selecione o tipo"
-            />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="destinationType" className={giroLabel}>
+                Tipo de destino
+              </Label>
+              <SimpleSelect
+                id="destinationType"
+                value={formData.destinationType}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    destinationType: e.target
+                      .value as typeof formData.destinationType,
+                  })
+                }
+                options={[
+                  { value: "ocorrencia", label: "Ocorrência" },
+                  { value: "qrf", label: "QRF" },
+                  { value: "ceman", label: "CEMAN" },
+                  { value: "cal", label: "CAL" },
+                  { value: "outro", label: "Outro" },
+                ]}
+                placeholder="Selecione o tipo"
+                className={giroSelect}
+              />
+            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="destination">
-                Destino <span className="text-red-500">*</span>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="destination" className={giroLabel}>
+                Destino <span className="text-giro-accent">*</span>
               </Label>
               <Input
                 id="destination"
@@ -315,32 +325,38 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
                 }
                 placeholder="Ex: Av. Goiás, 123"
                 required
+                className={giroField}
               />
             </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="notes">Observações</Label>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="notes" className={giroLabel}>
+              Observações
+            </Label>
             <Input
               id="notes"
               value={formData.notes}
               onChange={(e) =>
                 setFormData({ ...formData, notes: e.target.value })
               }
-              placeholder="Observações adicionais (opcional)"
+              placeholder="Opcional"
+              className={giroField}
             />
           </div>
-          <DialogFooter>
-            <Button
+          <DialogFooter className="pt-1">
+            <GiroButton
               type="button"
               variant="secondary"
+              size="lg"
               onClick={() => onOpenChange(false)}
               disabled={isSubmitting}
             >
               Cancelar
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Registrando..." : "Registrar Saída"}
-            </Button>
+            </GiroButton>
+            <GiroButton type="submit" variant="primary" size="lg" disabled={isSubmitting}>
+              <ArrowRightFromSquare />
+              {isSubmitting ? "Registrando..." : "Registrar saída"}
+            </GiroButton>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -1,8 +1,12 @@
 import { useAuthActions } from "@convex-dev/auth/react";
-import { LogOut, ShieldCheck, ClipboardList } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRightFromSquare, ListCheck, Shield } from "@gravity-ui/icons";
+import { useQuery } from "convex/react";
 import { useLayoutEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { GiroButton } from "@/components/giro/giro-button";
+import { GiroBrand } from "@/components/giro/GiroLogo";
+import { initials } from "@/lib/giro";
+import { api } from "../../../convex/_generated/api";
 
 interface GuaritaLayoutProps {
   children: React.ReactNode;
@@ -11,8 +15,9 @@ interface GuaritaLayoutProps {
 export function GuaritaLayout({ children }: GuaritaLayoutProps) {
   const { signOut } = useAuthActions();
   const location = useLocation();
+  const viewer = useQuery(api.auth.viewer);
 
-  // Force light theme
+  // A direção "Placar" só tem valores Light por enquanto
   useLayoutEffect(() => {
     const originalTheme = document.documentElement.classList.contains("dark");
     document.documentElement.classList.remove("dark");
@@ -24,56 +29,78 @@ export function GuaritaLayout({ children }: GuaritaLayoutProps) {
     };
   }, []);
 
-  const isChecklistRoute = location.pathname === "/checklist";
+  const isChecklistRoute = location.pathname.startsWith("/checklist");
+  const section = isChecklistRoute ? "Checklist" : "Guarita";
+  const userLabel = viewer?.name || viewer?.email || null;
 
   return (
-    <div className="light min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="flex h-16 items-center justify-between gap-2">
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 shrink-0">
-                <ShieldCheck className="w-6 h-6 text-primary" />
-              </div>
-              <div className="min-w-0">
-                <h1 className="text-base sm:text-xl font-bold truncate">Sistema Giro</h1>
-                <p className="text-[10px] sm:text-xs text-muted-foreground truncate">
-                  CBMGO - Controle de Viaturas
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 shrink-0">
-              {isChecklistRoute ? (
-                <Link to="/guarita">
-                  <Button variant="secondary" className="flex items-center gap-1.5 font-semibold px-2.5 sm:px-4">
-                    <ShieldCheck className="w-4 h-4" />
-                    <span className="hidden sm:inline">Ir para Guarita</span>
-                    <span className="sm:hidden">Guarita</span>
-                  </Button>
-                </Link>
-              ) : (
-                <Link to="/checklist">
-                  <Button variant="default" className="flex items-center gap-1.5 font-semibold shadow-xs px-2.5 sm:px-4">
-                    <ClipboardList className="w-4 h-4" />
-                    <span className="hidden sm:inline">Checklist</span>
-                    <span className="sm:hidden">Checklist</span>
-                  </Button>
-                </Link>
-              )}
-
-              <Button variant="outline" onClick={() => void signOut()} className="px-2.5 sm:px-4">
-                <LogOut className="w-4 h-4 sm:mr-2" />
-                <span className="hidden sm:inline">Sair</span>
-              </Button>
-            </div>
+    <div className="min-h-screen bg-giro-bg font-giro text-giro-fg antialiased">
+      <header className="sticky top-0 z-40 border-b border-giro-separator bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 lg:bg-giro-bg/95 lg:supports-[backdrop-filter]:bg-giro-bg/80">
+        <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between gap-3 px-4 sm:px-6 lg:h-16 lg:px-10">
+          <div className="flex min-w-0 items-center gap-3">
+            <Link
+              to="/guarita"
+              aria-label="GIRO, ir para a guarita"
+              className="rounded-lg outline-none focus-visible:ring-[3px] focus-visible:ring-giro-accent/35"
+            >
+              <GiroBrand size="sm" className="lg:hidden" />
+              <GiroBrand className="hidden lg:inline-flex" />
+            </Link>
+            <span aria-hidden="true" className="hidden h-5 w-px bg-giro-separator sm:block" />
+            <span className="truncate text-sm text-giro-muted">{section}</span>
           </div>
+
+          <nav aria-label="Principal" className="flex shrink-0 items-center gap-1 sm:gap-2">
+            {isChecklistRoute ? (
+              <GiroButton asChild variant="ghost" size="sm" className="text-sm">
+                <Link to="/guarita">
+                  <Shield />
+                  <span className="hidden sm:inline">Guarita</span>
+                </Link>
+              </GiroButton>
+            ) : (
+              <GiroButton asChild variant="ghost" size="sm" className="text-sm">
+                <Link to="/checklist">
+                  <ListCheck className="size-[18px]" />
+                  <span className="hidden sm:inline">Checklist</span>
+                </Link>
+              </GiroButton>
+            )}
+
+            <span aria-hidden="true" className="hidden h-5 w-px bg-giro-separator sm:block" />
+
+            {userLabel && (
+              <div className="flex items-center gap-2.5 pl-1 pr-1.5">
+                <span
+                  aria-hidden="true"
+                  className="inline-flex size-8 items-center justify-center rounded-full bg-giro-accent-soft text-xs font-semibold text-giro-accent-soft-foreground"
+                >
+                  {initials(userLabel)}
+                </span>
+                <span className="hidden max-w-48 flex-col lg:flex">
+                  <span className="truncate text-[13px] font-semibold">{userLabel}</span>
+                  <span className="text-xs text-giro-muted">
+                    {isChecklistRoute ? "Checklist de viatura" : "Plantão da guarita"}
+                  </span>
+                </span>
+              </div>
+            )}
+
+            <GiroButton
+              variant="ghost"
+              size="sm"
+              className="text-sm"
+              onClick={() => void signOut()}
+              aria-label="Sair"
+            >
+              <ArrowRightFromSquare />
+              <span className="hidden sm:inline">Sair</span>
+            </GiroButton>
+          </nav>
         </div>
       </header>
 
-      {/* Content */}
-      <main className="container mx-auto px-4 py-6 sm:p-6">{children}</main>
+      <main>{children}</main>
     </div>
   );
 }

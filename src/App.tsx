@@ -22,6 +22,7 @@ import { IssueFormPage } from "./pages/IssueFormPage";
 import { GuaritaPage } from "./pages/GuaritaPage";
 import { MovementsPage } from "./pages/MovementsPage";
 import { ChecklistPage } from "./pages/ChecklistPage";
+import { ShiftReportPage } from "./pages/ShiftReportPage";
 import { AdminChecklistsPage } from "./pages/AdminChecklistsPage";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { DesignSystemButtonPage } from "./pages/DesignSystemButtonPage";
@@ -54,6 +55,15 @@ export default function App() {
             element={
               <GuaritaLayout>
                 <GuaritaPage />
+              </GuaritaLayout>
+            }
+          />
+
+          <Route
+            path="/guarita/relatorio"
+            element={
+              <GuaritaLayout>
+                <ShiftReportPage />
               </GuaritaLayout>
             }
           />

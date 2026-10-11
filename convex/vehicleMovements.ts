@@ -113,8 +113,22 @@ export const listInTransit = query({
 
 // Query: List shift movements (7am yesterday to 7am today OR 7am today to now)
 export const listShiftMovements = query({
-  args: {},
-  handler: async (ctx) => {
+  args: {
+    // Janela explícita do plantão (calculada no fuso do cliente); sem ela, usa o plantão atual
+    startMs: v.optional(v.number()),
+    endMs: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    if (args.startMs !== undefined && args.endMs !== undefined) {
+      const movements = await ctx.db
+        .query("vehicleMovements")
+        .withIndex("by_date", (q) =>
+          q.gte("departureTime", args.startMs!).lt("departureTime", args.endMs!)
+        )
+        .collect();
+      return await enrichMovements(ctx, movements);
+    }
+
     const now = new Date();
     const currentHour = now.getHours();
 
