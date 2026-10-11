@@ -1,6 +1,6 @@
 # Painel do projeto
 
-**Última atualização:** 2026-08-19
+**Última atualização:** 2026-10-11
 
 Este é o ponto de entrada para entender o estado atual do GIRO. Detalhes de execução e decisões ficam nos planos vinculados, sem duplicação neste painel.
 
@@ -12,6 +12,17 @@ Este é o ponto de entrada para entender o estado atual do GIRO. Detalhes de exe
 - **Plano:** [Design system Velocity Light](planos/2026-07-11-design-system-velocity-light.md)
 - **Etapa atual:** Implementar a [issue #13](https://github.com/bresends/giro/issues/13), ativando temas globais e alinhando os tokens usados pelo piloto `/vehicles`.
 - **Resultado esperado:** design system interno validado na listagem de viaturas e pronto para orientar as próximas páginas.
+- **Paleta de cores:** amarelo de atenção `#F8D659` ("Vivo") e cinza neutro `#E4E7EA` escolhidos e transformados nos primeiros tokens `giro-warning*` e `giro-neutral*`; próximo: valores Dark e demais cores (ver seção `Paleta de cores` do plano).
+- **Logo:** o logo atual será substituído; quatro direções em P&B (giroflex, rota pela cidade, rota + luz e pião) estão em `design/logo.pen`. Próximo: escolher uma ou duas variações para refinar.
+- **Decisão pendente:** julgar os protótipos `Proto Linear` (login, viaturas e detalhe) em `design/design-system.pen`, que trocam o chanfro por geometria linear mantendo a paleta.
+
+### Guarita e checklist na direção Placar
+
+- **Estado:** em andamento (prioridade definida pelo usuário em 2026-10-11)
+- **Planos:** [Operação da guarita](planos/2026-07-11-operacao-guarita.md) e [Checklist operacional](planos/2026-07-11-checklist-operacional.md)
+- **Referência:** telas da guarita, do relatório do plantão e do checklist em `design/hero.pen`; logo 2C·7 em `design/logo.pen`.
+- **Situação:** guarita, relatório do plantão, modais e checklist implementados; `npm run build` aprovado.
+- **Próximo passo:** publicar o backend (`auth.viewer` e janela de `listShiftMovements`) e validar as telas no navegador, desktop e celular.
 
 ### Retomada
 
@@ -42,6 +53,7 @@ Este é o ponto de entrada para entender o estado atual do GIRO. Detalhes de exe
 ## Referências rápidas
 
 - [Visão do projeto](01-visao-do-projeto.md)
+- [Contexto de produto para design](../PRODUCT.md) (gerado pelo `impeccable init`)
 - [Guia de documentação](02-guia-de-documentacao.md)
 - [Referência Velocity Light](referencias/01-velocity-light.md)
 - Especificação visual versionada: `design/design-system.pen`
