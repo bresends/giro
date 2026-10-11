@@ -2,10 +2,6 @@
 
 Sistema de gestão de frota do CBMGO, construído com React, Vite, Convex e componentes shadcn.
 
-## Documentação do projeto
-
-Comece pelo [painel do projeto](docs/00-painel.md) para consultar o estado atual, os planos ativos e os próximos passos.
-
 ## Desenvolvimento
 
 This is a [Convex](https://convex.dev/) project created with [`npm create convex`](https://www.npmjs.com/package/create-convex).
