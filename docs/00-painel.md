@@ -53,7 +53,6 @@ Este é o ponto de entrada para entender o estado atual do GIRO. Detalhes de exe
 ## Referências rápidas
 
 - [Visão do projeto](01-visao-do-projeto.md)
-- [Contexto de produto para design](../PRODUCT.md) (gerado pelo `impeccable init`)
 - [Guia de documentação](02-guia-de-documentacao.md)
 - [Referência Velocity Light](referencias/01-velocity-light.md)
 - Especificação visual versionada: `design/design-system.pen`
