@@ -2,7 +2,7 @@
 
 ## Direção
 
-Velocity Light é a linguagem visual escolhida para a remodelagem do GIRO. A branch `origin/feat/velocity-light-design-system` é uma referência de composição e identidade, não uma fonte para copiar componentes integralmente.
+Velocity Light é a linguagem visual escolhida para a remodelagem do GIRO. A antiga branch de referência `feat/velocity-light-design-system` foi removida em 2026-10-11; esta página e `design/design-system.pen` concentram a referência de composição e identidade.
 
 A estética é clara, plana, angular e inspirada em motorsport e interfaces táticas. A interface deve continuar sendo uma ferramenta operacional densa, legível e eficiente.
 
@@ -90,12 +90,8 @@ O significado deve ser representado por variantes como `success`, `warning`, `da
 - As rotas `/design-system` validam a implementação e não substituem o Pencil como canvas de exploração.
 - Nenhuma sincronização Pencil → código deve ser aceita sem revisão de diff e validação no navegador.
 
-## Uso da branch de referência
-
-Ao consultar `origin/feat/velocity-light-design-system`:
+## Ao aplicar a direção visual
 
 - Aproveite composição, hierarquia e direção visual.
-- Não substitua arquivos atuais pelos da branch.
-- Preserve recursos adicionados posteriormente, incluindo comboboxes, validações de KM, movimentações, checklists e rich text.
-- Não copie as variantes experimentais de login; somente a direção Velocity Light é relevante.
+- Preserve recursos existentes, incluindo comboboxes, validações de KM, movimentações, checklists e rich text.
 - Prefira tokens, Tailwind e variantes CVA a estilos inline.

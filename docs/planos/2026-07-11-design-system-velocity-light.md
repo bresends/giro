@@ -59,7 +59,7 @@ O Pencil não substitui testes no navegador. Hover, active, focus-visible, tecla
 - [Referência visual Velocity Light](../referencias/01-velocity-light.md)
 - [Especificação executável do piloto `/vehicles`](https://github.com/bresends/giro/issues/12)
 - Tickets executáveis: [#13](https://github.com/bresends/giro/issues/13), [#14](https://github.com/bresends/giro/issues/14), [#15](https://github.com/bresends/giro/issues/15), [#16](https://github.com/bresends/giro/issues/16), [#17](https://github.com/bresends/giro/issues/17) e [#18](https://github.com/bresends/giro/issues/18).
-- Branch visual: `origin/feat/velocity-light-design-system`.
+- Branch visual `feat/velocity-light-design-system`: removida em 2026-10-11 a pedido do usuário; a referência fica em `docs/referencias/01-velocity-light.md` e `design/design-system.pen`.
 - O frontend usa React 19, Tailwind CSS 4, CVA e componentes `shadcn` locais.
 - Pencil é usado pelo MCP e o arquivo `.pen` permanece versionado no repositório.
 - A branch visual orienta composição e identidade, mas não deve substituir arquivos atuais nem ser copiada integralmente.
