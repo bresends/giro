@@ -4,10 +4,12 @@ import { cn } from "@/lib/utils";
  * Símbolo 2C·7 ("G com base"): o G é a rota pela cidade e o ponto é a base,
  * aceso em amarelo Vivo. Geometria copiada de `design/logo.pen`.
  */
-export function GiroSymbol({ className }: { className?: string }) {
+export function GiroSymbol({ className, size }: { className?: string; size?: number }) {
   return (
     <svg
       viewBox="0 0 100 100"
+      width={size}
+      height={size}
       className={className}
       aria-hidden="true"
       focusable="false"
@@ -27,7 +29,11 @@ export function GiroSymbol({ className }: { className?: string }) {
   );
 }
 
-/** Bloco vermelho com o símbolo, usado como ícone do aplicativo. */
+/**
+ * Bloco vermelho com o símbolo, usado como ícone do aplicativo.
+ * Medidas inteiras como em `design/hero.pen` (símbolo de 22px e cantos de 8px nos
+ * blocos de 28 e 32px): tamanhos fracionários borram o traço e deslocam o branco.
+ */
 export function GiroMark({
   size = 32,
   className,
@@ -35,19 +41,17 @@ export function GiroMark({
   size?: number;
   className?: string;
 }) {
+  const symbol = size >= 28 ? 22 : Math.round(size * 0.6875);
+  const radius = size >= 28 ? 8 : Math.round(size / 4);
   return (
     <span
       className={cn(
         "inline-flex shrink-0 items-center justify-center bg-giro-brand",
         className,
       )}
-      style={{
-        width: size,
-        height: size,
-        borderRadius: Math.round(size / 4),
-      }}
+      style={{ width: size, height: size, borderRadius: radius }}
     >
-      <GiroSymbol className="size-[69%]" />
+      <GiroSymbol className="block shrink-0" size={symbol} />
     </span>
   );
 }

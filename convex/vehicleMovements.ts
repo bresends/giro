@@ -24,9 +24,13 @@ async function enrichMovements(ctx: QueryCtx, movements: Doc<"vehicleMovements">
       const personnel = await ctx.db.get(movement.personnelId);
 
       let vehicleTypeName = "N/A";
+      let vehicleTypeDescription: string | null = null;
       if (vehicle) {
         const vehicleType = await ctx.db.get(vehicle.typeId);
-        if (vehicleType) vehicleTypeName = vehicleType.name;
+        if (vehicleType) {
+          vehicleTypeName = vehicleType.name;
+          vehicleTypeDescription = vehicleType.description;
+        }
       }
 
       const registeredByUser = movement.registeredByDeparture
@@ -52,6 +56,7 @@ async function enrichMovements(ctx: QueryCtx, movements: Doc<"vehicleMovements">
               operationalPrefix: vehicle.operationalPrefix,
               plate: vehicle.plate,
               type: vehicleTypeName,
+              typeDescription: vehicleTypeDescription,
             }
           : null,
         personnel: personnel

@@ -1,4 +1,4 @@
-import { FileText } from "@gravity-ui/icons";
+import { IconRelatorio } from "@/components/giro/icons";
 import { Link } from "react-router-dom";
 import { GiroButton } from "@/components/giro/giro-button";
 import { formatDuration, formatKm, SHIFT_START_HOUR, type ShiftWindow } from "@/lib/giro";
@@ -14,7 +14,7 @@ function Kpi({ label, value, sub }: { label: string; value: string; sub: string 
   return (
     <div className="flex min-w-0 flex-col gap-1">
       <dt className="text-xs text-giro-muted">{label}</dt>
-      <dd className="text-[26px] leading-tight font-bold tracking-[-0.5px] tabular-nums">{value}</dd>
+      <dd className="text-[26px] font-bold tracking-[-0.5px] tabular-nums">{value}</dd>
       <dd className="text-xs text-giro-muted">{sub}</dd>
     </div>
   );
@@ -34,6 +34,7 @@ function HourlyChart({ movements, window, now }: { movements: Movement[]; window
     ).length;
     return { hour, count };
   });
+  // Escala relativa: a hora mais movimentada ocupa os 72px, mesmo com poucas saídas
   const max = Math.max(1, ...buckets.map((b) => b.count));
   const peak = Math.max(...buckets.map((b) => b.count));
   const description = buckets
@@ -43,7 +44,7 @@ function HourlyChart({ movements, window, now }: { movements: Movement[]; window
 
   return (
     <figure className="flex w-full flex-col gap-2">
-      <figcaption className="text-xs text-giro-muted">Saídas por hora</figcaption>
+      <figcaption className="text-xs leading-[14.5px] text-giro-muted">Saídas por hora</figcaption>
       <div
         role="img"
         aria-label={description ? `Saídas por hora no plantão. ${description}.` : "Nenhuma saída no plantão."}
@@ -57,13 +58,13 @@ function HourlyChart({ movements, window, now }: { movements: Movement[]; window
               "min-w-0 flex-1 rounded-md",
               b.count === 0 ? "bg-giro-default" : b.count === peak ? "bg-giro-accent" : "bg-giro-accent-tint",
             )}
-            style={{ height: b.count === 0 ? 4 : Math.max(8, (b.count / max) * 72) }}
+            style={{ height: b.count === 0 ? 4 : Math.max(8, Math.round((b.count / max) * 72)) }}
           />
         ))}
       </div>
       <div aria-hidden="true" className="flex gap-1.5">
         {buckets.map((b) => (
-          <span key={b.hour} className="min-w-0 flex-1 text-center text-[11px] text-giro-muted tabular-nums">
+          <span key={b.hour} className="min-w-0 flex-1 text-center text-[11px] leading-[13.5px] text-giro-muted tabular-nums">
             {b.hour.toString().padStart(2, "0")}h
           </span>
         ))}
@@ -95,7 +96,7 @@ export function ShiftSummary({
         </h2>
         <GiroButton asChild variant="secondary" size="sm">
           <Link to="/guarita/relatorio">
-            <FileText />
+            <IconRelatorio />
             Relatório do plantão
           </Link>
         </GiroButton>
@@ -111,7 +112,7 @@ export function ShiftSummary({
           <Kpi
             label="Tempo médio fora"
             value={stats?.averageMs != null ? formatDuration(stats.averageMs) : "—"}
-            sub="por saída concluída"
+            sub="por saída"
           />
           <Kpi
             label="Ocorrências"

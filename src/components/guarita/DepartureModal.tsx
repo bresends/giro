@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "convex/react";
 import { useEffect, useState } from "react";
-import { ArrowRightFromSquare } from "@gravity-ui/icons";
+import { IconRegistrarSaida } from "@/components/giro/icons";
 import { GiroButton } from "@/components/giro/giro-button";
 import {
   giroCombobox,
@@ -354,7 +354,7 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
               Cancelar
             </GiroButton>
             <GiroButton type="submit" variant="primary" size="lg" disabled={isSubmitting}>
-              <ArrowRightFromSquare />
+              <IconRegistrarSaida />
               {isSubmitting ? "Registrando..." : "Registrar saída"}
             </GiroButton>
           </DialogFooter>

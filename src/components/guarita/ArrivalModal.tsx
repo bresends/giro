@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowRightToSquare } from "@gravity-ui/icons";
+import { IconRegistrarChegada } from "@/components/giro/icons";
 import { GiroButton } from "@/components/giro/giro-button";
 import {
   giroDialog,
@@ -268,7 +268,7 @@ export function ArrivalModal({
               size="lg"
               disabled={isSubmitting || kmInvalid}
             >
-              <ArrowRightToSquare />
+              <IconRegistrarChegada />
               {isSubmitting
                 ? "Registrando..."
                 : kmSuspicious && warningConfirmed

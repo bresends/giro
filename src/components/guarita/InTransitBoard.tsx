@@ -1,4 +1,5 @@
-import { ArrowRightToSquare, House } from "@gravity-ui/icons";
+import { House } from "@gravity-ui/icons";
+import { IconRegistrarChegada } from "@/components/giro/icons";
 import { GiroButton } from "@/components/giro/giro-button";
 import { VehicleIllustration } from "@/components/giro/VehicleIllustration";
 import {
@@ -18,21 +19,21 @@ const TILE_STYLES: Record<
 > = {
   critical: {
     tile: "bg-giro-accent text-white",
-    plate: "border-white/25 bg-white/15",
+    plate: "bg-white/15 ring-white/25",
     prefix: "text-white",
     sub: "text-white/80",
     button: "onState",
   },
   warning: {
     tile: "bg-giro-warning text-giro-warning-foreground",
-    plate: "border-giro-separator bg-white",
+    plate: "bg-white ring-giro-separator",
     prefix: "text-giro-warning-foreground",
     sub: "text-giro-warning-foreground",
     button: "primary",
   },
   normal: {
     tile: "bg-giro-neutral text-giro-neutral-foreground",
-    plate: "border-giro-separator bg-white",
+    plate: "bg-white ring-giro-separator",
     prefix: "text-giro-neutral-foreground",
     sub: "text-giro-neutral-muted",
     button: "onState",
@@ -88,7 +89,10 @@ export function InTransitBoard({
             const elapsed = now - movement.departureTime;
             const state = transitState(elapsed);
             const s = TILE_STYLES[state];
-            const typeLine = [movement.vehicle?.type, destinationTypeLabel(movement.destinationType)]
+            const typeLine = [
+              movement.vehicle?.typeDescription || movement.vehicle?.type,
+              destinationTypeLabel(movement.destinationType),
+            ]
               .filter(Boolean)
               .join(" · ");
 
@@ -96,29 +100,35 @@ export function InTransitBoard({
               <li
                 key={movement._id}
                 className={cn(
-                  "flex min-h-[252px] flex-col gap-3.5 rounded-[20px] p-4 transition-colors duration-200 ease-out motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-top-2 motion-safe:duration-200",
+                  "flex h-[252px] flex-col gap-3.5 rounded-[20px] p-4 transition-colors duration-200 ease-out motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-top-2 motion-safe:duration-200",
                   s.tile,
                 )}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className={cn("rounded-lg border px-2 py-1", s.plate)}>
-                    <span className={cn("text-[13px] font-bold tracking-[0.5px]", s.prefix)}>
-                      {movement.vehicle?.operationalPrefix ?? "—"}
-                    </span>
+                  <span
+                    className={cn(
+                      "inline-flex shrink-0 items-center rounded-lg px-2 py-1 text-[13px] font-bold tracking-[0.5px] whitespace-nowrap ring-1 ring-inset",
+                      s.plate,
+                      s.prefix,
+                    )}
+                  >
+                    {movement.vehicle?.operationalPrefix ?? "—"}
                   </span>
-                  <span className={cn("truncate text-xs", s.sub)}>{typeLine}</span>
+                  <span className={cn("min-w-0 truncate text-right text-xs", s.sub)} title={typeLine}>
+                    {typeLine}
+                  </span>
                 </div>
 
                 <div className="flex items-end justify-between gap-2">
                   <div className="flex min-w-0 flex-col gap-0.5">
-                    <span className="text-[34px] leading-tight font-bold tracking-[-0.8px] tabular-nums">
+                    <span className="text-[34px] font-bold tracking-[-0.8px] tabular-nums">
                       {formatDuration(elapsed)}
                     </span>
-                    <span className={cn("text-xs", s.sub)}>
+                    <span className={cn("w-[172px] text-xs", s.sub)}>
                       {stateNote(state, movement.departureTime)}
                     </span>
                   </div>
-                  <VehicleIllustration type={movement.vehicle?.type} className="h-[72px] w-24 shrink-0" />
+                  <VehicleIllustration type={movement.vehicle?.type} />
                 </div>
 
                 <div className="flex min-w-0 flex-col gap-[3px]">
@@ -126,13 +136,16 @@ export function InTransitBoard({
                   <span className={cn("truncate text-xs", s.sub)}>{movement.destination}</span>
                 </div>
 
+                {/* Espaçador como no design: os gaps de 14px continuam valendo dos dois lados */}
+                <div aria-hidden="true" className="min-h-0 flex-1" />
+
                 <GiroButton
                   variant={s.button}
                   size="sm"
-                  className="mt-auto h-[38px] w-full"
+                  className="h-[38px] w-full shrink-0 gap-1.5"
                   onClick={() => onArrival(movement)}
                 >
-                  <ArrowRightToSquare />
+                  <IconRegistrarChegada />
                   Registrar chegada
                   <span className="sr-only"> de {movement.vehicle?.operationalPrefix}</span>
                 </GiroButton>

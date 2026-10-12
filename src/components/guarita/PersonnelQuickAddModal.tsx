@@ -1,7 +1,7 @@
 import { useMutation } from "convex/react";
 import { useEffect, useState } from "react";
 import { ConvexError } from "convex/values";
-import { PersonPlus } from "@gravity-ui/icons";
+import { IconCadastrarMilitar } from "@/components/giro/icons";
 import { GiroButton } from "@/components/giro/giro-button";
 import {
   giroDialog,
@@ -174,7 +174,7 @@ export function PersonnelQuickAddModal({
               Cancelar
             </GiroButton>
             <GiroButton type="submit" variant="primary" size="lg" disabled={isSubmitting}>
-              <PersonPlus />
+              <IconCadastrarMilitar />
               {isSubmitting ? "Cadastrando..." : "Cadastrar"}
             </GiroButton>
           </DialogFooter>

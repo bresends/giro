@@ -4,7 +4,7 @@
  * As classes são combinadas com as das primitivas via `cn` (tailwind-merge).
  */
 export const giroDialog =
-  "font-giro text-giro-fg bg-white border-0 rounded-3xl p-5 sm:p-6 gap-5 shadow-[0_24px_64px_rgb(0_0_0/0.18)] max-w-[calc(100%-1.5rem)] sm:max-w-lg max-h-[calc(100dvh-1.5rem)] overflow-y-auto";
+  "giro-ui font-giro text-giro-fg bg-white border-0 rounded-3xl p-5 sm:p-6 gap-5 shadow-[0_24px_64px_rgb(0_0_0/0.18)] max-w-[calc(100%-1.5rem)] sm:max-w-lg max-h-[calc(100dvh-1.5rem)] overflow-y-auto";
 
 export const giroDialogTitle = "text-xl font-semibold tracking-[-0.3px] text-giro-fg";
 

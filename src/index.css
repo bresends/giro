@@ -94,7 +94,7 @@
   --color-giro-success: #148a24;
   --color-giro-success-soft: #e2f2e4;
   --color-giro-success-soft-foreground: #0d6816;
-  --color-giro-amber: #b45309;
+  --color-giro-amber: #d9730d;
 
   --font-giro: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
@@ -227,4 +227,20 @@
       0 calc(100% - var(--corner-cut))
     );
   }
+}
+
+/*
+ * Direção "Placar": o Pencil usa a altura de linha natural da fonte (~1,21 na Inter).
+ * Fora de camadas para vencer as alturas embutidas em `text-sm`/`text-xs`; elementos com
+ * `leading-*` explícito (alturas definidas no design) ficam fora da regra.
+ * `.giro-ui` fica no shell da guarita/checklist e nos modais (que abrem em portal).
+ */
+.giro-ui,
+.giro-ui *:not([class*="leading-"]) {
+  line-height: normal;
+}
+
+.giro-ui .giro-prose,
+.giro-ui .giro-prose * {
+  line-height: 1.55;
 }

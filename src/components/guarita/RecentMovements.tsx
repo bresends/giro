@@ -1,4 +1,11 @@
-import { ArrowRight, Calendar, Funnel, Magnifier, Pencil, TrashBin } from "@gravity-ui/icons";
+import {
+  IconBusca,
+  IconEditar,
+  IconExcluir,
+  IconFiltrar,
+  IconHoje,
+  IconSetaDireita,
+} from "@/components/giro/icons";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { GiroButton } from "@/components/giro/giro-button";
@@ -24,8 +31,6 @@ import {
 import { cn } from "@/lib/utils";
 import { driverName, type Movement } from "./types";
 
-const PAGE_SIZE = 10;
-
 const CHIP_STYLES: Record<TransitState, string> = {
   normal: "bg-giro-neutral text-giro-neutral-foreground",
   warning: "bg-giro-warning text-giro-warning-foreground",
@@ -43,12 +48,6 @@ function TransitChip({ state }: { state: TransitState }) {
       Em trânsito
     </span>
   );
-}
-
-function startOfToday(now: number) {
-  const d = new Date(now);
-  d.setHours(0, 0, 0, 0);
-  return d.getTime();
 }
 
 function RowActions({
@@ -71,7 +70,7 @@ function RowActions({
         aria-label={`Editar saída ${prefix}`}
         title="Editar saída"
       >
-        <Pencil />
+        <IconEditar />
       </GiroButton>
       <GiroButton
         variant="ghost"
@@ -81,14 +80,24 @@ function RowActions({
         aria-label={`Excluir saída ${prefix}`}
         title="Excluir saída"
       >
-        <TrashBin />
+        <IconExcluir />
       </GiroButton>
     </div>
   );
 }
 
+/** Colunas do design (1440px); entre lg e xl uma versão compacta para caber. */
 const COLUMNS =
-  "grid grid-cols-[88px_104px_minmax(150px,1.1fr)_minmax(0,1.6fr)_84px_84px_104px_80px_72px] items-center gap-4 px-4";
+  "grid items-center gap-4 px-4 grid-cols-[72px_96px_minmax(140px,1fr)_minmax(0,1.4fr)_76px_80px_100px_72px_72px] xl:grid-cols-[120px_130px_210px_minmax(0,1fr)_100px_100px_120px_96px_76px]";
+
+/** Últimas saídas (`listRecent`): mostra as 25 mais recentes de uma vez; "Hoje" filtra o dia. */
+const VISIBLE = 25;
+
+function startOfToday(now: number) {
+  const d = new Date(now);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+}
 
 export function RecentMovements({
   movements,
@@ -104,8 +113,7 @@ export function RecentMovements({
   const [search, setSearch] = useState("");
   const [destinationType, setDestinationType] = useState("todos");
   const [todayOnly, setTodayOnly] = useState(false);
-  const [visible, setVisible] = useState(PAGE_SIZE);
-
+  
   const filtered = useMemo(() => {
     const term = search.trim().toLocaleLowerCase("pt-BR");
     const todayStart = startOfToday(now);
@@ -128,7 +136,7 @@ export function RecentMovements({
     });
   }, [movements, search, destinationType, todayOnly, now]);
 
-  const shown = filtered.slice(0, visible);
+  const shown = filtered.slice(0, VISIBLE);
   const hasFilters = search.trim() !== "" || destinationType !== "todos" || todayOnly;
 
   return (
@@ -145,14 +153,13 @@ export function RecentMovements({
 
         <div className="flex flex-wrap items-center gap-2">
           <label className="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-xl bg-white px-3.5 focus-within:ring-[3px] focus-within:ring-giro-accent/25 lg:w-[300px] lg:flex-none">
-            <Magnifier className="size-4 shrink-0 text-giro-muted" aria-hidden="true" />
+            <IconBusca className="size-4 shrink-0 text-giro-muted" />
             <span className="sr-only">Buscar nas últimas saídas</span>
             <input
               type="search"
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
-                setVisible(PAGE_SIZE);
               }}
               placeholder="Buscar por viatura, motorista ou RG"
               className="h-full min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-giro-muted"
@@ -163,9 +170,10 @@ export function RecentMovements({
             <DropdownMenuTrigger asChild>
               <GiroButton
                 variant={destinationType === "todos" ? "secondary" : "primary"}
+                className="px-3.5"
                 aria-label="Filtrar por tipo de destino"
               >
-                <Funnel />
+                <IconFiltrar />
                 {destinationType === "todos" ? "Filtrar" : destinationTypeLabel(destinationType)}
               </GiroButton>
             </DropdownMenuTrigger>
@@ -175,7 +183,6 @@ export function RecentMovements({
                 value={destinationType}
                 onValueChange={(v) => {
                   setDestinationType(v);
-                  setVisible(PAGE_SIZE);
                 }}
               >
                 <DropdownMenuRadioItem value="todos">Todos</DropdownMenuRadioItem>
@@ -190,13 +197,13 @@ export function RecentMovements({
 
           <GiroButton
             variant={todayOnly ? "primary" : "secondary"}
+            className="px-3.5"
             aria-pressed={todayOnly}
             onClick={() => {
               setTodayOnly((v) => !v);
-              setVisible(PAGE_SIZE);
             }}
           >
-            <Calendar />
+            <IconHoje />
             Hoje
           </GiroButton>
         </div>
@@ -216,7 +223,7 @@ export function RecentMovements({
           {/* Desktop: tabela */}
           <div role="table" aria-label="Últimas saídas" className="hidden rounded-[20px] bg-giro-surface-2 p-1 lg:block">
             <div role="rowgroup">
-              <div role="row" className={cn(COLUMNS, "py-2.5 text-xs font-medium text-giro-muted")}>
+              <div role="row" className={cn(COLUMNS, "h-9 text-xs font-medium text-giro-muted")}>
                 <span role="columnheader">Saída</span>
                 <span role="columnheader">Viatura</span>
                 <span role="columnheader">Motorista</span>
@@ -236,7 +243,7 @@ export function RecentMovements({
                   <div
                     role="row"
                     key={m._id}
-                    className={cn(COLUMNS, "border-b border-giro-separator py-3 last:border-b-0")}
+                    className={cn(COLUMNS, "py-3 shadow-[inset_0_-1px_0_var(--color-giro-separator)] last:shadow-none")}
                   >
                     <div role="cell" className="flex flex-col gap-0.5">
                       <span className="text-sm font-medium tabular-nums">{formatTime(m.departureTime)}</span>
@@ -327,19 +334,12 @@ export function RecentMovements({
           Mostrando {shown.length} de {filtered.length} {filtered.length === 1 ? "saída" : "saídas"}
           {hasFilters ? " encontradas" : " mais recentes"}
         </p>
-        <div className="flex items-center gap-1">
-          {filtered.length > shown.length && (
-            <GiroButton variant="secondary" size="sm" onClick={() => setVisible((v) => v + PAGE_SIZE)}>
-              Mostrar mais
-            </GiroButton>
-          )}
-          <GiroButton asChild variant="link" size="sm">
-            <Link to="/movements">
-              Ver todas as movimentações
-              <ArrowRight />
-            </Link>
-          </GiroButton>
-        </div>
+        <GiroButton asChild variant="link" size="sm" className="gap-1.5">
+          <Link to="/movements">
+            Ver todas as movimentações
+            <IconSetaDireita />
+          </Link>
+        </GiroButton>
       </div>
     </section>
   );

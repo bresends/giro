@@ -18,6 +18,7 @@ export interface Movement {
     operationalPrefix: string;
     plate: string;
     type?: string;
+    typeDescription?: string | null;
   } | null;
   personnel: {
     _id: Id<"personnel">;

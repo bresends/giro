@@ -2,7 +2,7 @@
 
 import { Authenticated, Unauthenticated } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -23,6 +23,7 @@ import { GuaritaPage } from "./pages/GuaritaPage";
 import { MovementsPage } from "./pages/MovementsPage";
 import { ChecklistPage } from "./pages/ChecklistPage";
 import { ShiftReportPage } from "./pages/ShiftReportPage";
+import { DesignReviewPage } from "./pages/design-review/DesignReviewPage";
 import { AdminChecklistsPage } from "./pages/AdminChecklistsPage";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { DesignSystemButtonPage } from "./pages/DesignSystemButtonPage";
@@ -36,6 +37,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Toaster />
+      <ReviewGate>
       <Authenticated>
         <Routes>
           {import.meta.env.DEV && (
@@ -147,6 +149,7 @@ export default function App() {
           <Route path="*" element={<LoginPage />} />
         </Routes>
       </Unauthenticated>
+      </ReviewGate>
     </BrowserRouter>
   );
 }
@@ -393,4 +396,20 @@ function LoginPage() {
       </div>
     </div>
   );
+}
+
+/**
+ * Em desenvolvimento, `/design-review/*` mostra só as telas de revisão visual contra
+ * `design/hero.pen`, sem login; nas demais rotas segue o app normal.
+ */
+function ReviewGate({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  if (import.meta.env.DEV && location.pathname.startsWith("/design-review")) {
+    return (
+      <Routes>
+        <Route path="/design-review/:screen?" element={<DesignReviewPage />} />
+      </Routes>
+    );
+  }
+  return <>{children}</>;
 }

@@ -28,13 +28,15 @@ function fullDateTime(ms: number) {
   });
 }
 
-export function shiftTitle(window: ShiftWindow) {
-  return `${formatLongDate(window.startMs)} · Plantão das ${formatTime(window.startMs)} às ${formatTime(window.endMs)} de ${formatDayMonth(window.endMs)}`;
+/** "Quinta-feira, 9 de outubro · Plantão das 07:00 às 07:00 de amanhã" (plantões passados usam a data). */
+export function shiftTitle(window: ShiftWindow, now: number = Date.now()) {
+  const end = window.endMs > now ? "de amanhã" : `de ${formatDayMonth(window.endMs)}`;
+  return `${formatLongDate(window.startMs)} · Plantão das ${formatTime(window.startMs)} às ${formatTime(window.endMs)} ${end}`;
 }
 
-/** Ordem do documento: saídas mais antigas primeiro, como no livro da guarita. */
+/** Ordem do documento, como no design: saídas mais recentes primeiro. */
 export function sortForReport(movements: Movement[]) {
-  return [...movements].sort((a, b) => a.departureTime - b.departureTime);
+  return [...movements].sort((a, b) => b.departureTime - a.departureTime);
 }
 
 /**

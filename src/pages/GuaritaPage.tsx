@@ -1,4 +1,3 @@
-import { ArrowRightFromSquare, PersonPlus } from "@gravity-ui/icons";
 import { useMutation, useQuery } from "convex/react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -12,24 +11,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { formatLongDate, shiftWindowAt, useNow } from "@/lib/giro";
+import { shiftWindowAt, useNow } from "@/lib/giro";
 import { api } from "../../convex/_generated/api";
 import { Loading } from "../components/common/Loading";
 import { ArrivalModal } from "../components/guarita/ArrivalModal";
 import { DepartureModal } from "../components/guarita/DepartureModal";
 import { EditMovementModal } from "../components/guarita/EditMovementModal";
+import { GuaritaHeader } from "../components/guarita/GuaritaHeader";
 import { InTransitBoard } from "../components/guarita/InTransitBoard";
 import { PersonnelQuickAddModal } from "../components/guarita/PersonnelQuickAddModal";
 import { RecentMovements } from "../components/guarita/RecentMovements";
 import { ShiftSummary } from "../components/guarita/ShiftSummary";
 import type { Movement } from "../components/guarita/types";
 
-function shiftMeta(now: number) {
-  const startedYesterday = new Date(now).getHours() < 7;
-  return startedYesterday
-    ? "Plantão iniciado ontem às 07:00, encerra hoje às 07:00"
-    : "Plantão iniciado às 07:00, encerra às 07:00 de amanhã";
-}
 
 export function GuaritaPage() {
   const now = useNow();
@@ -89,33 +83,11 @@ export function GuaritaPage() {
 
   return (
     <div className="mx-auto flex max-w-[1440px] flex-col gap-10 px-4 pt-6 pb-14 sm:px-6 lg:px-10 lg:pt-8">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div className="flex flex-col gap-1.5">
-          <h1 className="text-[30px] leading-tight font-semibold tracking-[-0.6px]">Guarita</h1>
-          <p className="text-sm text-giro-muted">
-            {formatLongDate(now)} · {shiftMeta(now)}
-          </p>
-        </div>
-        <div className="flex gap-2.5">
-          <GiroButton
-            variant="secondary"
-            className="flex-1 md:flex-none"
-            onClick={() => setPersonnelModalOpen(true)}
-          >
-            <PersonPlus />
-            Cadastrar militar
-          </GiroButton>
-          <GiroButton
-            variant="primary"
-            size="lg"
-            className="flex-1 md:flex-none"
-            onClick={() => setDepartureModalOpen(true)}
-          >
-            <ArrowRightFromSquare />
-            Registrar saída
-          </GiroButton>
-        </div>
-      </div>
+      <GuaritaHeader
+        now={now}
+        onAddPersonnel={() => setPersonnelModalOpen(true)}
+        onDeparture={() => setDepartureModalOpen(true)}
+      />
 
       <InTransitBoard movements={inTransit} now={now} onArrival={handleArrivalClick} />
 
