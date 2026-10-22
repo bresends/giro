@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from "convex/react";
+import { ConvexError } from "convex/values";
 import { useState, useEffect } from "react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
@@ -100,12 +101,16 @@ export function AdminChecklistsPage() {
   };
 
   const handleDeleteFunction = async (funcId: Id<"operationalFunctions">, funcName: string) => {
-    if (window.confirm(`Tem certeza que deseja excluir a função "${funcName}"? Esta ação excluirá permanentemente todos os modelos e checklists vinculados.`)) {
+    if (window.confirm(`Tem certeza que deseja excluir a função "${funcName}"? Apenas funções sem modelos ou conferências de checklist podem ser excluídas. Para retirar uma função do serviço, edite-a e desative-a.`)) {
       try {
         await removeFunctionMutation({ id: funcId });
         toast.success("Função operacional excluída!");
       } catch (err) {
-        toast.error("Erro ao excluir função operacional.");
+        toast.error(
+          err instanceof ConvexError
+            ? String(err.data)
+            : "Erro ao excluir função operacional."
+        );
       }
     }
   };
