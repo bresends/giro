@@ -1,4 +1,4 @@
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { Id } from "./_generated/dataModel";
@@ -496,27 +496,26 @@ export const removeOperationalFunction = mutation({
       throw new Error("Não autorizado. Usuário não autenticado.");
     }
 
-    // 1. Delete associated templates
-    const templates = await ctx.db
+    const template = await ctx.db
       .query("vehicleChecklistTemplates")
-      .withIndex("by_function_and_role")
-      .filter((q) => q.eq(q.field("operationalFunctionId"), args.id))
-      .collect();
-    for (const template of templates) {
-      await ctx.db.delete(template._id);
-    }
+      .withIndex("by_function_and_role", (q) =>
+        q.eq("operationalFunctionId", args.id)
+      )
+      .first();
 
-    // 2. Delete associated submissions
-    const submissions = await ctx.db
+    const submission = await ctx.db
       .query("vehicleChecklistSubmissions")
-      .withIndex("by_function_and_date")
-      .filter((q) => q.eq(q.field("operationalFunctionId"), args.id))
-      .collect();
-    for (const sub of submissions) {
-      await ctx.db.delete(sub._id);
+      .withIndex("by_function_and_date", (q) =>
+        q.eq("operationalFunctionId", args.id)
+      )
+      .first();
+
+    if (template || submission) {
+      throw new ConvexError(
+        "Esta função possui modelos ou conferências de checklist e não pode ser excluída. Edite a função e desative-a para preservar os dados."
+      );
     }
 
-    // 3. Delete the operational function itself
     await ctx.db.delete(args.id);
 
     return args.id;
