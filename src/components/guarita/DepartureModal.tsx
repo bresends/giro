@@ -189,7 +189,7 @@ export function DepartureModal({ open, onOpenChange }: DepartureModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent ref={setContainer} className={cn(giroDialog, "sm:max-w-[560px]")}>
+      <DialogContent ref={setContainer} className={cn(giroDialog, "sm:max-w-140")}>
         <DialogHeader>
           <DialogTitle className={giroDialogTitle}>Registrar saída</DialogTitle>
           <DialogDescription className={giroDialogDescription}>

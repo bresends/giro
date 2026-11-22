@@ -73,7 +73,7 @@ export function IssueFormPage() {
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar
         </Button>
-        <h1 className="text-[1.75rem] leading-tight font-bold tracking-tight mt-2">
+        <h1 className="text-giro-heading leading-tight font-bold tracking-tight mt-2">
           {isEdit ? "Editar Problema" : "Novo Problema"}
         </h1>
         <p className="text-muted-foreground">

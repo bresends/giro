@@ -45,7 +45,7 @@ export function MaintenancesPage() {
       {/* Cabeçalho */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-[1.75rem] leading-tight font-bold tracking-tight">Manutenções</h1>
+          <h1 className="text-giro-heading leading-tight font-bold tracking-tight">Manutenções</h1>
           <p className="text-muted-foreground">
             Gerencie o histórico de manutenções da frota
           </p>

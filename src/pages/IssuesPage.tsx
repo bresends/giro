@@ -31,7 +31,7 @@ export function IssuesPage() {
     <div className="admin-page space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-[1.75rem] leading-tight font-bold tracking-tight">Problemas</h1>
+          <h1 className="text-giro-heading leading-tight font-bold tracking-tight">Problemas</h1>
           <p className="text-muted-foreground">
             Gerencie os problemas e defeitos da frota
           </p>

@@ -243,7 +243,7 @@ export function AdminChecklistsPage() {
     <div className="admin-page space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-[1.75rem] leading-tight font-bold tracking-tight">Checklists de Viaturas</h1>
+          <h1 className="text-giro-heading leading-tight font-bold tracking-tight">Checklists de Viaturas</h1>
           <p className="text-muted-foreground">
             Gerenciamento e controle de conferência de materiais operacionais
           </p>

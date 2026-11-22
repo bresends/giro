@@ -69,7 +69,7 @@ export function GuaritaTopBar({ current, userLabel, userImage, movements, now, r
 
   return (
     <header className="sticky top-0 z-40 border-b border-giro-separator bg-white lg:bg-giro-bg">
-      <div className="mx-auto flex h-[55px] max-w-[1440px] items-center justify-between px-4 lg:h-[63px] lg:px-10">
+      <div className="mx-auto flex h-[55px] max-w-[1440px] items-center justify-between px-4 lg:h-15.75 lg:px-10">
         <div className="flex min-w-0 items-center gap-2.5 lg:gap-3">
           <Link to={guarita} aria-label="GIRO, ir para a guarita" className="rounded-lg focus-visible:outline-2 focus-visible:outline-giro-accent">
             <span className="lg:hidden"><GiroBrand size="sm" /></span>

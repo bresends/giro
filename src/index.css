@@ -66,6 +66,9 @@
 
 /* Direção "Placar" (test.pen): guarita e checklist. Valores Light; Dark ainda pendente. */
 @theme {
+  --text-giro-heading: 1.75rem;
+  --text-giro-caption: 0.625rem;
+  --spacing-sidebar-panel: calc(100dvh - 4rem);
   --color-giro-bg: #f5f7f9;
   --color-giro-surface: #ffffff;
   --color-giro-surface-2: #f1f3f5;

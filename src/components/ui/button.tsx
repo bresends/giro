@@ -23,7 +23,7 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-10 px-5 has-[>svg]:px-4",
-        xs: "h-6 gap-1 px-2 text-[10px] has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
+        xs: "h-6 gap-1 px-2 text-giro-caption has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-8 gap-1.5 px-3 text-xs has-[>svg]:px-2.5",
         lg: "h-12 px-6 text-sm has-[>svg]:px-4",
         xl: "h-14 px-7 text-sm has-[>svg]:px-5",

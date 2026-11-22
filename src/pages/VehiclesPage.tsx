@@ -41,7 +41,7 @@ export function VehiclesPage() {
     <div className="admin-page space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-[1.75rem] leading-tight font-bold tracking-tight">
+          <h1 className="text-giro-heading leading-tight font-bold tracking-tight">
             Viaturas
           </h1>
           <p className="text-muted-foreground mt-1">

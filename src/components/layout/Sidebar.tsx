@@ -15,7 +15,7 @@ export function Sidebar() {
   const location = useLocation();
 
   return (
-    <aside className="bg-sidebar border-b md:sticky md:top-16 md:h-[calc(100dvh-4rem)] md:w-56 md:shrink-0 md:overflow-y-auto md:border-r md:border-b-0">
+    <aside className="bg-sidebar border-b md:sticky md:top-16 md:h-sidebar-panel md:w-56 md:shrink-0 md:overflow-y-auto md:border-r md:border-b-0">
       <nav aria-label="Administração" className="flex gap-1 overflow-x-auto p-2 md:flex-col md:p-3">
         {navigation.map((item) => {
           const isActive = location.pathname === item.path || (item.path !== "/admin" && location.pathname.startsWith(item.path + "/"));

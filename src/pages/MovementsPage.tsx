@@ -187,7 +187,7 @@ export function MovementsPage() {
     <div className="admin-page space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-[1.75rem] leading-tight font-bold tracking-tight">Movimentações</h1>
+        <h1 className="text-giro-heading leading-tight font-bold tracking-tight">Movimentações</h1>
         <p className="text-muted-foreground mt-1">
           Gerencie e corrija movimentacoes de viaturas
         </p>
