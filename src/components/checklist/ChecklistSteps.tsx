@@ -51,7 +51,7 @@ function VehicleCard({ vehicle }: { vehicle: ChecklistVehicle }) {
         </div>
         <VehicleIllustration type={vehicle.type} />
       </div>
-      <dl className="flex gap-3 pt-3 shadow-[inset_0_1px_0_#16191C1A]">
+      <dl className="flex gap-3 pt-3 border-t border-giro-separator">
         {[
           ["KM atual", formatKm(vehicle.currentKm)],
           ["Próx. manutenção", vehicle.nextMaintenanceKm != null ? formatKm(vehicle.nextMaintenanceKm, true) : "—"],
@@ -70,7 +70,7 @@ function VehicleCard({ vehicle }: { vehicle: ChecklistVehicle }) {
 /** Rodapé fixo com a ação principal (Footer do design). */
 function StickyFooter({ children }: { children: React.ReactNode }) {
   return (
-    <div className="sticky bottom-0 z-10 mt-auto flex flex-col items-center gap-3 bg-white px-4 pt-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-[inset_0_1px_0_var(--color-giro-separator)]">
+    <div className="sticky bottom-0 z-10 mt-auto flex flex-col items-center gap-3 bg-white px-4 pt-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] border-t border-giro-separator">
       {children}
     </div>
   );
@@ -359,7 +359,7 @@ export function ChecklistConferenceStep({
                   </div>
                   <ol className="px-[18px] py-0.5">
                     {section.items.map((item, ii) => (
-                      <li key={ii} className="flex gap-3.5 py-3.5 shadow-[inset_0_-1px_0_var(--color-giro-separator)] last:shadow-none">
+                      <li key={ii} className="flex gap-3.5 py-3.5 border-b border-giro-separator last:border-b-0">
                         <span className="shrink-0 text-[13px] leading-[1.6] font-semibold text-giro-muted tabular-nums">
                           {String(ii + 1).padStart(2, "0")}
                         </span>

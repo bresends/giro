@@ -6,6 +6,9 @@ import { cn } from "@/lib/utils";
  * O mapa usa o nome do tipo de viatura (`vehicleTypes.name`).
  */
 const ILLUSTRATION_BY_TYPE: Record<string, string> = {
+  VTR: "s10",
+  SUV: "suv",
+  S10: "s10",
   UR: "ur", // Unidade de Resgate
   ABT: "abt", // Auto Bomba Tanque
   ABTS: "abt", // Auto Bomba Tanque e Salvamento
@@ -48,7 +51,7 @@ export function VehicleIllustration({
         src={`/viaturas/${illustrationFor(type)}.png`}
         alt=""
         draggable={false}
-        className={cn("pointer-events-none absolute h-[108px] w-36 max-w-none select-none", p.img)}
+        className={cn("pointer-events-none absolute object-contain h-[108px] w-36 max-w-none select-none", p.img)}
       />
     </span>
   );

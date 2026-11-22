@@ -132,7 +132,7 @@ export function ArrivalModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={cn(giroDialog, "sm:max-w-xl")}>
+      <DialogContent className={cn(giroDialog, "sm:max-w-[560px]")}>
         <DialogHeader>
           <DialogTitle className={giroDialogTitle}>
             Registrar chegada · {movement.vehicle?.operationalPrefix}

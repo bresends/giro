@@ -124,7 +124,7 @@ export function DesignReviewPage() {
 
   return (
     <div className="giro-ui min-h-screen bg-giro-bg font-giro text-giro-fg antialiased">
-      <GuaritaTopBar current={isChecklist ? "checklist" : "guarita"} userLabel={USER} onSignOut={noop} />
+      <GuaritaTopBar review current={isChecklist ? "checklist" : "guarita"} movements={IN_TRANSIT} now={NOW} userLabel={USER} onSignOut={noop} />
       <main>{content}</main>
     </div>
   );

@@ -85,7 +85,7 @@ function ReportTable({ movements }: { movements: Movement[] }) {
           const distance = m.arrivalKm !== undefined ? m.arrivalKm - m.departureKm : null;
           const type = destinationTypeLabel(m.destinationType);
           return (
-            <div role="row" key={m._id} className={cn(cols, "py-3 shadow-[inset_0_-1px_0_var(--color-giro-separator)] last:shadow-none")}>
+            <div role="row" key={m._id} className={cn(cols, "py-3 border-b border-giro-separator last:border-b-0")}>
               <div role="cell" className="flex flex-col gap-0.5">
                 <span className="text-sm font-semibold tabular-nums">{formatTime(m.departureTime)}</span>
                 <span className="text-xs text-giro-muted tabular-nums">{formatDayMonth(m.departureTime)}</span>
@@ -195,7 +195,7 @@ export function ShiftReportView({
           <article className="flex flex-col gap-8 rounded-3xl bg-white p-5 sm:p-9">
             <section aria-labelledby="rel-resumo" className="flex flex-col gap-3">
               <h2 id="rel-resumo" className="text-base font-semibold">Resumo do plantão</h2>
-              <dl className="grid grid-cols-2 gap-6 py-4 shadow-[inset_0_1px_0_var(--color-giro-separator),inset_0_-1px_0_var(--color-giro-separator)] sm:grid-cols-3 xl:grid-cols-5">
+              <dl className="grid grid-cols-2 gap-6 py-4 border-y border-giro-separator sm:grid-cols-3 xl:grid-cols-5">
                 <Indicator icon={<ArrowUpRight />} label="Saídas" value={stats ? String(stats.departures) : "—"} sub="no plantão" tone="accent" />
                 <Indicator icon={<ArrowDownLeft />} label="Chegadas" value={stats ? String(stats.returned) : "—"} sub="viaturas retornaram" tone="success" />
                 <Indicator icon={<Timer />} label="Em trânsito" value={stats ? String(stats.inTransit) : "—"} sub="ainda fora" tone="neutral" />

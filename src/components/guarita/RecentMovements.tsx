@@ -243,7 +243,7 @@ export function RecentMovements({
                   <div
                     role="row"
                     key={m._id}
-                    className={cn(COLUMNS, "py-3 shadow-[inset_0_-1px_0_var(--color-giro-separator)] last:shadow-none")}
+                    className={cn(COLUMNS, "py-3 border-b border-giro-separator last:border-b-0")}
                   >
                     <div role="cell" className="flex flex-col gap-0.5">
                       <span className="text-sm font-medium tabular-nums">{formatTime(m.departureTime)}</span>

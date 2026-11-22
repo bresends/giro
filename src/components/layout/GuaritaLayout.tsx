@@ -1,6 +1,7 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useQuery } from "convex/react";
 import { useLayoutEffect } from "react";
+import { useNow } from "@/lib/giro";
 import { useLocation } from "react-router-dom";
 import { api } from "../../../convex/_generated/api";
 import { GuaritaTopBar } from "./GuaritaTopBar";
@@ -12,6 +13,8 @@ interface GuaritaLayoutProps {
 export function GuaritaLayout({ children }: GuaritaLayoutProps) {
   const { signOut } = useAuthActions();
   const location = useLocation();
+  const movements = useQuery(api.vehicleMovements.listInTransit);
+  const now = useNow();
   const viewer = useQuery(api.users.viewer);
 
   // A direção "Placar" só tem valores Light por enquanto
@@ -33,6 +36,8 @@ export function GuaritaLayout({ children }: GuaritaLayoutProps) {
     <div className="giro-ui min-h-screen bg-giro-bg font-giro text-giro-fg antialiased">
       <GuaritaTopBar
         current={isChecklistRoute ? "checklist" : "guarita"}
+        movements={movements}
+        now={now}
         userLabel={userLabel}
         userImage={viewer?.image ?? null}
         onSignOut={() => void signOut()}

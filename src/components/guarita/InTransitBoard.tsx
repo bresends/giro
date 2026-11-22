@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { House } from "@gravity-ui/icons";
 import { IconRegistrarChegada } from "@/components/giro/icons";
 import { GiroButton } from "@/components/giro/giro-button";
@@ -55,13 +56,19 @@ export function InTransitBoard({
   now: number;
   onArrival: (movement: Movement) => void;
 }) {
+  useEffect(() => {
+    if (window.location.hash === "#em-transito-titulo") {
+      document.getElementById("em-transito-titulo")?.scrollIntoView();
+    }
+  }, []);
+
   const sorted = [...movements].sort((a, b) => a.departureTime - b.departureTime);
 
   return (
     <section aria-labelledby="em-transito-titulo" className="flex flex-col gap-3.5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2.5">
-          <h2 id="em-transito-titulo" className="text-[17px] font-semibold">
+          <h2 id="em-transito-titulo" className="scroll-mt-20 text-[17px] font-semibold">
             Em trânsito agora
           </h2>
           <span className="inline-flex h-[22px] items-center rounded-full bg-giro-default px-2 text-xs font-semibold tabular-nums">
