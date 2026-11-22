@@ -47,7 +47,7 @@ const styleguideNavigation = [
       { name: "Cores", href: "#foundation" },
       { name: "Tipografia", href: "#typography" },
       { name: "Spacing e radius", href: "#geometry" },
-      { name: "Shadows", href: "#elevation" },
+      { name: "Superfícies", href: "#elevation" },
       { name: "Iconografia", href: "#iconography" },
     ],
   },
@@ -89,7 +89,7 @@ export function StyleguideLayout({ children }: { children: ReactNode }) {
           <a className="flex items-center gap-3" href="#overview">
             <img
               className="h-8 w-auto"
-              src="/logo.svg"
+              src="/favicon.svg"
               alt=""
               aria-hidden="true"
             />
@@ -103,7 +103,7 @@ export function StyleguideLayout({ children }: { children: ReactNode }) {
             </span>
           </a>
           <button
-            className="grid size-9 place-items-center border border-sidebar-border hover:bg-sidebar-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sidebar-ring"
+            className="grid size-9 place-items-center rounded-lg border border-sidebar-border hover:bg-sidebar-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sidebar-ring"
             type="button"
             onClick={() => setDark((value) => !value)}
             aria-label={dark ? "Ativar tema claro" : "Ativar tema escuro"}
@@ -146,10 +146,10 @@ const colors = [
   ["Marca", "bg-primary", "#dc2626"],
   ["Dados", "bg-info-foreground", "#2563eb"],
   ["Sucesso", "bg-success-foreground", "#16a34a"],
-  ["Atenção", "bg-[#fff3c4]", "#fff3c4"],
+  ["Atenção", "bg-[#f8d659]", "#f8d659"],
   ["Manutenção", "bg-maintenance-foreground", "#ea580c"],
-  ["Texto", "bg-foreground", "#1a1a1a"],
-  ["Background", "bg-background", "#f7f7f7"],
+  ["Texto", "bg-foreground", "#16191c"],
+  ["Background", "bg-background", "#f5f7f9"],
   ["Surface", "bg-card", "#ffffff"],
 ] as const;
 
@@ -336,7 +336,7 @@ function Section({
           </h2>
         </div>
         <span className="hidden font-mono text-[10px] text-muted-foreground sm:block">
-          VELOCITY / LIGHT
+          GIRO
         </span>
       </header>
       {children}
@@ -352,13 +352,13 @@ export function DesignSystemPage() {
 
   return (
     <StyleguideLayout>
-      <main className="min-h-screen bg-background text-foreground [--warning-foreground:#7a5700] [--warning-on-strong:#5c4500] [--warning-strong:#facc15] [--warning:#fff3c4] dark:[--warning-foreground:#fde047] dark:[--warning-on-strong:#422006] dark:[--warning-strong:#facc15] dark:[--warning:rgb(250_204_21/14%)]">
+      <main className="min-h-screen bg-background text-foreground [--warning-on-strong:#5c4500] [--warning-strong:#facc15] dark:[--warning-on-strong:#422006] dark:[--warning-strong:#facc15]">
         <div className="border-b border-border bg-card">
           <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3">
               <img
                 className="h-9 w-auto"
-                src="/logo.svg"
+                src="/favicon.svg"
                 alt=""
                 aria-hidden="true"
               />
@@ -385,20 +385,17 @@ export function DesignSystemPage() {
             <div>
               <div className="mb-5 h-1 w-12 bg-primary" />
               <h1 className="max-w-3xl font-display text-5xl uppercase leading-[0.92] sm:text-7xl lg:text-8xl">
-                Velocity <span className="text-primary">Light</span>
+                Design system <span className="text-primary">GIRO</span>
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                Linguagem clara, angular e operacional para gestão de frota.
-                Esta página explora a direção visual antes da implementação nas
-                primitives.
+                Cores, tipografia e componentes para a gestão de frota do CBMGO.
               </p>
             </div>
             <dl className="grid grid-cols-2 gap-px border border-border bg-border">
               {[
-                ["Tema", "Claro"],
+                ["Temas", "Claro e escuro"],
                 ["Densidade", "Operacional"],
-                ["Geometria", "Angular"],
-                ["Estado", "Exploração"],
+                ["Geometria", "Arredondada"],
               ].map(([term, value]) => (
                 <div className="bg-card p-4" key={term}>
                   <dt className="font-condensed text-[10px] font-semibold uppercase text-muted-foreground">
@@ -422,7 +419,7 @@ export function DesignSystemPage() {
                 {colors.map(([name, color, value]) => (
                   <div className="border border-border bg-card p-3" key={name}>
                     <div
-                      className={`corner-cut aspect-3/2 ${color} [--corner-cut:8px]`}
+                      className={`rounded-lg aspect-3/2 ${color}`}
                     />
                     <p className="mt-3 font-condensed text-xs font-semibold uppercase">
                       {name}
@@ -560,7 +557,7 @@ export function DesignSystemPage() {
                       <p
                         className={`font-display uppercase leading-none ${size}`}
                       >
-                        Velocity
+                        UR-214
                       </p>
                       <p className="text-xs text-muted-foreground">{usage}</p>
                     </div>
@@ -745,7 +742,7 @@ export function DesignSystemPage() {
 
                 <div className="border border-border bg-card p-5">
                   <p className="font-condensed text-xs font-semibold uppercase">
-                    Corner cuts
+                    Cantos arredondados
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground">
                     Geometria de assinatura para elementos de destaque.
@@ -758,9 +755,9 @@ export function DesignSystemPage() {
                     ].map(([name, value]) => (
                       <div key={name}>
                         <div
-                          className="corner-cut aspect-4/3 bg-secondary"
+                          className="rounded-lg aspect-4/3 bg-secondary"
                           style={
-                            { "--corner-cut": value } as React.CSSProperties
+                            { borderRadius: value }
                           }
                         />
                         <p className="mt-2 font-condensed text-[10px] font-semibold uppercase">
@@ -777,41 +774,13 @@ export function DesignSystemPage() {
             </div>
           </Section>
 
-          <Section id="elevation" eyebrow="04 / Elevação" title="Shadows">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {[
-                [
-                  "XS",
-                  "shadow-xs",
-                  "0 1px 2px / 4%",
-                  "Controles e separação mínima",
-                ],
-                ["SM", "shadow-sm", "0 2px 6px / 6%", "Card em hover"],
-                ["MD", "shadow-md", "0 6px 16px / 8%", "Popover e menu"],
-                [
-                  "LG",
-                  "shadow-lg",
-                  "0 12px 28px / 10%",
-                  "Dialog e elevação temporária",
-                ],
-              ].map(([name, shadow, value, usage]) => (
-                <article
-                  className={`flex min-h-52 flex-col justify-end border border-border bg-card p-5 ${shadow}`}
-                  key={name}
-                >
-                  <p className="font-display text-4xl uppercase">{name}</p>
-                  <p className="mt-2 font-mono text-[9px] text-muted-foreground">
-                    {value}
-                  </p>
-                  <p className="mt-3 text-xs text-muted-foreground">{usage}</p>
-                </article>
-              ))}
+          <Section id="elevation" eyebrow="04 / Elevação" title="Superfícies">
+            <div className="rounded-xl border bg-card p-5">
+              <p className="text-sm text-muted-foreground">
+                Cartões, menus e diálogos usam superfícies planas, cantos arredondados
+                e bordas de 1 px. A cor de fundo distingue cada grupo de conteúdo.
+              </p>
             </div>
-            <p className="mt-5 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-              Bordas definem a estrutura principal. Sombras comunicam apenas
-              mudança temporária de elevação e não devem substituir hierarquia
-              ou agrupamento.
-            </p>
           </Section>
 
           <Section id="iconography" eyebrow="05 / Iconografia" title="Ícones">
@@ -909,18 +878,18 @@ export function DesignSystemPage() {
                             Button
                           </span>
                           {[
-                            ["Giant", "h-14 px-7 text-sm [--corner-cut:10px]"],
-                            ["Large", "h-12 px-6 text-xs [--corner-cut:9px]"],
+                            ["Giant", "h-14 px-7 text-sm"],
+                            ["Large", "h-12 px-6 text-xs"],
                             [
                               "Medium",
-                              "h-10 px-5 text-[10px] [--corner-cut:7px]",
+                              "h-10 px-5 text-[10px]",
                             ],
-                            ["Small", "h-8 px-3 text-[9px] [--corner-cut:5px]"],
-                            ["Tiny", "h-6 px-2 text-[8px] [--corner-cut:4px]"],
+                            ["Small", "h-8 px-3 text-[9px]"],
+                            ["Tiny", "h-6 px-2 text-[8px]"],
                           ].map(([label, size]) => (
                             <div className="flex justify-center" key={label}>
                               <button
-                                className={`corner-cut bg-primary font-condensed font-bold uppercase text-primary-foreground ${size}`}
+                                className={`rounded-lg bg-primary font-condensed font-bold uppercase text-primary-foreground ${size}`}
                               >
                                 Button
                               </button>
@@ -945,15 +914,15 @@ export function DesignSystemPage() {
                             Icon
                           </span>
                           {[
-                            ["Giant", "size-14 [--corner-cut:10px]", "size-5"],
-                            ["Large", "size-12 [--corner-cut:9px]", "size-4.5"],
-                            ["Medium", "size-10 [--corner-cut:7px]", "size-4"],
-                            ["Small", "size-8 [--corner-cut:5px]", "size-3.5"],
-                            ["Tiny", "size-6 [--corner-cut:4px]", "size-3"],
+                            ["Giant", "size-14", "size-5"],
+                            ["Large", "size-12", "size-4.5"],
+                            ["Medium", "size-10", "size-4"],
+                            ["Small", "size-8", "size-3.5"],
+                            ["Tiny", "size-6", "size-3"],
                           ].map(([label, size, icon]) => (
                             <div key={label}>
                               <button
-                                className={`corner-cut grid place-items-center bg-primary text-primary-foreground ${size}`}
+                                className={`rounded-lg grid place-items-center bg-primary text-primary-foreground ${size}`}
                                 aria-label={`${label} favorito`}
                               >
                                 <Search className={icon} />
@@ -1101,7 +1070,7 @@ export function DesignSystemPage() {
                           <span className="font-condensed text-[10px] font-semibold uppercase text-muted-foreground">
                             Left
                           </span>
-                          <button className="corner-cut h-9 w-fit min-w-28 justify-self-start bg-primary px-4 font-condensed text-[9px] font-bold uppercase text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [--corner-cut:7px]">
+                          <button className="rounded-lg h-9 w-fit min-w-28 justify-self-start bg-primary px-4 font-condensed text-[9px] font-bold uppercase text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
                             <Search className="mr-2 inline size-3.5" />
                             Button
                           </button>
@@ -1110,7 +1079,7 @@ export function DesignSystemPage() {
                           <span className="font-condensed text-[10px] font-semibold uppercase text-muted-foreground">
                             Right
                           </span>
-                          <button className="corner-cut h-9 w-fit min-w-28 justify-self-start bg-primary px-4 font-condensed text-[9px] font-bold uppercase text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [--corner-cut:7px]">
+                          <button className="rounded-lg h-9 w-fit min-w-28 justify-self-start bg-primary px-4 font-condensed text-[9px] font-bold uppercase text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
                             Button
                             <Search className="ml-2 inline size-3.5" />
                           </button>
@@ -1119,7 +1088,7 @@ export function DesignSystemPage() {
                           <span className="font-condensed text-[10px] font-semibold uppercase text-muted-foreground">
                             None
                           </span>
-                          <button className="corner-cut h-9 w-fit min-w-28 justify-self-start bg-primary px-4 font-condensed text-[9px] font-bold uppercase text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [--corner-cut:7px]">
+                          <button className="rounded-lg h-9 w-fit min-w-28 justify-self-start bg-primary px-4 font-condensed text-[9px] font-bold uppercase text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
                             Button
                           </button>
                         </div>
@@ -1136,23 +1105,23 @@ export function DesignSystemPage() {
                       {[
                         [
                           "Primary",
-                          "corner-cut bg-primary text-white [--corner-cut:7px]",
+                          "rounded-lg bg-primary text-white",
                         ],
                         [
                           "Success",
-                          "corner-cut bg-success-foreground text-white [--corner-cut:7px]",
+                          "rounded-lg bg-success-foreground text-white",
                         ],
                         [
                           "Warning",
-                          "corner-cut bg-[var(--warning-strong)] text-[var(--warning-on-strong)] [--corner-cut:7px]",
+                          "rounded-lg bg-[var(--warning-strong)] text-[var(--warning-on-strong)]",
                         ],
                         [
                           "Destructive",
-                          "corner-cut bg-destructive text-white [--corner-cut:7px]",
+                          "rounded-lg bg-destructive text-white",
                         ],
                         [
                           "Info",
-                          "corner-cut bg-info-foreground text-white [--corner-cut:7px]",
+                          "rounded-lg bg-info-foreground text-white",
                         ],
                         [
                           "Control",
@@ -1233,19 +1202,19 @@ export function DesignSystemPage() {
                     {[
                       [
                         "Processando",
-                        "corner-cut bg-primary text-primary-foreground [--corner-cut:7px]",
+                        "rounded-lg bg-primary text-primary-foreground",
                       ],
                       [
                         "Salvando",
-                        "corner-cut bg-success-foreground text-white [--corner-cut:7px]",
+                        "rounded-lg bg-success-foreground text-white",
                       ],
                       [
                         "Aguarde",
-                        "corner-cut bg-[var(--warning-strong)] text-[var(--warning-on-strong)] [--corner-cut:7px]",
+                        "rounded-lg bg-[var(--warning-strong)] text-[var(--warning-on-strong)]",
                       ],
                       [
                         "Carregando",
-                        "corner-cut bg-info-foreground text-white [--corner-cut:7px]",
+                        "rounded-lg bg-info-foreground text-white",
                       ],
                       [
                         "Consultando",
@@ -1614,8 +1583,8 @@ export function DesignSystemPage() {
                   </code>
                 </div>
                 <div className="grid gap-4 md:grid-cols-3">
-                  <div className="corner-cut bg-border p-[1px] [--corner-cut:10px]">
-                    <article className="corner-cut h-full bg-card p-5">
+                  <div className="rounded-lg bg-border p-[1px]">
+                    <article className="rounded-lg h-full bg-card p-5">
                       <p className="font-condensed text-[10px] font-semibold uppercase text-primary">
                         Viatura
                       </p>
@@ -1627,8 +1596,8 @@ export function DesignSystemPage() {
                       </p>
                     </article>
                   </div>
-                  <div className="corner-cut bg-border p-[1px] shadow-sm transition-transform hover:-translate-y-0.5 hover:shadow-md [--corner-cut:10px]">
-                    <article className="corner-cut h-full bg-card p-5 flex flex-col justify-between">
+                  <div className="rounded-lg bg-border p-[1px] shadow-sm transition-transform hover:-translate-y-0.5 hover:shadow-md">
+                    <article className="rounded-lg h-full bg-card p-5 flex flex-col justify-between">
                       <div>
                         <div className="flex items-start justify-between gap-3">
                           <div>
@@ -1647,7 +1616,7 @@ export function DesignSystemPage() {
                       </button>
                     </article>
                   </div>
-                  <article className="corner-cut bg-secondary p-5 text-secondary-foreground [--corner-cut:10px]">
+                  <article className="rounded-lg bg-secondary p-5 text-secondary-foreground">
                     <p className="font-condensed text-[10px] font-semibold uppercase text-secondary-foreground/60">
                       Movimentações
                     </p>
@@ -1670,7 +1639,7 @@ export function DesignSystemPage() {
                   <div className="flex flex-wrap gap-3">
                     {statuses.map(([label, color, Icon]) => (
                       <span
-                        className={`corner-cut inline-flex items-center gap-1.5 px-2.5 py-1 font-condensed text-[10px] font-bold uppercase [--corner-cut:3px] ${color}`}
+                        className={`rounded-lg inline-flex items-center gap-1.5 px-2.5 py-1 font-condensed text-[10px] font-bold uppercase ${color}`}
                         key={`component-${label}`}
                       >
                         <Icon className="size-3" />
@@ -2053,7 +2022,7 @@ export function DesignSystemPage() {
                 </div>
                 <div className="flex min-h-48 flex-wrap items-start gap-4 bg-card p-5">
                   <button
-                    className="corner-cut min-h-10 bg-primary px-5 font-condensed text-xs font-semibold uppercase text-primary-foreground [--corner-cut:7px]"
+                    className="rounded-lg min-h-10 bg-primary px-5 font-condensed text-xs font-semibold uppercase text-primary-foreground"
                     onClick={openDialog}
                   >
                     Abrir dialog
@@ -2851,7 +2820,7 @@ export function DesignSystemPage() {
                       accept="image/*,.pdf"
                     />
                     <span>
-                      <span className="corner-cut mx-auto grid size-12 place-items-center bg-accent text-primary [--corner-cut:8px]">
+                      <span className="rounded-lg mx-auto grid size-12 place-items-center bg-accent text-primary">
                         <Upload className="size-5" />
                       </span>
                       <span className="mt-4 block font-condensed text-xs font-bold uppercase">
@@ -2990,7 +2959,7 @@ export function DesignSystemPage() {
             <div className="flex flex-wrap gap-3">
               {statuses.map(([label, color, Icon]) => (
                 <span
-                  className={`corner-cut inline-flex items-center gap-1.5 px-2.5 py-1 font-condensed text-[10px] font-bold uppercase [--corner-cut:3px] ${color}`}
+                  className={`rounded-lg inline-flex items-center gap-1.5 px-2.5 py-1 font-condensed text-[10px] font-bold uppercase ${color}`}
                   key={label}
                 >
                   <Icon className="size-3" /> {label}
@@ -3069,7 +3038,7 @@ export function DesignSystemPage() {
                 ["Movimentos", "128", "Últimos 30 dias"],
               ].map(([label, value, note], index) => (
                 <article
-                  className="corner-cut border border-border bg-card p-5 [--corner-cut:10px]"
+                  className="rounded-lg border border-border bg-card p-5"
                   key={label}
                 >
                   <p className="font-condensed text-[11px] font-semibold uppercase text-muted-foreground">
@@ -3155,7 +3124,7 @@ export function DesignSystemPage() {
                     </div>
                   </div>
                 </div>
-                <button className="corner-cut min-h-10 bg-primary px-5 font-condensed text-xs font-semibold uppercase text-primary-foreground [--corner-cut:7px]">
+                <button className="rounded-lg min-h-10 bg-primary px-5 font-condensed text-xs font-semibold uppercase text-primary-foreground">
                   <Plus className="mr-2 inline size-4" /> Nova viatura
                 </button>
               </header>
@@ -3170,7 +3139,7 @@ export function DesignSystemPage() {
 
               <div className="grid min-h-56 place-items-center border border-dashed border-foreground/20 bg-background p-8 text-center">
                 <div>
-                  <span className="corner-cut mx-auto grid size-12 place-items-center bg-muted [--corner-cut:8px]">
+                  <span className="rounded-lg mx-auto grid size-12 place-items-center bg-muted">
                     <Search className="size-5 text-muted-foreground" />
                   </span>
                   <h5 className="mt-4 font-display text-2xl uppercase">
@@ -3191,7 +3160,7 @@ export function DesignSystemPage() {
         <footer className="border-t border-border bg-foreground py-8 text-background">
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
             <p className="font-display text-2xl uppercase">
-              Giro / Velocity Light
+              GIRO
             </p>
             <p className="font-condensed text-[10px] font-semibold uppercase text-background/60">
               Ambiente de desenvolvimento
@@ -3203,7 +3172,7 @@ export function DesignSystemPage() {
           id="velocity-dialog"
           className="m-auto w-[calc(100%-2rem)] max-w-md bg-transparent backdrop:bg-foreground/55"
         >
-          <div className="corner-cut bg-card p-6 text-card-foreground shadow-lg [--corner-cut:12px]">
+          <div className="rounded-lg bg-card p-6 text-card-foreground shadow-lg">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="font-condensed text-[10px] font-semibold uppercase text-primary">
@@ -3241,7 +3210,7 @@ export function DesignSystemPage() {
                 Cancelar
               </button>
               <button
-                className="corner-cut min-h-10 bg-primary px-5 font-condensed text-xs font-semibold uppercase text-primary-foreground [--corner-cut:7px]"
+                className="rounded-lg min-h-10 bg-primary px-5 font-condensed text-xs font-semibold uppercase text-primary-foreground"
                 onClick={() =>
                   document
                     .querySelector<HTMLDialogElement>("#velocity-dialog")

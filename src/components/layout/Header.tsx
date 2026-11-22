@@ -1,7 +1,7 @@
 import { useConvexAuth } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Button } from "@/components/ui/button";
-import { Truck, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { UserAvatar } from "./UserAvatar";
 
 export function Header() {
@@ -9,13 +9,13 @@ export function Header() {
   const { signOut } = useAuthActions();
 
   return (
-    <header className="sticky top-0 z-50 bg-background border-b shadow-sm">
-      <div className="px-6 py-4 flex items-center justify-between">
+    <header className="sticky top-0 z-50 bg-card border-b">
+      <div className="h-16 px-3 sm:px-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Truck className="w-8 h-8 text-primary" />
+          <img src="/favicon.svg" alt="" className="size-8" />
           <div>
-            <h1 className="text-xl font-bold">
-              Giro
+            <h1 className="font-giro text-xl font-extrabold tracking-tight">
+              GIRO
             </h1>
             <p className="text-xs text-muted-foreground">
               Gestão de Frota CBMGO
@@ -26,7 +26,7 @@ export function Header() {
           <div className="flex items-center gap-3">
             <UserAvatar />
             <Button variant="ghost" onClick={() => void signOut()}>
-              <LogOut className="w-4 h-4 mr-2" />
+              <LogOut className="size-4" />
               Sair
             </Button>
           </div>

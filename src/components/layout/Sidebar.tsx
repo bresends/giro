@@ -15,17 +15,18 @@ export function Sidebar() {
   const location = useLocation();
 
   return (
-    <aside className="fixed left-0 top-[73px] h-[calc(100vh-73px)] w-64 bg-background border-r overflow-y-auto">
-      <nav className="p-4 space-y-1">
+    <aside className="bg-sidebar border-b md:sticky md:top-16 md:h-[calc(100dvh-4rem)] md:w-56 md:shrink-0 md:overflow-y-auto md:border-r md:border-b-0">
+      <nav aria-label="Administração" className="flex gap-1 overflow-x-auto p-2 md:flex-col md:p-3">
         {navigation.map((item) => {
-          const isActive = location.pathname === item.path;
+          const isActive = location.pathname === item.path || (item.path !== "/admin" && location.pathname.startsWith(item.path + "/"));
           const Icon = item.Icon;
           return (
             <Link
               key={item.path}
               to={item.path}
+              aria-current={isActive ? "page" : undefined}
               className={`
-                flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition
+                flex shrink-0 items-center gap-2 px-3 py-2 focus-visible:outline-2 focus-visible:outline-ring rounded-lg text-sm font-medium transition
                 ${
                   isActive
                     ? "bg-accent text-accent-foreground"

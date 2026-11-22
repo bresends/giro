@@ -58,10 +58,10 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --shadow-xs: var(--elevation-xs);
-  --shadow-sm: var(--elevation-sm);
-  --shadow-md: var(--elevation-md);
-  --shadow-lg: var(--elevation-lg);
+  --shadow-xs: 0 0 transparent;
+  --shadow-sm: 0 0 transparent;
+  --shadow-md: 0 0 transparent;
+  --shadow-lg: 0 0 transparent;
 }
 
 /* Direção "Placar" (test.pen): guarita e checklist. Valores Light; Dark ainda pendente. */
@@ -102,36 +102,36 @@
 :root {
   color-scheme: light;
 
-  --background: #f7f7f7;
-  --foreground: #1a1a1a;
+  --background: #f5f7f9;
+  --foreground: #16191c;
   --card: #ffffff;
-  --card-foreground: #1a1a1a;
+  --card-foreground: #16191c;
   --popover: #ffffff;
-  --popover-foreground: #1a1a1a;
+  --popover-foreground: #16191c;
   --primary: #dc2626;
   --primary-foreground: #ffffff;
-  --secondary: #1a1a1a;
-  --secondary-foreground: #ffffff;
-  --muted: #eeeeee;
-  --muted-foreground: #737373;
-  --accent: #fef2f2;
-  --accent-foreground: #b91c1c;
+  --secondary: #e4e7ea;
+  --secondary-foreground: #16191c;
+  --muted: #f1f3f5;
+  --muted-foreground: #60656a;
+  --accent: #ffebea;
+  --accent-foreground: #991618;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: rgb(0 0 0 / 6%);
-  --input: #ffffff;
+  --border: #dce0e4;
+  --input: #bac1c7;
   --ring: #dc2626;
 
-  --success: rgb(22 163 74 / 8%);
-  --success-foreground: #15803d;
-  --warning: rgb(202 138 4 / 8%);
-  --warning-foreground: #a16207;
+  --success: #e2f2e4;
+  --success-foreground: #0d6816;
+  --warning: #f8d659;
+  --warning-foreground: #312409;
   --maintenance: rgb(234 88 12 / 8%);
   --maintenance-foreground: #c2410c;
   --info: rgb(37 99 235 / 8%);
   --info-foreground: #1d4ed8;
-  --neutral: rgb(0 0 0 / 4%);
-  --neutral-foreground: #525252;
+  --neutral: #e4e7ea;
+  --neutral-foreground: #16191c;
 
   --chart-1: #dc2626;
   --chart-2: #2563eb;
@@ -145,15 +145,11 @@
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #fef2f2;
   --sidebar-accent-foreground: #b91c1c;
-  --sidebar-border: rgb(0 0 0 / 6%);
+  --sidebar-border: var(--border);
   --sidebar-ring: #dc2626;
 
   --radius: 0.5rem;
-  --corner-cut: 0.625rem;
-  --elevation-xs: 0 1px 2px rgb(0 0 0 / 4%);
-  --elevation-sm: 0 2px 6px rgb(0 0 0 / 6%);
-  --elevation-md: 0 6px 16px rgb(0 0 0 / 8%);
-  --elevation-lg: 0 12px 28px rgb(0 0 0 / 10%);
+
 }
 
 .dark {
@@ -175,7 +171,7 @@
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --border: rgb(255 255 255 / 10%);
-  --input: #202020;
+  --input: #555a60;
   --ring: #ef4444;
   --success: rgb(34 197 94 / 14%);
   --success-foreground: #4ade80;
@@ -195,10 +191,6 @@
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: rgb(255 255 255 / 10%);
   --sidebar-ring: #ef4444;
-  --elevation-xs: 0 1px 2px rgb(0 0 0 / 30%);
-  --elevation-sm: 0 2px 6px rgb(0 0 0 / 35%);
-  --elevation-md: 0 6px 16px rgb(0 0 0 / 40%);
-  --elevation-lg: 0 12px 28px rgb(0 0 0 / 45%);
 }
 
 @layer base {
@@ -216,18 +208,6 @@
   }
 }
 
-@layer utilities {
-  .corner-cut {
-    clip-path: polygon(
-      0 0,
-      calc(100% - var(--corner-cut)) 0,
-      100% var(--corner-cut),
-      100% 100%,
-      var(--corner-cut) 100%,
-      0 calc(100% - var(--corner-cut))
-    );
-  }
-}
 
 /*
  * Direção "Placar": o Pencil usa a altura de linha natural da fonte (~1,21 na Inter).

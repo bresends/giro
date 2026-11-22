@@ -25,7 +25,6 @@ import { AdminChecklistsPage } from "./pages/AdminChecklistsPage";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { DesignSystemButtonPage } from "./pages/DesignSystemButtonPage";
 import { Button } from "@/components/ui/button";
-import { Truck } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 
 export default function App() {
@@ -171,13 +170,13 @@ function LoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-3">
-            <Truck className="w-16 h-16 text-primary" />
+            <img src="/favicon.svg" alt="" className="size-14" />
           </div>
-          <h1 className="text-3xl font-bold mb-2">Giro</h1>
+          <h1 className="font-giro text-3xl font-extrabold tracking-tight mb-2">GIRO</h1>
           <p className="text-muted-foreground">Gestão de Frota CBMGO</p>
         </div>
 
-        <div className="bg-card rounded-lg shadow-lg p-8 border space-y-4">
+        <div className="bg-card rounded-xl p-5 sm:p-8 border space-y-4">
           <Button
             className="w-full"
             variant="outline"
@@ -191,7 +190,7 @@ function LoginPage() {
 
           {authError && (
             <div className="bg-destructive/10 border border-destructive rounded-md p-3">
-              <p className="text-sm text-destructive">{authError}</p>
+              <p role="alert" className="text-sm text-destructive">{authError}</p>
             </div>
           )}
         </div>

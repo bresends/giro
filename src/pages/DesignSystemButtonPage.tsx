@@ -35,7 +35,7 @@ export function DesignSystemButtonPage() {
           <p className="font-condensed text-xs font-bold uppercase tracking-widest text-primary">
             Componente
           </p>
-          <h1 className="font-display text-5xl uppercase">Button</h1>
+          <h1 className="font-display text-5xl uppercase">Botões</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
             Esta página usa diretamente o componente compartilhado em
             <code className="ml-1 font-mono text-xs">
@@ -76,7 +76,7 @@ export function DesignSystemButtonPage() {
                   <div className="flex justify-center" key={size.label}>
                     <Button
                       size={size.icon}
-                      aria-label={`Buscar — ${size.label}`}
+                      aria-label={`Buscar - ${size.label}`}
                     >
                       <Search />
                     </Button>
