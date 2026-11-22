@@ -1,3 +1,4 @@
+import "./admin.css";
 import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
@@ -26,6 +27,7 @@ import {
 } from "@/components/ui/table";
 import { Loading } from "../components/common/Loading";
 import { EditMovementModal } from "../components/guarita/EditMovementModal";
+import { transitState, useNow } from "@/lib/giro";
 import { getVehicleTypeColor } from "@/lib/utils";
 import {
   ArrowLeftRight,
@@ -65,7 +67,14 @@ interface Movement {
   } | null;
 }
 
+const transitBadge = {
+  normal: { style: "bg-giro-neutral text-giro-neutral-foreground", label: "Em trânsito" },
+  warning: { style: "bg-giro-warning text-giro-warning-foreground", label: "Em trânsito há mais de 2 h" },
+  critical: { style: "bg-giro-accent text-white", label: "Em trânsito há 24 h ou mais" },
+};
+
 export function MovementsPage() {
+  const now = useNow();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [vehicleFilter, setVehicleFilter] = useState("all");
@@ -141,8 +150,8 @@ export function MovementsPage() {
 
   const statusOptions = [
     { value: "all", label: "Todos" },
-    { value: "em_transito", label: "Em Transito" },
-    { value: "concluido", label: "Concluido" },
+    { value: "em_transito", label: "Em trânsito" },
+    { value: "concluido", label: "Concluído" },
   ];
 
   function handleEditClick(movement: Movement) {
@@ -175,10 +184,10 @@ export function MovementsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="admin-page space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold">Movimentacoes</h1>
+        <h1 className="text-[1.75rem] leading-tight font-bold tracking-tight">Movimentações</h1>
         <p className="text-muted-foreground mt-1">
           Gerencie e corrija movimentacoes de viaturas
         </p>
@@ -191,18 +200,18 @@ export function MovementsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total</p>
-                <p className="text-2xl font-bold">{totalCount}</p>
+                <p className="font-display text-3xl leading-none tabular-nums">{totalCount}</p>
               </div>
               <ArrowLeftRight className="w-8 h-8 text-muted-foreground" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-orange-500">
+        <Card className="border-l border-l-orange-500">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Em Transito</p>
-                <p className="text-2xl font-bold text-orange-600">
+                <p className="text-sm text-muted-foreground">Em trânsito</p>
+                <p className="font-display text-3xl leading-none tabular-nums text-orange-600">
                   {inTransitCount}
                 </p>
               </div>
@@ -210,12 +219,12 @@ export function MovementsPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l border-l-green-500">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Concluidos</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-sm text-muted-foreground">Concluídos</p>
+                <p className="font-display text-3xl leading-none tabular-nums text-green-600">
                   {completedCount}
                 </p>
               </div>
@@ -224,12 +233,12 @@ export function MovementsPage() {
           </CardContent>
         </Card>
         {anomalyCount > 0 && (
-          <Card className="border-l-4 border-l-red-500">
+          <Card className="border-l border-l-red-500">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">KM Suspeito</p>
-                  <p className="text-2xl font-bold text-red-600">
+                  <p className="font-display text-3xl leading-none tabular-nums text-red-600">
                     {anomalyCount}
                   </p>
                 </div>
@@ -299,7 +308,7 @@ export function MovementsPage() {
       <Card>
         <CardHeader>
           <CardTitle>
-            Movimentacoes{" "}
+            Movimentações{" "}
             {hasFilters ? `(${movements.length} resultados)` : "(ultimas 100)"}
           </CardTitle>
         </CardHeader>
@@ -344,6 +353,7 @@ export function MovementsPage() {
                     });
 
                     const anomalous = isAnomalousKm(movement);
+                    const transit = transitBadge[transitState(now - movement.departureTime)];
 
                     return (
                       <TableRow
@@ -351,9 +361,7 @@ export function MovementsPage() {
                         className={
                           anomalous
                             ? "bg-red-50 dark:bg-red-950/20"
-                            : movement.status === "em_transito"
-                              ? "bg-orange-50 dark:bg-orange-950/20"
-                              : ""
+                            : ""
                         }
                       >
                         <TableCell className="font-medium whitespace-nowrap">
@@ -414,12 +422,12 @@ export function MovementsPage() {
                         </TableCell>
                         <TableCell>
                           {movement.status === "em_transito" ? (
-                            <Badge variant="outline" className="text-orange-600 border-orange-300">
-                              Em Transito
+                            <Badge variant="outline" className={transit.style}>
+                              {transit.label}
                             </Badge>
                           ) : (
                             <Badge variant="outline" className="text-green-600 border-green-300">
-                              Concluido
+                              Concluído
                             </Badge>
                           )}
                         </TableCell>

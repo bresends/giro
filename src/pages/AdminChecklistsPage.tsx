@@ -1,3 +1,4 @@
+import "./admin.css";
 import { useMutation, useQuery } from "convex/react";
 import { useState, useEffect } from "react";
 import { api } from "../../convex/_generated/api";
@@ -239,10 +240,10 @@ export function AdminChecklistsPage() {
 
 
   return (
-    <div className="space-y-6">
+    <div className="admin-page space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Checklists de Viaturas</h1>
+          <h1 className="text-[1.75rem] leading-tight font-bold tracking-tight">Checklists de Viaturas</h1>
           <p className="text-muted-foreground">
             Gerenciamento e controle de conferência de materiais operacionais
           </p>
@@ -290,7 +291,7 @@ export function AdminChecklistsPage() {
       {activeTab === "submissions" && (
         <div className="space-y-6">
           {/* Controls Bar */}
-          <Card className="shadow-xs border-border">
+          <Card className="border-border">
             <CardContent className="p-4 flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-2 w-full md:w-auto">
                 <span className="text-sm font-semibold whitespace-nowrap">Selecione o Dia:</span>
@@ -321,42 +322,42 @@ export function AdminChecklistsPage() {
           {/* Stats Bar */}
           {dailyStatus && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Card className="shadow-xs">
+              <Card className="shadow-none">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div>
                     <p className="text-xs text-muted-foreground font-medium">Total Viaturas</p>
-                    <p className="text-2xl font-bold">{dailyStatus.length}</p>
+                    <p className="font-display text-3xl leading-none tabular-nums">{dailyStatus.length}</p>
                   </div>
-                  <ClipboardList className="w-8 h-8 text-blue-500/20" />
+                  <ClipboardList className="w-8 h-8 text-muted-foreground" />
                 </CardContent>
               </Card>
-              <Card className="shadow-xs">
+              <Card className="shadow-none">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div>
                     <p className="text-xs text-muted-foreground font-medium">Motoristas OK</p>
-                    <p className="text-2xl font-bold">
+                    <p className="font-display text-3xl leading-none tabular-nums">
                       {dailyStatus.filter((s: any) => s.motorista).length} / {dailyStatus.length}
                     </p>
                   </div>
                   <FileCheck2 className="w-8 h-8 text-green-500/20" />
                 </CardContent>
               </Card>
-              <Card className="shadow-xs">
+              <Card className="shadow-none">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div>
                     <p className="text-xs text-muted-foreground font-medium">Comandantes OK</p>
-                    <p className="text-2xl font-bold">
+                    <p className="font-display text-3xl leading-none tabular-nums">
                       {dailyStatus.filter((s: any) => s.comandante).length} / {dailyStatus.length}
                     </p>
                   </div>
                   <FileCheck2 className="w-8 h-8 text-green-500/20" />
                 </CardContent>
               </Card>
-              <Card className="shadow-xs">
+              <Card className="shadow-none">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div>
                     <p className="text-xs text-muted-foreground font-medium">Divergências</p>
-                    <p className="text-2xl font-bold text-red-600">
+                    <p className="font-display text-3xl leading-none tabular-nums text-red-600">
                       {
                         dailyStatus.filter(
                           (s: any) => s.motorista?.hasAlterations || s.comandante?.hasAlterations
@@ -374,7 +375,7 @@ export function AdminChecklistsPage() {
           {dailyStatus === undefined ? (
             <Loading text="Carregando status das viaturas..." />
           ) : dailyStatus.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
+            <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center text-muted-foreground">
               Nenhuma viatura cadastrada no sistema.
             </div>
           ) : (
@@ -386,7 +387,7 @@ export function AdminChecklistsPage() {
                 return (
                   <Card 
                     key={item.operationalFunctionId} 
-                    className={`shadow-xs transition-all border-l-4 ${
+                    className={`transition-colors border-l ${
                       hasAlteration
                         ? "border-l-red-500 bg-red-50/10 dark:bg-red-950/5"
                         : "border-l-border"
@@ -453,7 +454,7 @@ export function AdminChecklistsPage() {
                             {item.motorista.hasAlterations && (
                               <div className="pt-1.5 flex flex-wrap gap-1.5 items-center">
                                 {item.motorista.seiProcessNumber ? (
-                                  <Badge variant="outline" className="text-[10px] bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300">
+                                  <Badge variant="outline" className="text-[10px] bg-giro-neutral text-giro-neutral-foreground">
                                     SEI: {item.motorista.seiProcessNumber}
                                   </Badge>
                                 ) : (
@@ -500,7 +501,7 @@ export function AdminChecklistsPage() {
                             {item.comandante.hasAlterations && (
                               <div className="pt-1.5 flex flex-wrap gap-1.5 items-center">
                                 {item.comandante.seiProcessNumber ? (
-                                  <Badge variant="outline" className="text-[10px] bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300">
+                                  <Badge variant="outline" className="text-[10px] bg-giro-neutral text-giro-neutral-foreground">
                                     SEI: {item.comandante.seiProcessNumber}
                                   </Badge>
                                 ) : (
@@ -531,7 +532,7 @@ export function AdminChecklistsPage() {
       {/* TAB 2: Templates Manager / Modelos */}
       {activeTab === "templates" && (
         <div className="space-y-6">
-          <Card className="shadow-xs border-border">
+          <Card className="border-border">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg">Seleção do Modelo de Materiais</CardTitle>
               <CardDescription>
@@ -588,7 +589,7 @@ export function AdminChecklistsPage() {
           </Card>
 
           {selectedTemplateFunction && selectedTemplateRole ? (
-            <Card className="shadow-xs border-border">
+            <Card className="border-border">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg flex items-center justify-between">
                   <span>Conteúdo da Lista de Materiais</span>
@@ -614,7 +615,7 @@ export function AdminChecklistsPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="text-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
+            <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center text-muted-foreground">
               Selecione a função operacional e o papel acima para visualizar e editar o checklist correspondente.
             </div>
           )}
@@ -702,13 +703,13 @@ export function AdminChecklistsPage() {
           {opFunctions === undefined ? (
             <Loading text="Carregando funções..." />
           ) : opFunctions.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
+            <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center text-muted-foreground">
               Nenhuma função operacional cadastrada. Clique em "Nova Função" para cadastrar.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {opFunctions.map((func: any) => (
-                <Card key={func._id} className="shadow-xs hover:shadow-sm transition-all border-border flex flex-col justify-between">
+                <Card key={func._id} className="transition-colors border-border flex flex-col justify-between">
                   <CardHeader className="pb-3 flex flex-row items-start justify-between space-y-0">
                     <div className="space-y-1">
                       <CardTitle className="text-base font-bold flex flex-wrap items-center gap-2">

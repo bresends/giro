@@ -8,11 +8,11 @@ export function MaintenanceTypeBadge({ type }: MaintenanceTypeBadgeProps) {
   const typeConfig = {
     preventive: {
       label: "Preventiva",
-      className: "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20",
+      className: "bg-giro-neutral text-giro-neutral-foreground",
     },
     corrective: {
       label: "Corretiva",
-      className: "bg-orange-500/10 text-orange-500 hover:bg-orange-500/20",
+      className: "bg-giro-warning text-giro-warning-foreground",
     },
   };
 

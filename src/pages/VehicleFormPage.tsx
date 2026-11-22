@@ -1,3 +1,4 @@
+import "./admin.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
@@ -53,7 +54,7 @@ export function VehicleFormPage() {
 
   if (isEdit && vehicle === null) {
     return (
-      <div className="text-center py-12">
+      <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center">
         <h3 className="text-lg font-medium mb-2">
           Viatura não encontrada
         </h3>
@@ -65,13 +66,13 @@ export function VehicleFormPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="admin-page space-y-6 max-w-3xl">
       <div>
         <Button variant="ghost" size="sm" onClick={handleCancel}>
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar
         </Button>
-        <h1 className="text-3xl font-bold mt-2">
+        <h1 className="text-[1.75rem] leading-tight font-bold tracking-tight mt-2">
           {isEdit ? "Editar Viatura" : "Nova Viatura"}
         </h1>
         <p className="text-muted-foreground">

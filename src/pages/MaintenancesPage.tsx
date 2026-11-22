@@ -1,3 +1,4 @@
+import "./admin.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "convex/react";
@@ -40,11 +41,11 @@ export function MaintenancesPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="admin-page space-y-6">
       {/* Cabeçalho */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold">Manutenções</h1>
+          <h1 className="text-[1.75rem] leading-tight font-bold tracking-tight">Manutenções</h1>
           <p className="text-muted-foreground">
             Gerencie o histórico de manutenções da frota
           </p>
@@ -64,7 +65,7 @@ export function MaintenancesPage() {
                 <p className="text-sm font-medium text-muted-foreground">
                   Total
                 </p>
-                <p className="text-2xl font-bold mt-1">{stats.total}</p>
+                <p className="font-display text-3xl leading-none tabular-nums mt-1">{stats.total}</p>
               </div>
               <div className="p-3 rounded-lg bg-secondary">
                 <Wrench className="w-5 h-5 text-muted-foreground" />
@@ -80,7 +81,7 @@ export function MaintenancesPage() {
                 <p className="text-sm font-medium text-muted-foreground">
                   Aguardando CEMAN
                 </p>
-                <p className="text-2xl font-bold mt-1">{stats.awaitingCeman}</p>
+                <p className="font-display text-3xl leading-none tabular-nums mt-1">{stats.awaitingCeman}</p>
               </div>
               <div className="p-3 rounded-lg bg-secondary">
                 <Calendar className="w-5 h-5 text-blue-500" />
@@ -96,7 +97,7 @@ export function MaintenancesPage() {
                 <p className="text-sm font-medium text-muted-foreground">
                   Em Andamento
                 </p>
-                <p className="text-2xl font-bold mt-1">{stats.inProgress}</p>
+                <p className="font-display text-3xl leading-none tabular-nums mt-1">{stats.inProgress}</p>
               </div>
               <div className="p-3 rounded-lg bg-secondary">
                 <Wrench className="w-5 h-5 text-yellow-500" />
@@ -112,7 +113,7 @@ export function MaintenancesPage() {
                 <p className="text-sm font-medium text-muted-foreground">
                   Concluídas
                 </p>
-                <p className="text-2xl font-bold mt-1">{stats.completed}</p>
+                <p className="font-display text-3xl leading-none tabular-nums mt-1">{stats.completed}</p>
               </div>
               <div className="p-3 rounded-lg bg-secondary">
                 <CheckCircle className="w-5 h-5 text-green-500" />

@@ -21,7 +21,7 @@ interface IssueListProps {
 export function IssueList({ issues }: IssueListProps) {
   if (issues.length === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="rounded-2xl border bg-card px-4 py-12 text-center">
         <AlertTriangle className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
         <h3 className="text-lg font-medium mb-2">
           Nenhum problema encontrado

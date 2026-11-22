@@ -125,9 +125,10 @@ export default function App() {
                   <Route
                     path="/settings"
                     element={
-                      <div className="text-2xl font-bold">
-                        Configurações - Em construção
-                      </div>
+                      <section className="space-y-4">
+                        <h1 className="text-[1.75rem] font-bold tracking-tight">Configurações</h1>
+                        <p className="rounded-2xl border bg-card p-6 text-muted-foreground">Em construção</p>
+                      </section>
                     }
                   />
 

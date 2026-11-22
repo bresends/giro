@@ -1,3 +1,4 @@
+import "./admin.css";
 import { useMutation, useQuery } from "convex/react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -41,7 +42,7 @@ export function IssueDetailPage() {
 
   if (!id) {
     return (
-      <div className="text-center py-12">
+      <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center">
         <p className="text-red-600">ID do problema não fornecido</p>
       </div>
     );
@@ -53,7 +54,7 @@ export function IssueDetailPage() {
 
   if (issue === null) {
     return (
-      <div className="text-center py-12">
+      <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center">
         <h3 className="text-lg font-medium mb-2">Problema não encontrado</h3>
         <Button onClick={() => navigate("/issues")}>Voltar para lista</Button>
       </div>
@@ -61,15 +62,15 @@ export function IssueDetailPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className="admin-page space-y-6 max-w-4xl">
       {/* Cabeçalho */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <Button variant="ghost" size="sm" onClick={() => navigate("/issues")}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
           </Button>
-          <h1 className="text-3xl font-bold mt-2">{issue.title}</h1>
+          <h1 className="text-[1.75rem] leading-tight font-bold tracking-tight mt-2">{issue.title}</h1>
           {issue.vehicle && (
             <p className="text-muted-foreground">
               {issue.vehicle.operationalPrefix} - {issue.vehicle.plate}
