@@ -1450,14 +1450,14 @@ export function DesignSystemPage() {
                         "Default",
                         "",
                         "Placeholder",
-                        "border-border bg-input",
+                        "border-input bg-card",
                         "text-muted-foreground",
                       ],
                       [
                         "Input text",
                         "Input text",
                         "",
-                        "border-border bg-input",
+                        "border-input bg-card",
                         "text-muted-foreground",
                       ],
                       [
@@ -1471,7 +1471,7 @@ export function DesignSystemPage() {
                         "Focus",
                         "Digitando...",
                         "",
-                        "border-ring bg-input ring-2 ring-ring/15",
+                        "border-ring bg-card ring-2 ring-ring/15",
                         "text-primary",
                       ],
                       [
@@ -1521,7 +1521,7 @@ export function DesignSystemPage() {
                       Prefixo da viatura
                     </span>
                     <input
-                      className="h-11 border border-border bg-input px-3 text-sm outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/15"
+                      className="h-11 border border-input bg-card px-3 text-sm outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/15"
                       placeholder="Ex.: UR-214"
                     />
                   </label>
@@ -1531,7 +1531,7 @@ export function DesignSystemPage() {
                     </span>
                     <span className="relative">
                       <select
-                        className="h-11 w-full appearance-none border border-border bg-input px-3 pr-10 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/15"
+                        className="h-11 w-full appearance-none border border-input bg-card px-3 pr-10 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/15"
                         defaultValue=""
                       >
                         <option value="" disabled>
@@ -1548,7 +1548,7 @@ export function DesignSystemPage() {
                       Quilometragem / erro
                     </span>
                     <input
-                      className="h-11 border border-destructive bg-input px-3 font-mono text-sm outline-none focus:ring-2 focus:ring-destructive/15"
+                      className="h-11 border border-destructive bg-card px-3 font-mono text-sm outline-none focus:ring-2 focus:ring-destructive/15"
                       defaultValue="-120"
                       aria-invalid="true"
                     />
@@ -1561,7 +1561,7 @@ export function DesignSystemPage() {
                       Observações
                     </span>
                     <textarea
-                      className="min-h-24 resize-y border border-border bg-input p-3 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/15"
+                      className="min-h-24 resize-y border border-input bg-card p-3 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/15"
                       placeholder="Registre informações relevantes."
                     />
                   </label>
@@ -2625,7 +2625,7 @@ export function DesignSystemPage() {
                     <span className="relative">
                       <Search className="absolute left-3 top-3.5 size-4 text-muted-foreground" />
                       <input
-                        className="h-11 w-full border border-border bg-input pl-10 pr-3 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/15"
+                        className="h-11 w-full border border-input bg-card pl-10 pr-3 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/15"
                         list="vehicle-options"
                         placeholder="Buscar viatura"
                       />
@@ -2788,7 +2788,7 @@ export function DesignSystemPage() {
                         Date picker
                       </span>
                       <input
-                        className="h-11 border border-border bg-input px-3 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/15"
+                        className="h-11 border border-input bg-card px-3 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/15"
                         type="date"
                         defaultValue="2026-07-11"
                       />

@@ -375,7 +375,7 @@ export function AdminChecklistsPage() {
           {dailyStatus === undefined ? (
             <Loading text="Carregando status das viaturas..." />
           ) : dailyStatus.length === 0 ? (
-            <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center text-muted-foreground">
+            <div className="rounded-2xl border bg-card px-4 py-12 text-center text-muted-foreground">
               Nenhuma viatura cadastrada no sistema.
             </div>
           ) : (
@@ -615,7 +615,7 @@ export function AdminChecklistsPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center text-muted-foreground">
+            <div className="rounded-2xl border bg-card px-4 py-12 text-center text-muted-foreground">
               Selecione a função operacional e o papel acima para visualizar e editar o checklist correspondente.
             </div>
           )}
@@ -703,7 +703,7 @@ export function AdminChecklistsPage() {
           {opFunctions === undefined ? (
             <Loading text="Carregando funções..." />
           ) : opFunctions.length === 0 ? (
-            <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center text-muted-foreground">
+            <div className="rounded-2xl border bg-card px-4 py-12 text-center text-muted-foreground">
               Nenhuma função operacional cadastrada. Clique em "Nova Função" para cadastrar.
             </div>
           ) : (

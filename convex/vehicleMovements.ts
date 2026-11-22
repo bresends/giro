@@ -107,6 +107,8 @@ export const listRecent = query({
 export const listInTransit = query({
   args: {},
   handler: async (ctx) => {
+    if (!(await getAuthUserId(ctx))) throw new Error("Autenticação necessária");
+
     const movements = await ctx.db
       .query("vehicleMovements")
       .withIndex("by_status", (q) => q.eq("status", "em_transito"))

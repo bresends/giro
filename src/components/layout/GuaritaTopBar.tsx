@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Movement } from "@/components/guarita/types";
-import { formatDuration, formatTime, initials, transitState } from "@/lib/giro";
+import { formatDuration, transitNote, initials, transitState } from "@/lib/giro";
 import { cn } from "@/lib/utils";
 
 export interface GuaritaTopBarProps {
@@ -21,7 +21,7 @@ export interface GuaritaTopBarProps {
   userLabel: string | null;
   /** Foto do perfil do Google; sem foto (ou se não carregar), mostra as iniciais. */
   userImage?: string | null;
-  review?: boolean;
+  destinations?: { guarita: string; checklist: string; report: string };
   movements?: Movement[];
   now: number;
   onSignOut: () => void;
@@ -54,13 +54,11 @@ function Avatar({ label, image, className }: { label: string | null; image?: str
  * Desktop (lg+): `Guarita · Ícones Gravity UI` → Top Bar.
  * Celular: `Checklist · Mobile` → Top Bar; navegação e "Sair" ficam no menu do avatar.
  */
-export function GuaritaTopBar({ current, userLabel, userImage, movements, now, review = false, onSignOut }: GuaritaTopBarProps) {
+export function GuaritaTopBar({ current, userLabel, userImage, movements, now, destinations = { guarita: "/guarita", checklist: "/checklist", report: "/guarita/relatorio" }, onSignOut }: GuaritaTopBarProps) {
   const alerts = movements?.filter(m => transitState(now - m.departureTime) !== "normal")
     .sort((a, b) => a.departureTime - b.departureTime);
   const isChecklist = current === "checklist";
-  const guarita = review ? "/design-review/guarita" : "/guarita";
-  const checklist = review ? "/design-review/checklist-1" : "/checklist";
-  const report = review ? "/design-review/relatorio" : "/guarita/relatorio";
+  const { guarita, checklist, report } = destinations;
   const section = isChecklist ? "Checklist" : "Guarita";
   const role = isChecklist ? "Checklist de viatura" : "Plantão da guarita";
   const other = isChecklist
@@ -79,7 +77,7 @@ export function GuaritaTopBar({ current, userLabel, userImage, movements, now, r
           <span className="truncate text-sm text-giro-muted">{section}{!isChecklist && <span className="hidden lg:inline"> · 1º Batalhão Bombeiro Militar</span>}</span>
         </div>
         <nav aria-label="Principal" className="flex items-center gap-4">
-          <DropdownMenu>
+          {movements !== undefined && <DropdownMenu>
             <DropdownMenuTrigger aria-label={alerts?.length ? `Alertas, ${alerts.length} ativos` : "Alertas"} className="relative hidden size-9 items-center justify-center rounded-full text-giro-muted hover:bg-giro-default focus-visible:outline-2 focus-visible:outline-giro-accent lg:flex">
               <Bell className="size-[18px]" />
               {!!alerts?.length && <span className="absolute top-2 right-2 size-2 rounded-full bg-giro-accent ring-1 ring-white" />}
@@ -89,12 +87,12 @@ export function GuaritaTopBar({ current, userLabel, userImage, movements, now, r
               {alerts?.length ? <ul className="divide-y divide-giro-separator">{alerts.map((movement) => (
                 <li key={movement._id} className="px-2 py-2 text-sm">
                   <strong>{movement.vehicle?.operationalPrefix ?? "Viatura"} · fora há {formatDuration(now - movement.departureTime)}</strong>
-                  <p>{transitState(now - movement.departureTime) === "critical" ? "Provável esquecimento" : "Acima de 2h"} · saiu {formatTime(movement.departureTime)}</p>
+                  <p>{transitNote(transitState(now - movement.departureTime), movement.departureTime)}</p>
                 </li>
               ))}</ul> : <p className="px-2 py-2 text-sm text-giro-muted">{alerts ? "Nenhum alerta ativo." : "Carregando alertas..."}</p>}
               <DropdownMenuItem asChild><Link to={guarita + "#em-transito-titulo"} onClick={() => document.getElementById("em-transito-titulo")?.scrollIntoView()}>Ver em trânsito</Link></DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu>}
           <DropdownMenu>
             <DropdownMenuTrigger aria-label="Menu do usuário" className="flex items-center gap-2.5 rounded-full text-left focus-visible:outline-2 focus-visible:outline-giro-accent">
               <Avatar label={userLabel} image={userImage} className="bg-giro-default font-bold text-giro-fg" />

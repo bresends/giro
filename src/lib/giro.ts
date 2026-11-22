@@ -133,3 +133,9 @@ export function initials(text?: string | null) {
   }
   return base.slice(0, 2).toUpperCase();
 }
+
+export function transitNote(state: TransitState, departureTime: number) {
+  if (state === "critical") return `Provável esquecimento · saiu ${formatDayMonth(departureTime)}`;
+  if (state === "warning") return `Acima de 2h · saiu ${formatTime(departureTime)}`;
+  return `saiu ${formatTime(departureTime)}`;
+}

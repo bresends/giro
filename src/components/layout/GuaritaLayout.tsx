@@ -13,7 +13,7 @@ interface GuaritaLayoutProps {
 export function GuaritaLayout({ children }: GuaritaLayoutProps) {
   const { signOut } = useAuthActions();
   const location = useLocation();
-  const movements = useQuery(api.vehicleMovements.listInTransit);
+  const movements = useQuery(api.vehicleMovements.listInTransit, location.pathname === "/guarita" ? {} : "skip");
   const now = useNow();
   const viewer = useQuery(api.users.viewer);
 

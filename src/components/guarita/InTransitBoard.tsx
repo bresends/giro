@@ -5,9 +5,8 @@ import { GiroButton } from "@/components/giro/giro-button";
 import { VehicleIllustration } from "@/components/giro/VehicleIllustration";
 import {
   destinationTypeLabel,
-  formatDayMonth,
+  transitNote,
   formatDuration,
-  formatTime,
   transitState,
   type TransitState,
 } from "@/lib/giro";
@@ -40,12 +39,6 @@ const TILE_STYLES: Record<
     button: "onState",
   },
 };
-
-function stateNote(state: TransitState, departureTime: number) {
-  if (state === "critical") return `Provável esquecimento · saiu ${formatDayMonth(departureTime)}`;
-  if (state === "warning") return `Acima de 2h · saiu ${formatTime(departureTime)}`;
-  return `saiu ${formatTime(departureTime)}`;
-}
 
 export function InTransitBoard({
   movements,
@@ -132,7 +125,7 @@ export function InTransitBoard({
                       {formatDuration(elapsed)}
                     </span>
                     <span className={cn("w-[172px] text-xs", s.sub)}>
-                      {stateNote(state, movement.departureTime)}
+                      {transitNote(state, movement.departureTime)}
                     </span>
                   </div>
                   <VehicleIllustration type={movement.vehicle?.type} />
