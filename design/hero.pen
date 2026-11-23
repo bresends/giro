@@ -1,5 +1,5 @@
 {
-  "version": "2.20",
+  "version": "2.25",
   "children": [
     {
       "type": "frame",
@@ -40263,6 +40263,956 @@
                       ]
                     }
                   ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "jItJK",
+      "x": -1519,
+      "y": 4729,
+      "name": "Login · 01 · Garagem",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "#FFFFFF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "rectangle",
+          "id": "J07tN6",
+          "x": 600,
+          "y": 0,
+          "name": "Parede da garagem",
+          "fill": "#DFE5E7",
+          "width": 840,
+          "height": 900
+        },
+        {
+          "type": "rectangle",
+          "id": "O71An",
+          "x": 600,
+          "y": 692,
+          "name": "Faixa de sinalização",
+          "fill": "#F3BA21",
+          "width": 840,
+          "height": 7
+        },
+        {
+          "type": "rectangle",
+          "id": "f4YFn",
+          "x": 600,
+          "y": 699,
+          "name": "Piso",
+          "fill": "#CFD7DA",
+          "width": 840,
+          "height": 201
+        },
+        {
+          "type": "text",
+          "id": "Oocug",
+          "x": 663,
+          "y": 110,
+          "name": "Identificação da viatura",
+          "fill": "#C5CED2",
+          "content": "ABTS",
+          "fontFamily": "Bebas Neue",
+          "fontSize": 195,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "rectangle",
+          "id": "uI1Vp",
+          "x": 597,
+          "y": 235,
+          "name": "Autobomba do CBMGO",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "assets/viaturas-realistas/abts-fenix-cbmgo.png",
+            "mode": "contain"
+          },
+          "width": 844,
+          "height": 540
+        },
+        {
+          "type": "frame",
+          "id": "M7GBVi",
+          "x": 72,
+          "y": 62,
+          "name": "Mark",
+          "width": 28,
+          "height": 28,
+          "fill": "#DC2626",
+          "cornerRadius": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "Vguyk",
+              "name": "Símbolo 2C·7",
+              "width": 22,
+              "height": 22,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "path",
+                  "id": "HwxJq",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Rota (G)",
+                  "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                  "viewBox": [
+                    0,
+                    0,
+                    100,
+                    100
+                  ],
+                  "width": 22,
+                  "height": 22,
+                  "stroke": "#FFFFFF",
+                  "strokeWidth": 4.4,
+                  "strokeLinecap": "round"
+                },
+                {
+                  "type": "path",
+                  "id": "JVPq0",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Base (luz)",
+                  "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                  "viewBox": [
+                    0,
+                    0,
+                    100,
+                    100
+                  ],
+                  "fill": "$giro-warning",
+                  "width": 22,
+                  "height": 22
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "SIaiN",
+          "x": 110,
+          "y": 60,
+          "name": "Assinatura GIRO",
+          "fill": "#192023",
+          "content": "GIRO",
+          "fontFamily": "Inter",
+          "fontSize": 26,
+          "fontWeight": "800"
+        },
+        {
+          "type": "text",
+          "id": "BftCd",
+          "x": 72,
+          "y": 282,
+          "name": "Identificação",
+          "fill": "#A51D23",
+          "content": "CBMGO  /  FROTA",
+          "fontFamily": "Barlow Condensed",
+          "fontSize": 15,
+          "fontWeight": "600"
+        },
+        {
+          "type": "text",
+          "id": "X9UxjI",
+          "x": 69,
+          "y": 325,
+          "name": "Título",
+          "fill": "#182023",
+          "content": "Acesso à frota",
+          "fontFamily": "Inter",
+          "fontSize": 58,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "XbadT",
+          "x": 72,
+          "y": 416,
+          "name": "Orientação",
+          "fill": "#536168",
+          "content": "Entre com sua conta Google para acessar o GIRO.",
+          "fontFamily": "Inter",
+          "fontSize": 17,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "i2kcyN",
+          "x": 72,
+          "y": 491,
+          "name": "Entrar com Google",
+          "width": 442,
+          "height": 58,
+          "fill": "#FFFFFF",
+          "cornerRadius": 14,
+          "stroke": "#BBC3C8",
+          "strokeWidth": 1,
+          "layout": "none",
+          "children": [
+            {
+              "type": "path",
+              "id": "p4BOXL",
+              "x": 132,
+              "y": 17,
+              "name": "Símbolo Google",
+              "geometry": "M23.49 12.27c0-0.79-0.07-1.54-0.19-2.27h-11.3v4.51h6.47c-0.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z",
+              "viewBox": [
+                0,
+                0,
+                24,
+                24
+              ],
+              "fill": "#4285F4",
+              "width": 24,
+              "height": 24
+            },
+            {
+              "type": "path",
+              "id": "fZn4F",
+              "x": 132,
+              "y": 17,
+              "name": "Símbolo Google",
+              "geometry": "M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08 0.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09c1.97 3.92 6.02 6.62 10.71 6.62z",
+              "viewBox": [
+                0,
+                0,
+                24,
+                24
+              ],
+              "fill": "#34A853",
+              "width": 24,
+              "height": 24
+            },
+            {
+              "type": "path",
+              "id": "y7t2M",
+              "x": 132,
+              "y": 17,
+              "name": "Símbolo Google",
+              "geometry": "M5.27 14.29c-0.25-0.72-0.38-1.49-0.38-2.29s0.14-1.57 0.38-2.29v-3.09h-3.98c-0.82 1.62-1.29 3.44-1.29 5.38s0.47 3.76 1.29 5.38l3.98-3.09z",
+              "viewBox": [
+                0,
+                0,
+                24,
+                24
+              ],
+              "fill": "#FBBC05",
+              "width": 24,
+              "height": 24
+            },
+            {
+              "type": "path",
+              "id": "ZjG3n",
+              "x": 132,
+              "y": 17,
+              "name": "Símbolo Google",
+              "geometry": "M12 4.75c1.77 0 3.35 0.61 4.6 1.8l3.42-3.42c-2.07-1.94-4.78-3.13-8.02-3.13-4.69 0-8.74 2.7-10.71 6.62l3.98 3.09c0.95-2.85 3.6-4.96 6.73-4.96z",
+              "viewBox": [
+                0,
+                0,
+                24,
+                24
+              ],
+              "fill": "#EA4335",
+              "width": 24,
+              "height": 24
+            },
+            {
+              "type": "text",
+              "id": "QMzBr",
+              "x": 168,
+              "y": 18,
+              "name": "Ação",
+              "fill": "#182023",
+              "content": "Entrar com Google",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "uHodL",
+          "x": 72,
+          "y": 818,
+          "name": "Instituição",
+          "fill": "#576267",
+          "content": "Corpo de Bombeiros Militar do Estado de Goiás",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Aquas",
+      "x": -15,
+      "y": 4729,
+      "name": "Login · 02 · Identidade",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "#A8161C",
+      "layout": "none",
+      "children": [
+        {
+          "type": "rectangle",
+          "id": "EUhD2",
+          "x": 0,
+          "y": 552,
+          "name": "Área de acesso",
+          "fill": "#FAFAF7",
+          "width": 1440,
+          "height": 348
+        },
+        {
+          "type": "frame",
+          "id": "I43Qn",
+          "x": 70,
+          "y": 53,
+          "name": "Mark",
+          "width": 28,
+          "height": 28,
+          "fill": "#DC2626",
+          "cornerRadius": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "a1Zz0",
+              "name": "Símbolo 2C·7",
+              "width": 22,
+              "height": 22,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "path",
+                  "id": "k3Zlu",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Rota (G)",
+                  "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                  "viewBox": [
+                    0,
+                    0,
+                    100,
+                    100
+                  ],
+                  "width": 22,
+                  "height": 22,
+                  "stroke": "#FFFFFF",
+                  "strokeWidth": 4.4,
+                  "strokeLinecap": "round"
+                },
+                {
+                  "type": "path",
+                  "id": "MBgJ1",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Base (luz)",
+                  "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                  "viewBox": [
+                    0,
+                    0,
+                    100,
+                    100
+                  ],
+                  "fill": "$giro-warning",
+                  "width": 22,
+                  "height": 22
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "KaHQX",
+          "x": 108,
+          "y": 51,
+          "name": "Assinatura GIRO",
+          "fill": "#FFFFFF",
+          "content": "GIRO",
+          "fontFamily": "Inter",
+          "fontSize": 26,
+          "fontWeight": "800"
+        },
+        {
+          "type": "text",
+          "id": "Gd0FZ",
+          "x": 1250,
+          "y": 52,
+          "name": "Instituição",
+          "fill": "#FFFFFF",
+          "content": "CBMGO",
+          "fontFamily": "Barlow Condensed",
+          "fontSize": 25,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "TfMW7",
+          "x": 56,
+          "y": 110,
+          "name": "Nome do sistema",
+          "fill": "#FFFFFF",
+          "content": "GIRO",
+          "fontFamily": "Bebas Neue",
+          "fontSize": 286,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "rectangle",
+          "id": "GwZ5U",
+          "x": 590,
+          "y": 42,
+          "name": "Viatura de resgate",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "assets/viaturas-realistas/ur.png",
+            "mode": "contain"
+          },
+          "width": 785,
+          "height": 494
+        },
+        {
+          "type": "text",
+          "id": "Y05iwE",
+          "x": 75,
+          "y": 628,
+          "name": "Função",
+          "fill": "#1A2022",
+          "content": "Gestão de frota",
+          "fontFamily": "Inter",
+          "fontSize": 57,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "bm4fX",
+          "x": 77,
+          "y": 718,
+          "name": "Instituição por extenso",
+          "fill": "#556268",
+          "content": "Corpo de Bombeiros Militar do Estado de Goiás",
+          "fontFamily": "Inter",
+          "fontSize": 19,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "G6uxVL",
+          "x": 902,
+          "y": 657,
+          "name": "Entrar com Google",
+          "width": 443,
+          "height": 58,
+          "fill": "#FFFFFF",
+          "cornerRadius": 14,
+          "stroke": "#BBC3C8",
+          "strokeWidth": 1,
+          "layout": "none",
+          "children": [
+            {
+              "type": "path",
+              "id": "p5E7Fz",
+              "x": 132.5,
+              "y": 17,
+              "name": "Símbolo Google",
+              "geometry": "M23.49 12.27c0-0.79-0.07-1.54-0.19-2.27h-11.3v4.51h6.47c-0.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z",
+              "viewBox": [
+                0,
+                0,
+                24,
+                24
+              ],
+              "fill": "#4285F4",
+              "width": 24,
+              "height": 24
+            },
+            {
+              "type": "path",
+              "id": "aPLqq",
+              "x": 132.5,
+              "y": 17,
+              "name": "Símbolo Google",
+              "geometry": "M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08 0.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09c1.97 3.92 6.02 6.62 10.71 6.62z",
+              "viewBox": [
+                0,
+                0,
+                24,
+                24
+              ],
+              "fill": "#34A853",
+              "width": 24,
+              "height": 24
+            },
+            {
+              "type": "path",
+              "id": "lb8RK",
+              "x": 132.5,
+              "y": 17,
+              "name": "Símbolo Google",
+              "geometry": "M5.27 14.29c-0.25-0.72-0.38-1.49-0.38-2.29s0.14-1.57 0.38-2.29v-3.09h-3.98c-0.82 1.62-1.29 3.44-1.29 5.38s0.47 3.76 1.29 5.38l3.98-3.09z",
+              "viewBox": [
+                0,
+                0,
+                24,
+                24
+              ],
+              "fill": "#FBBC05",
+              "width": 24,
+              "height": 24
+            },
+            {
+              "type": "path",
+              "id": "nyPWb",
+              "x": 132.5,
+              "y": 17,
+              "name": "Símbolo Google",
+              "geometry": "M12 4.75c1.77 0 3.35 0.61 4.6 1.8l3.42-3.42c-2.07-1.94-4.78-3.13-8.02-3.13-4.69 0-8.74 2.7-10.71 6.62l3.98 3.09c0.95-2.85 3.6-4.96 6.73-4.96z",
+              "viewBox": [
+                0,
+                0,
+                24,
+                24
+              ],
+              "fill": "#EA4335",
+              "width": 24,
+              "height": 24
+            },
+            {
+              "type": "text",
+              "id": "CgIt8",
+              "x": 168.5,
+              "y": 18,
+              "name": "Ação",
+              "fill": "#182023",
+              "content": "Entrar com Google",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "600"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "DkBu4",
+      "x": 1489,
+      "y": 4729,
+      "name": "Login · 03 · Pátio noturno",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "#172126",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "M1zLH",
+          "x": 68,
+          "y": 54,
+          "name": "Mark",
+          "width": 28,
+          "height": 28,
+          "fill": "#DC2626",
+          "cornerRadius": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "qFVOD",
+              "name": "Símbolo 2C·7",
+              "width": 22,
+              "height": 22,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "path",
+                  "id": "PHRWD",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Rota (G)",
+                  "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                  "viewBox": [
+                    0,
+                    0,
+                    100,
+                    100
+                  ],
+                  "width": 22,
+                  "height": 22,
+                  "stroke": "#FFFFFF",
+                  "strokeWidth": 4.4,
+                  "strokeLinecap": "round"
+                },
+                {
+                  "type": "path",
+                  "id": "PRTHj",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Base (luz)",
+                  "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                  "viewBox": [
+                    0,
+                    0,
+                    100,
+                    100
+                  ],
+                  "fill": "$giro-warning",
+                  "width": 22,
+                  "height": 22
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "A7uRon",
+          "x": 106,
+          "y": 52,
+          "name": "Assinatura GIRO",
+          "fill": "#FFFFFF",
+          "content": "GIRO",
+          "fontFamily": "Inter",
+          "fontSize": 26,
+          "fontWeight": "800"
+        },
+        {
+          "type": "text",
+          "id": "dg7Iz",
+          "x": 955,
+          "y": 60,
+          "name": "Instituição",
+          "fill": "#CFD9DC",
+          "content": "CORPO DE BOMBEIROS MILITAR DE GOIÁS",
+          "fontFamily": "Barlow Condensed",
+          "fontSize": 17,
+          "fontWeight": "600"
+        },
+        {
+          "type": "rectangle",
+          "id": "z243yi",
+          "x": 0,
+          "y": 650,
+          "name": "Plano de fundo do pátio",
+          "fill": "#202F36",
+          "width": 1440,
+          "height": 250
+        },
+        {
+          "type": "rectangle",
+          "id": "u4z9B",
+          "x": 96,
+          "y": 706,
+          "name": "Demarcação de vaga",
+          "fill": "#415159",
+          "width": 3,
+          "height": 119
+        },
+        {
+          "type": "rectangle",
+          "id": "E8M7U",
+          "x": 386,
+          "y": 706,
+          "name": "Demarcação de vaga",
+          "fill": "#415159",
+          "width": 3,
+          "height": 119
+        },
+        {
+          "type": "rectangle",
+          "id": "Q0Beo",
+          "x": 676,
+          "y": 706,
+          "name": "Demarcação de vaga",
+          "fill": "#415159",
+          "width": 3,
+          "height": 119
+        },
+        {
+          "type": "rectangle",
+          "id": "fPvXL",
+          "x": 966,
+          "y": 706,
+          "name": "Demarcação de vaga",
+          "fill": "#415159",
+          "width": 3,
+          "height": 119
+        },
+        {
+          "type": "rectangle",
+          "id": "c9ueEZ",
+          "x": 1256,
+          "y": 706,
+          "name": "Demarcação de vaga",
+          "fill": "#415159",
+          "width": 3,
+          "height": 119
+        },
+        {
+          "type": "rectangle",
+          "id": "rtr56",
+          "x": 64,
+          "y": 820,
+          "name": "Linha de estacionamento",
+          "fill": "#415159",
+          "width": 1312,
+          "height": 3
+        },
+        {
+          "type": "rectangle",
+          "id": "Y91aXy",
+          "x": 6,
+          "y": 450,
+          "name": "Viatura de vistoria",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "assets/viaturas-realistas/vistoria.png",
+            "mode": "contain"
+          },
+          "width": 460,
+          "height": 302
+        },
+        {
+          "type": "rectangle",
+          "id": "s8kqRS",
+          "x": 953,
+          "y": 440,
+          "name": "Viatura de resgate",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "assets/viaturas-realistas/ur.png",
+            "mode": "contain"
+          },
+          "width": 486,
+          "height": 319
+        },
+        {
+          "type": "frame",
+          "id": "n9RQQ9",
+          "x": 467,
+          "y": 211,
+          "name": "Painel de acesso",
+          "width": 506,
+          "height": 463,
+          "fill": "#F9FAF8",
+          "cornerRadius": 26,
+          "layout": "none",
+          "children": [
+            {
+              "type": "frame",
+              "id": "n8c4k",
+              "x": 49,
+              "y": 46,
+              "name": "Mark",
+              "width": 28,
+              "height": 28,
+              "fill": "#DC2626",
+              "cornerRadius": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "fAXiU",
+                  "name": "Símbolo 2C·7",
+                  "width": 22,
+                  "height": 22,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "path",
+                      "id": "Zkzjy",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Rota (G)",
+                      "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                      "viewBox": [
+                        0,
+                        0,
+                        100,
+                        100
+                      ],
+                      "width": 22,
+                      "height": 22,
+                      "stroke": "#FFFFFF",
+                      "strokeWidth": 4.4,
+                      "strokeLinecap": "round"
+                    },
+                    {
+                      "type": "path",
+                      "id": "DFoE0",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Base (luz)",
+                      "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                      "viewBox": [
+                        0,
+                        0,
+                        100,
+                        100
+                      ],
+                      "fill": "$giro-warning",
+                      "width": 22,
+                      "height": 22
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "kbFm5",
+              "x": 49,
+              "y": 111,
+              "name": "Sistema",
+              "fill": "#596467",
+              "content": "GIRO  /  CBMGO",
+              "fontFamily": "Barlow Condensed",
+              "fontSize": 15,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "soTg4",
+              "x": 46,
+              "y": 154,
+              "name": "Título",
+              "fill": "#192126",
+              "content": "Acessar o GIRO",
+              "fontFamily": "Inter",
+              "fontSize": 48,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "mg6Qi",
+              "x": 49,
+              "y": 233,
+              "name": "Função",
+              "fill": "#506068",
+              "content": "Gestão de frota",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "X6nI6",
+              "x": 49,
+              "y": 328,
+              "name": "Entrar com Google",
+              "width": 408,
+              "height": 58,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "stroke": "#BBC3C8",
+              "strokeWidth": 1,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "path",
+                  "id": "n38KN7",
+                  "x": 115,
+                  "y": 17,
+                  "name": "Símbolo Google",
+                  "geometry": "M23.49 12.27c0-0.79-0.07-1.54-0.19-2.27h-11.3v4.51h6.47c-0.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z",
+                  "viewBox": [
+                    0,
+                    0,
+                    24,
+                    24
+                  ],
+                  "fill": "#4285F4",
+                  "width": 24,
+                  "height": 24
+                },
+                {
+                  "type": "path",
+                  "id": "A2bg2",
+                  "x": 115,
+                  "y": 17,
+                  "name": "Símbolo Google",
+                  "geometry": "M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08 0.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09c1.97 3.92 6.02 6.62 10.71 6.62z",
+                  "viewBox": [
+                    0,
+                    0,
+                    24,
+                    24
+                  ],
+                  "fill": "#34A853",
+                  "width": 24,
+                  "height": 24
+                },
+                {
+                  "type": "path",
+                  "id": "wWyfP",
+                  "x": 115,
+                  "y": 17,
+                  "name": "Símbolo Google",
+                  "geometry": "M5.27 14.29c-0.25-0.72-0.38-1.49-0.38-2.29s0.14-1.57 0.38-2.29v-3.09h-3.98c-0.82 1.62-1.29 3.44-1.29 5.38s0.47 3.76 1.29 5.38l3.98-3.09z",
+                  "viewBox": [
+                    0,
+                    0,
+                    24,
+                    24
+                  ],
+                  "fill": "#FBBC05",
+                  "width": 24,
+                  "height": 24
+                },
+                {
+                  "type": "path",
+                  "id": "y4zMFV",
+                  "x": 115,
+                  "y": 17,
+                  "name": "Símbolo Google",
+                  "geometry": "M12 4.75c1.77 0 3.35 0.61 4.6 1.8l3.42-3.42c-2.07-1.94-4.78-3.13-8.02-3.13-4.69 0-8.74 2.7-10.71 6.62l3.98 3.09c0.95-2.85 3.6-4.96 6.73-4.96z",
+                  "viewBox": [
+                    0,
+                    0,
+                    24,
+                    24
+                  ],
+                  "fill": "#EA4335",
+                  "width": 24,
+                  "height": 24
+                },
+                {
+                  "type": "text",
+                  "id": "RNtdR",
+                  "x": 151,
+                  "y": 18,
+                  "name": "Ação",
+                  "fill": "#182023",
+                  "content": "Entrar com Google",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "600"
                 }
               ]
             }
