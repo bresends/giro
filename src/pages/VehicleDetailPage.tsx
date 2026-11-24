@@ -1,3 +1,4 @@
+import "./admin.css";
 import { useMutation, useQuery } from "convex/react";
 import {
   AlertTriangle,
@@ -55,7 +56,7 @@ export function VehicleDetailPage() {
 
   if (!id) {
     return (
-      <div className="text-center py-12">
+      <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center">
         <p className="text-red-600">ID da viatura não fornecido</p>
       </div>
     );
@@ -67,7 +68,7 @@ export function VehicleDetailPage() {
 
   if (vehicle === null) {
     return (
-      <div className="text-center py-12">
+      <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center">
         <h3 className="text-lg font-medium mb-2">Viatura não encontrada</h3>
         <Button onClick={() => navigate("/vehicles")}>Voltar para lista</Button>
       </div>
@@ -75,9 +76,9 @@ export function VehicleDetailPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className="admin-page space-y-6 max-w-4xl">
       {/* Cabeçalho */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <Button
             variant="ghost"
@@ -87,7 +88,7 @@ export function VehicleDetailPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
           </Button>
-          <h1 className="text-3xl font-bold mt-2">
+          <h1 className="text-giro-heading leading-tight font-bold tracking-tight mt-2">
             {vehicle.operationalPrefix}
           </h1>
           <p className="text-muted-foreground">{vehicle.type?.description}</p>
@@ -205,7 +206,7 @@ export function VehicleDetailPage() {
               <p className="text-sm text-muted-foreground mb-1">
                 Quilometragem Atual
               </p>
-              <p className="text-2xl font-bold">
+              <p className="font-display text-3xl leading-none tabular-nums">
                 {new Intl.NumberFormat("pt-BR").format(vehicle.currentKm)} km
               </p>
             </div>

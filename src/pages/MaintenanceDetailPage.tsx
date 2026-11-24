@@ -1,3 +1,4 @@
+import "./admin.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
@@ -43,7 +44,7 @@ export function MaintenanceDetailPage() {
 
   if (!id) {
     return (
-      <div className="text-center py-12">
+      <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center">
         <p className="text-red-600">ID da manutenção não fornecido</p>
       </div>
     );
@@ -55,7 +56,7 @@ export function MaintenanceDetailPage() {
 
   if (maintenance === null) {
     return (
-      <div className="text-center py-12">
+      <div className="admin-page rounded-2xl border bg-card px-4 py-12 text-center">
         <h3 className="text-lg font-medium mb-2">Manutenção não encontrada</h3>
         <Button onClick={() => navigate("/maintenance")}>
           Voltar para lista
@@ -65,9 +66,9 @@ export function MaintenanceDetailPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className="admin-page space-y-6 max-w-4xl">
       {/* Cabeçalho */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <Button
             variant="ghost"
@@ -77,7 +78,7 @@ export function MaintenanceDetailPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
           </Button>
-          <h1 className="text-3xl font-bold mt-2">
+          <h1 className="text-giro-heading leading-tight font-bold tracking-tight mt-2">
             Manutenção - {maintenance.vehicle.operationalPrefix}
           </h1>
           <p className="text-muted-foreground">

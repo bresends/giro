@@ -30,7 +30,7 @@ interface MaintenanceListProps {
 export function MaintenanceList({ maintenances }: MaintenanceListProps) {
   if (maintenances.length === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="rounded-2xl border bg-card px-4 py-12 text-center">
         <Wrench className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
         <h3 className="text-lg font-medium mb-2">
           Nenhuma manutenção encontrada

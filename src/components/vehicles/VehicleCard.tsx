@@ -27,12 +27,12 @@ interface VehicleCardProps {
 
 export function VehicleCard({ vehicle }: VehicleCardProps) {
   return (
-    <Link to={`/vehicles/${vehicle._id}`}>
-      <Card className="hover:shadow-md transition cursor-pointer h-full">
+    <Link className="block rounded-2xl" to={`/vehicles/${vehicle._id}`}>
+      <Card className="h-full shadow-none transition-colors hover:border-ring">
         <CardContent className="p-4">
           <div className="flex items-start justify-between mb-3">
             <div>
-              <h3 className="text-lg font-bold">
+              <h3 className="font-display text-2xl leading-none">
                 {vehicle.operationalPrefix}
               </h3>
               <p className="text-sm text-muted-foreground">

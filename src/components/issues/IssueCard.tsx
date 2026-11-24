@@ -22,8 +22,8 @@ interface IssueCardProps {
 
 export function IssueCard({ issue }: IssueCardProps) {
   return (
-    <Link to={`/issues/${issue._id}`}>
-      <Card className="hover:shadow-md transition cursor-pointer h-full">
+    <Link className="block rounded-2xl" to={`/issues/${issue._id}`}>
+      <Card className="h-full shadow-none transition-colors hover:border-ring">
         <CardContent className="p-4">
           <div className="flex items-start justify-between mb-3">
             <div className="flex-1">

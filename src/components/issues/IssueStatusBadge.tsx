@@ -10,22 +10,22 @@ export function IssueStatusBadge({ status }: IssueStatusBadgeProps) {
     open: {
       label: "Aberto",
       icon: AlertCircle,
-      className: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+      className: "bg-giro-accent-soft text-giro-accent-soft-foreground",
     },
     in_progress: {
       label: "Em Andamento",
       icon: Clock,
-      className: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+      className: "bg-giro-neutral text-giro-neutral-foreground",
     },
     resolved: {
       label: "Resolvido",
       icon: CheckCircle,
-      className: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+      className: "bg-giro-success-soft text-giro-success-soft-foreground",
     },
     closed: {
       label: "Fechado",
       icon: XCircle,
-      className: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200",
+      className: "bg-giro-neutral text-giro-neutral-foreground",
     },
   };
 

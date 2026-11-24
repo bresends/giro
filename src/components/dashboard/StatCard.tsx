@@ -21,8 +21,8 @@ export function StatCard({
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <p className="text-3xl font-bold mt-2">{value}</p>
+            <p className="font-condensed text-sm font-semibold text-muted-foreground">{title}</p>
+            <p className="font-display text-4xl leading-none tabular-nums mt-2">{value}</p>
             {subtitle && (
               <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
             )}

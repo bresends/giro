@@ -1,3 +1,4 @@
+import "./admin.css";
 import { useQuery } from "convex/react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../convex/_generated/api";
@@ -21,9 +22,9 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="admin-page space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <h1 className="text-giro-heading leading-tight font-bold tracking-tight">Dashboard</h1>
         <p className="text-muted-foreground">
           Visão geral da frota
         </p>
@@ -35,7 +36,7 @@ export function DashboardPage() {
           title="Total de Viaturas"
           value={stats.total}
           icon={Truck}
-          iconColor="text-blue-500"
+          iconColor="text-muted-foreground"
         />
         <StatCard
           title="Ativas"
@@ -56,7 +57,7 @@ export function DashboardPage() {
           value={stats.operational}
           subtitle={`${stats.backup} em backup`}
           icon={Briefcase}
-          iconColor="text-blue-600"
+          iconColor="text-muted-foreground"
         />
         <StatCard
           title="Alertas"
@@ -68,19 +69,19 @@ export function DashboardPage() {
       </div>
 
       {/* Acesso ao Sistema Guarita */}
-      <Card className="border-blue-200 dark:border-blue-800 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
+      <Card>
         <CardContent className="p-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg">
-                <ShieldCheck className="w-8 h-8 text-white" />
+              <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center">
+                <ShieldCheck className="w-8 h-8 text-foreground" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-blue-900 dark:text-blue-100 flex items-center gap-2">
+                <h3 className="text-xl font-bold flex items-center gap-2">
                   Sistema Guarita
                   <ExternalLink className="w-4 h-4" />
                 </h3>
-                <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   Controle de saídas e chegadas de viaturas
                 </p>
               </div>
@@ -88,7 +89,6 @@ export function DashboardPage() {
             <Button
               size="lg"
               onClick={() => navigate("/guarita")}
-              className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
             >
               <ShieldCheck className="w-5 h-5 mr-2" />
               Acessar Guarita

@@ -1,3 +1,4 @@
+import "./admin.css";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Button } from "@/components/ui/button";
@@ -27,10 +28,10 @@ export function IssuesPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="admin-page space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold">Problemas</h1>
+          <h1 className="text-giro-heading leading-tight font-bold tracking-tight">Problemas</h1>
           <p className="text-muted-foreground">
             Gerencie os problemas e defeitos da frota
           </p>
@@ -42,8 +43,8 @@ export function IssuesPage() {
       </div>
 
       {/* Filtros */}
-      <div className="flex gap-4 items-end">
-        <div className="w-64">
+      <div className="flex flex-wrap gap-4 items-end rounded-2xl border bg-card p-4">
+        <div className="w-full sm:w-64">
           <SimpleSelect
             label="Status"
             value={statusFilter}
@@ -58,7 +59,7 @@ export function IssuesPage() {
           />
         </div>
 
-        <div className="w-64">
+        <div className="w-full sm:w-64">
           <SimpleSelect
             label="Gravidade"
             value={severityFilter}
