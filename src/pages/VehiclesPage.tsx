@@ -1,3 +1,4 @@
+import "./admin.css";
 import { useState } from "react";
 import { useQuery } from "convex/react";
 import { useNavigate } from "react-router-dom";
@@ -37,10 +38,10 @@ export function VehiclesPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="admin-page space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-giro-heading leading-tight font-bold tracking-tight">
             Viaturas
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -55,11 +56,11 @@ export function VehiclesPage() {
 
       {/* Estatísticas */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-card rounded-lg shadow-sm border p-4">
+        <div className="bg-card rounded-2xl border p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Total</p>
-              <p className="text-2xl font-bold">
+              <p className="font-display text-3xl leading-none tabular-nums">
                 {stats.total}
               </p>
             </div>
@@ -67,11 +68,11 @@ export function VehiclesPage() {
           </div>
         </div>
 
-        <div className="bg-card rounded-lg shadow-sm border border-l-4 border-l-green-500 p-4">
+        <div className="bg-card rounded-2xl border p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Ativas</p>
-              <p className="text-2xl font-bold text-green-600 dark:text-green-500">
+              <p className="font-display text-3xl leading-none tabular-nums text-green-600 dark:text-green-500">
                 {stats.active}
               </p>
               <p className="text-xs text-muted-foreground">{stats.activePercentage}%</p>
@@ -80,11 +81,11 @@ export function VehiclesPage() {
           </div>
         </div>
 
-        <div className="bg-card rounded-lg shadow-sm border border-l-4 border-l-orange-500 p-4">
+        <div className="bg-card rounded-2xl border p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Manutenção</p>
-              <p className="text-2xl font-bold text-orange-600 dark:text-orange-500">
+              <p className="font-display text-3xl leading-none tabular-nums text-orange-600 dark:text-orange-500">
                 {stats.inMaintenance}
               </p>
               <p className="text-xs text-muted-foreground">{stats.inMaintenancePercentage}%</p>
@@ -93,22 +94,22 @@ export function VehiclesPage() {
           </div>
         </div>
 
-        <div className="bg-card rounded-lg shadow-sm border border-l-4 border-l-blue-500 p-4">
+        <div className="bg-card rounded-2xl border p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Operacionais</p>
-              <p className="text-2xl font-bold text-blue-600 dark:text-blue-500">
+              <p className="font-display text-3xl leading-none tabular-nums">
                 {stats.operational}
               </p>
               <p className="text-xs text-muted-foreground">{stats.backup} backup</p>
             </div>
-            <Briefcase className="w-8 h-8 text-blue-500" />
+            <Briefcase className="w-8 h-8 text-muted-foreground" />
           </div>
         </div>
       </div>
 
       {/* Filtros */}
-      <div className="bg-card rounded-lg shadow-sm border p-4">
+      <div className="bg-card rounded-2xl border p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-center gap-4">
             <span className="text-sm font-medium">

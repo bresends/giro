@@ -7,14 +7,14 @@ interface VehicleActivityBadgeProps {
 export function VehicleActivityBadge({ inMaintenance }: VehicleActivityBadgeProps) {
   if (inMaintenance) {
     return (
-      <Badge variant="destructive" className="bg-orange-500/10 text-orange-600 border-orange-200">
+      <Badge variant="destructive" className="bg-giro-warning text-giro-warning-foreground">
         Em Manutenção
       </Badge>
     );
   }
 
   return (
-    <Badge variant="default" className="bg-green-500/10 text-green-600 border-green-200">
+    <Badge variant="default" className="bg-giro-success-soft text-giro-success-soft-foreground">
       Ativa
     </Badge>
   );

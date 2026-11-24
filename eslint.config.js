@@ -1,5 +1,6 @@
 import { defineConfig } from "eslint/config";
 import js from "@eslint/js";
+import { plugin as shadcn } from "@shadcn/lint";
 import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
@@ -30,14 +31,11 @@ export default defineConfig([
         ...globals.node,
       },
       parserOptions: {
-        project: [
-          "./tsconfig.node.json",
-          "./tsconfig.app.json",
-          "./convex/tsconfig.json",
-        ],
+        project: ["./tsconfig.json", "./convex/tsconfig.json"],
       },
     },
     plugins: {
+      shadcn,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
     },

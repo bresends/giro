@@ -1,0 +1,3640 @@
+{
+  "version": "2.20",
+  "children": [
+    {
+      "type": "frame",
+      "id": "A77LKm",
+      "x": 0,
+      "y": 0,
+      "name": "00 · Briefing",
+      "width": 520,
+      "fill": "$ink",
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 48,
+      "children": [
+        {
+          "type": "text",
+          "id": "rnntC",
+          "name": "Eyebrow",
+          "fill": "$giro-warning",
+          "content": "GIRO · EXPLORAÇÃO DE LOGO",
+          "fontFamily": "$font",
+          "fontSize": 12,
+          "fontWeight": "600",
+          "letterSpacing": 1.5
+        },
+        {
+          "type": "text",
+          "id": "wYcQi",
+          "name": "Título",
+          "fill": "$paper",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "Dois sentidos, um símbolo",
+          "fontFamily": "$font",
+          "fontSize": 36,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "JNsPP",
+          "name": "Giroflex",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "U7CPj",
+              "name": "Giroflex",
+              "fill": "$paper",
+              "content": "Giroflex",
+              "fontFamily": "$font",
+              "fontSize": 15,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "q6lXZF",
+              "name": "Texto",
+              "fill": "#B9BAB9",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Luz, rotação, alerta: a viatura em atendimento.",
+              "lineHeight": 1.5,
+              "fontFamily": "$font",
+              "fontSize": 14
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "jcdTK",
+          "name": "Dar um giro",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "O4Uu1T",
+              "name": "Dar um giro",
+              "fill": "$paper",
+              "content": "Dar um giro",
+              "fontFamily": "$font",
+              "fontSize": 15,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "EHggj",
+              "name": "Texto",
+              "fill": "#B9BAB9",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "A rota pela cidade: sair da base, atender a ocorrência, voltar. Cada giro é uma movimentação.",
+              "lineHeight": 1.5,
+              "fontFamily": "$font",
+              "fontSize": 14
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "WQlGu",
+          "name": "Critérios",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "IWtaD",
+              "name": "Critérios",
+              "fill": "$paper",
+              "content": "Critérios",
+              "fontFamily": "$font",
+              "fontSize": 15,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "rLpka",
+              "name": "Texto",
+              "fill": "#B9BAB9",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Adequado ao estilo · simples a ponto de redesenhar de memória · distinto (sem chama, capacete, escudo) · funciona em 16px e em P&B · variável (pode girar, esticar, virar loading).",
+              "lineHeight": 1.5,
+              "fontFamily": "$font",
+              "fontSize": 14
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "xrXw2",
+          "name": "Regra desta rodada",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "M9eVo",
+              "name": "Regra desta rodada",
+              "fill": "$paper",
+              "content": "Regra desta rodada",
+              "fontFamily": "$font",
+              "fontSize": 15,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "w6VD9",
+              "name": "Texto",
+              "fill": "#B9BAB9",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Tudo em preto e branco. Cor só depois que a forma se sustentar.",
+              "lineHeight": 1.5,
+              "fontFamily": "$font",
+              "fontSize": 14
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "a7emdg",
+      "x": 601,
+      "y": 0,
+      "name": "Direção 02 · Rota que volta",
+      "fill": "$paper",
+      "layout": "vertical",
+      "gap": 32,
+      "padding": 48,
+      "children": [
+        {
+          "type": "frame",
+          "id": "r9ncP0",
+          "name": "Cabeçalho",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "mIbiC",
+              "name": "Eyebrow",
+              "fill": "$giro-red",
+              "content": "DIREÇÃO 02",
+              "fontFamily": "$font",
+              "fontSize": 12,
+              "fontWeight": "600",
+              "letterSpacing": 1.5
+            },
+            {
+              "type": "text",
+              "id": "U23bS",
+              "name": "Título",
+              "fill": "$ink",
+              "content": "Rota que volta",
+              "fontFamily": "$font",
+              "fontSize": 32,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "sjCAs",
+              "name": "Conceito",
+              "fill": "$muted",
+              "textGrowth": "fixed-width",
+              "width": 880,
+              "content": "O giro pela cidade, literal: um traço que sai da base, dá a volta e retorna. Cada giro é uma movimentação (saída → ocorrência → chegada). Variável: o traço estica como rota real em banners e pode ser animado.",
+              "lineHeight": 1.5,
+              "fontFamily": "$font",
+              "fontSize": 15
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "BkNCM",
+          "name": "Variações",
+          "gap": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "GUqHq",
+              "name": "2C · Ida e volta",
+              "width": 280,
+              "fill": "$paper",
+              "cornerRadius": 12,
+              "stroke": "$line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "gap": 16,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "KFr8r",
+                  "name": "Palco",
+                  "width": "fill_container",
+                  "height": 240,
+                  "fill": "$canvas",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Kelhd",
+                      "name": "Marca 2C",
+                      "width": 160,
+                      "height": 160,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "rlKgG",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 160,
+                          "height": 160,
+                          "stroke": "$ink",
+                          "strokeWidth": 22.4,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "ruwbv",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M42 84a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 160,
+                          "height": 160
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rrCW6",
+                  "name": "Legenda",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "BmGYn",
+                      "name": "2C · Ida e volta",
+                      "fill": "$ink",
+                      "content": "2C · Ida e volta",
+                      "fontFamily": "$font",
+                      "fontSize": 15,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "t78L7Q",
+                      "name": "Descrição",
+                      "fill": "$muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Um O aberto embaixo: as duas pontas são a saída e a chegada, e a base fica entre elas.",
+                      "lineHeight": 1.45,
+                      "fontFamily": "$font",
+                      "fontSize": 13
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "LJ0vt",
+                  "name": "Tamanhos",
+                  "width": "fill_container",
+                  "gap": 20,
+                  "alignItems": "end",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "B9WAam",
+                      "name": "64px",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "mhMql",
+                          "name": "Marca 64",
+                          "width": 64,
+                          "height": 64,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "HYSZE",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 64,
+                              "height": 64,
+                              "stroke": "$ink",
+                              "strokeWidth": 8.96,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "wKGqc",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M42 84a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 64,
+                              "height": 64
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "gm5w6",
+                          "name": "64px",
+                          "fill": "$muted",
+                          "content": "64px",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ZEZyb",
+                      "name": "32px",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "QcyvD",
+                          "name": "Marca 32",
+                          "width": 32,
+                          "height": 32,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "uR6mt",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 32,
+                              "height": 32,
+                              "stroke": "$ink",
+                              "strokeWidth": 4.48,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "wJISw",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M42 84a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 32,
+                              "height": 32
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "WBvcb",
+                          "name": "32px",
+                          "fill": "$muted",
+                          "content": "32px",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "NnY5g",
+                      "name": "16px",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Jctge",
+                          "name": "Marca 16",
+                          "width": 16,
+                          "height": 16,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "x0L2U",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 16,
+                              "height": 16,
+                              "stroke": "$ink",
+                              "strokeWidth": 2.24,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "Q1LbaV",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M42 84a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 16,
+                              "height": 16
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "iROK6",
+                          "name": "16px",
+                          "fill": "$muted",
+                          "content": "16px",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "t1bgO",
+                      "name": "Invertido",
+                      "width": 64,
+                      "height": 64,
+                      "fill": "$ink",
+                      "cornerRadius": 14,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "c3Iz26",
+                          "name": "Marca invertida",
+                          "width": 40,
+                          "height": 40,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "mksKU",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 40,
+                              "height": 40,
+                              "stroke": "$paper",
+                              "strokeWidth": 5.6,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "KKlPw",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M42 84a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$paper",
+                              "width": 40,
+                              "height": 40
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "u47M7",
+                  "name": "Assinaturas",
+                  "width": "fill_container",
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": [
+                    12,
+                    0,
+                    0,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Kyvcb",
+                      "name": "Inter",
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "oZQlM",
+                          "name": "Marca",
+                          "width": 36,
+                          "height": 36,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "h6MZz",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 36,
+                              "height": 36,
+                              "stroke": "$ink",
+                              "strokeWidth": 5.04,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "gemzc",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M42 84a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 36,
+                              "height": 36
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "Vso9G",
+                          "name": "Wordmark Inter",
+                          "fill": "$ink",
+                          "content": "GIRO",
+                          "fontFamily": "$font",
+                          "fontSize": 34,
+                          "fontWeight": "800",
+                          "letterSpacing": -1
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "UWSEB",
+      "x": 1690,
+      "y": 0,
+      "name": "Refino 2C · Ida e volta · 7 variações",
+      "fill": "$paper",
+      "layout": "vertical",
+      "gap": 32,
+      "padding": 48,
+      "children": [
+        {
+          "type": "frame",
+          "id": "w9cYnp",
+          "name": "Cabeçalho",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "zL9Pd",
+              "name": "Eyebrow",
+              "fill": "$giro-red",
+              "content": "REFINO 2C",
+              "fontFamily": "$font",
+              "fontSize": 12,
+              "fontWeight": "600",
+              "letterSpacing": 1.5
+            },
+            {
+              "type": "text",
+              "id": "eIl5i",
+              "name": "Título",
+              "fill": "$ink",
+              "content": "Ida e volta · 7 variações",
+              "fontFamily": "$font",
+              "fontSize": 32,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "TfT9R",
+              "name": "Conceito",
+              "fill": "$muted",
+              "textGrowth": "fixed-width",
+              "width": 880,
+              "content": "O anel aberto é o giro pela cidade: as pontas são saída e chegada, o ponto é a base. Varia a forma da base, a posição da abertura, o corte das pontas e o traçado.",
+              "lineHeight": 1.5,
+              "fontFamily": "$font",
+              "fontSize": 15
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "KiJgC",
+          "name": "Variações",
+          "gap": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "wQMVu",
+              "name": "2C·1 · Original",
+              "width": 280,
+              "fill": "$paper",
+              "cornerRadius": 12,
+              "stroke": "$line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "gap": 16,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "A97Bvk",
+                  "name": "Palco",
+                  "width": "fill_container",
+                  "height": 240,
+                  "fill": "$canvas",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "J6i4y",
+                      "name": "Marca 2C·1",
+                      "width": 160,
+                      "height": 160,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "zLVhU",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 160,
+                          "height": 160,
+                          "stroke": "$ink",
+                          "strokeWidth": 22.4,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "sg5DW",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M42 83a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 160,
+                          "height": 160
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "f9bxk9",
+                  "name": "Legenda",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "I4DUs",
+                      "name": "2C·1 · Original",
+                      "fill": "$ink",
+                      "content": "2C·1 · Original",
+                      "fontFamily": "$font",
+                      "fontSize": 15,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "T6bcz",
+                      "name": "Descrição",
+                      "fill": "$muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Referência: anel de 14, abertura embaixo, base redonda.",
+                      "lineHeight": 1.45,
+                      "fontFamily": "$font",
+                      "fontSize": 13
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "BR60r",
+                  "name": "Tamanhos",
+                  "width": "fill_container",
+                  "gap": 20,
+                  "alignItems": "end",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "unaAu",
+                      "name": "64px",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "jkMUF",
+                          "name": "Marca 64",
+                          "width": 64,
+                          "height": 64,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "ZCDd6",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 64,
+                              "height": 64,
+                              "stroke": "$ink",
+                              "strokeWidth": 8.96,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "RNLyN",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M42 83a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 64,
+                              "height": 64
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "v3IyB",
+                          "name": "64px",
+                          "fill": "$muted",
+                          "content": "64px",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "cAOyM",
+                      "name": "32px",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "nd44L",
+                          "name": "Marca 32",
+                          "width": 32,
+                          "height": 32,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "WVW3b",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 32,
+                              "height": 32,
+                              "stroke": "$ink",
+                              "strokeWidth": 4.48,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "K8zXN",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M42 83a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 32,
+                              "height": 32
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "c4qVy",
+                          "name": "32px",
+                          "fill": "$muted",
+                          "content": "32px",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "EtCqj",
+                      "name": "16px",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "pK2BW",
+                          "name": "Marca 16",
+                          "width": 16,
+                          "height": 16,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "XQmfL",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 16,
+                              "height": 16,
+                              "stroke": "$ink",
+                              "strokeWidth": 2.24,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "OF1HP",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M42 83a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 16,
+                              "height": 16
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "USDdA",
+                          "name": "16px",
+                          "fill": "$muted",
+                          "content": "16px",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ndjgr",
+                      "name": "Invertido",
+                      "width": 64,
+                      "height": 64,
+                      "fill": "$ink",
+                      "cornerRadius": 14,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g4Xl3",
+                          "name": "Marca invertida",
+                          "width": 40,
+                          "height": 40,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "x8w8kT",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 40,
+                              "height": 40,
+                              "stroke": "$paper",
+                              "strokeWidth": 5.6,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "n7LEn",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M42 83a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$paper",
+                              "width": 40,
+                              "height": 40
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Ho3Dq",
+                  "name": "Assinaturas",
+                  "width": "fill_container",
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": [
+                    12,
+                    0,
+                    0,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "QImRI",
+                      "name": "Inter",
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "m10pqE",
+                          "name": "Marca",
+                          "width": 36,
+                          "height": 36,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "cEede",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 36,
+                              "height": 36,
+                              "stroke": "$ink",
+                              "strokeWidth": 5.04,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "EG9nT",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M42 83a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 36,
+                              "height": 36
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "fBMI6",
+                          "name": "Wordmark Inter",
+                          "fill": "$ink",
+                          "content": "GIRO",
+                          "fontFamily": "$font",
+                          "fontSize": 34,
+                          "fontWeight": "800",
+                          "letterSpacing": -1
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "U9QMMp",
+              "name": "2C·3 · Luz no topo",
+              "width": 280,
+              "fill": "$paper",
+              "cornerRadius": 12,
+              "stroke": "$line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "gap": 16,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "B46aHi",
+                  "name": "Palco",
+                  "width": "fill_container",
+                  "height": 240,
+                  "fill": "$canvas",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "uXPRh",
+                      "name": "Marca 2C·3",
+                      "width": 160,
+                      "height": 160,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "iNLks",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M29.68 24a33 33 0 1 0 40.64 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 160,
+                          "height": 160,
+                          "stroke": "$ink",
+                          "strokeWidth": 22.4,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "PUNwc",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M41 17a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 160,
+                          "height": 160
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "E3rLjC",
+                  "name": "Legenda",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "QOF05",
+                      "name": "2C·3 · Luz no topo",
+                      "fill": "$ink",
+                      "content": "2C·3 · Luz no topo",
+                      "fontFamily": "$font",
+                      "fontSize": 15,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "OlH2w",
+                      "name": "Descrição",
+                      "fill": "$muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Abertura em cima: o ponto passa a ser o giroflex no teto da viatura.",
+                      "lineHeight": 1.45,
+                      "fontFamily": "$font",
+                      "fontSize": 13
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "u8SQxL",
+                  "name": "Tamanhos",
+                  "width": "fill_container",
+                  "gap": 20,
+                  "alignItems": "end",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "T6Cy1",
+                      "name": "64px",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "U2ti9W",
+                          "name": "Marca 64",
+                          "width": 64,
+                          "height": 64,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "m3waF",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M29.68 24a33 33 0 1 0 40.64 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 64,
+                              "height": 64,
+                              "stroke": "$ink",
+                              "strokeWidth": 8.96,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "r41qp",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M41 17a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 64,
+                              "height": 64
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "Wi2oX",
+                          "name": "64px",
+                          "fill": "$muted",
+                          "content": "64px",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "FivHq",
+                      "name": "32px",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "bECyZ",
+                          "name": "Marca 32",
+                          "width": 32,
+                          "height": 32,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "LDDnl",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M29.68 24a33 33 0 1 0 40.64 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 32,
+                              "height": 32,
+                              "stroke": "$ink",
+                              "strokeWidth": 4.48,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "s8nBH",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M41 17a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 32,
+                              "height": 32
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "NcowF",
+                          "name": "32px",
+                          "fill": "$muted",
+                          "content": "32px",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "gCH8e",
+                      "name": "16px",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Wv6By",
+                          "name": "Marca 16",
+                          "width": 16,
+                          "height": 16,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "ZPd1O",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M29.68 24a33 33 0 1 0 40.64 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 16,
+                              "height": 16,
+                              "stroke": "$ink",
+                              "strokeWidth": 2.24,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "myeJn",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M41 17a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 16,
+                              "height": 16
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "LBda9",
+                          "name": "16px",
+                          "fill": "$muted",
+                          "content": "16px",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "mTl2z",
+                      "name": "Invertido",
+                      "width": 64,
+                      "height": 64,
+                      "fill": "$ink",
+                      "cornerRadius": 14,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "XwTPK",
+                          "name": "Marca invertida",
+                          "width": 40,
+                          "height": 40,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "utQaq",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M29.68 24a33 33 0 1 0 40.64 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 40,
+                              "height": 40,
+                              "stroke": "$paper",
+                              "strokeWidth": 5.6,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "j7ur5",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M41 17a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$paper",
+                              "width": 40,
+                              "height": 40
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "AZLbI",
+                  "name": "Assinaturas",
+                  "width": "fill_container",
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": [
+                    12,
+                    0,
+                    0,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "bnxEF",
+                      "name": "Inter",
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "nSwWb",
+                          "name": "Marca",
+                          "width": 36,
+                          "height": 36,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "J7zBSS",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M29.68 24a33 33 0 1 0 40.64 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 36,
+                              "height": 36,
+                              "stroke": "$ink",
+                              "strokeWidth": 5.04,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "H2lOME",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M41 17a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 36,
+                              "height": 36
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "X9ziFN",
+                          "name": "Wordmark Inter",
+                          "fill": "$ink",
+                          "content": "GIRO",
+                          "fontFamily": "$font",
+                          "fontSize": 34,
+                          "fontWeight": "800",
+                          "letterSpacing": -1
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "GDcHh",
+              "name": "2C·7 · G com base",
+              "width": 280,
+              "fill": "$paper",
+              "cornerRadius": 12,
+              "stroke": "$line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "gap": 16,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "G3CnZM",
+                  "name": "Palco",
+                  "width": "fill_container",
+                  "height": 240,
+                  "fill": "$canvas",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Jhtaq",
+                      "name": "Marca 2C·7",
+                      "width": 160,
+                      "height": 160,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "ZxYb7",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 160,
+                          "height": 160,
+                          "stroke": "$ink",
+                          "strokeWidth": 32,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "M35cr",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 160,
+                          "height": 160
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "iUTx7",
+                  "name": "Legenda",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "vIaw5",
+                      "name": "2C·7 · G com base",
+                      "fill": "$ink",
+                      "content": "2C·7 · G com base",
+                      "fontFamily": "$font",
+                      "fontSize": 15,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "vgS4c",
+                      "name": "Descrição",
+                      "fill": "$muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Ponte com o 1A: o G pesado com a base do 2C na boca, no lugar do feixe.",
+                      "lineHeight": 1.45,
+                      "fontFamily": "$font",
+                      "fontSize": 13
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "B6XfE",
+                  "name": "Tamanhos",
+                  "width": "fill_container",
+                  "gap": 20,
+                  "alignItems": "end",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "O1Ha4",
+                      "name": "64px",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "yOUYe",
+                          "name": "Marca 64",
+                          "width": 64,
+                          "height": 64,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "P4obK3",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 64,
+                              "height": 64,
+                              "stroke": "$ink",
+                              "strokeWidth": 12.8,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "M9lHty",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 64,
+                              "height": 64
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "I1HSkA",
+                          "name": "64px",
+                          "fill": "$muted",
+                          "content": "64px",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "qts3M",
+                      "name": "32px",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "W9HHuC",
+                          "name": "Marca 32",
+                          "width": 32,
+                          "height": 32,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "y4xW6",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 32,
+                              "height": 32,
+                              "stroke": "$ink",
+                              "strokeWidth": 6.4,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "W6oZD",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 32,
+                              "height": 32
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "n4aZrg",
+                          "name": "32px",
+                          "fill": "$muted",
+                          "content": "32px",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "pC1n4",
+                      "name": "16px",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "oPo3T",
+                          "name": "Marca 16",
+                          "width": 16,
+                          "height": 16,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "gWVk0",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 16,
+                              "height": 16,
+                              "stroke": "$ink",
+                              "strokeWidth": 3.2,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "g16mz",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 16,
+                              "height": 16
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "FDcd8",
+                          "name": "16px",
+                          "fill": "$muted",
+                          "content": "16px",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "gqw2I",
+                      "name": "Invertido",
+                      "width": 64,
+                      "height": 64,
+                      "fill": "$ink",
+                      "cornerRadius": 14,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "P4VKSD",
+                          "name": "Marca invertida",
+                          "width": 40,
+                          "height": 40,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "fCmpV",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 40,
+                              "height": 40,
+                              "stroke": "$paper",
+                              "strokeWidth": 8,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "c3rrlT",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$paper",
+                              "width": 40,
+                              "height": 40
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ehu67",
+                  "name": "Assinaturas",
+                  "width": "fill_container",
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": [
+                    12,
+                    0,
+                    0,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "zfX4e",
+                      "name": "Inter",
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "cLxQF",
+                          "name": "Marca",
+                          "width": 36,
+                          "height": 36,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "nWKuR",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 36,
+                              "height": 36,
+                              "stroke": "$ink",
+                              "strokeWidth": 7.2,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "ChpaZ",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 36,
+                              "height": 36
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "Vi9BO",
+                          "name": "Wordmark Inter",
+                          "fill": "$ink",
+                          "content": "GIRO",
+                          "fontFamily": "$font",
+                          "fontSize": 34,
+                          "fontWeight": "800",
+                          "letterSpacing": -1
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "tSSRf",
+          "name": "Variabilidade",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "TeS8t",
+              "name": "Rótulo",
+              "fill": "$ink",
+              "content": "Variabilidade · a base percorre a cidade (a abertura gira em passos de 45°)",
+              "fontFamily": "$font",
+              "fontSize": 13,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "wiAGw",
+              "name": "Quadros",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "qqGsK",
+                  "name": "Quadro 1",
+                  "width": 72,
+                  "height": 72,
+                  "fill": "$canvas",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "AciCM",
+                      "name": "Marca",
+                      "width": 52,
+                      "height": 52,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "Zd1Qo",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M65.49 79.14a33 33 0 1 0-30.98 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 52,
+                          "height": 52,
+                          "stroke": "$ink",
+                          "strokeWidth": 7.28,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "yCLfR",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M42 83a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 52,
+                          "height": 52
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "jiTp0",
+                  "name": "Quadro 2",
+                  "width": 72,
+                  "height": 72,
+                  "fill": "$canvas",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "yov3D",
+                      "name": "Marca",
+                      "width": 52,
+                      "height": 52,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "Km4YM",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M81.56 59.65a33 33 0 1 0-21.91 21.91",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 52,
+                          "height": 52,
+                          "stroke": "$ink",
+                          "strokeWidth": 7.28,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "YMEmH",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M65.33 73.33a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 52,
+                          "height": 52
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "H7tab",
+                  "name": "Quadro 3",
+                  "width": 72,
+                  "height": 72,
+                  "fill": "$canvas",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "M8L2v",
+                      "name": "Marca",
+                      "width": 52,
+                      "height": 52,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "M3Wlv8",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M79.14 34.51a33 33 0 1 0 0 30.98",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 52,
+                          "height": 52,
+                          "stroke": "$ink",
+                          "strokeWidth": 7.28,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "FaQf4",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M75 50a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 52,
+                          "height": 52
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "xgIs5",
+                  "name": "Quadro 4",
+                  "width": 72,
+                  "height": 72,
+                  "fill": "$canvas",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "L9ZmC1",
+                      "name": "Marca",
+                      "width": 52,
+                      "height": 52,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "BYs1U",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M59.65 18.44a33 33 0 1 0 21.91 21.91",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 52,
+                          "height": 52,
+                          "stroke": "$ink",
+                          "strokeWidth": 7.28,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "u1MJh",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M65.33 26.67a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 52,
+                          "height": 52
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "YmZy2",
+                  "name": "Quadro 5",
+                  "width": 72,
+                  "height": 72,
+                  "fill": "$canvas",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "qfDW6",
+                      "name": "Marca",
+                      "width": 52,
+                      "height": 52,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "kaOoE",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M34.51 20.86a33 33 0 1 0 30.98 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 52,
+                          "height": 52,
+                          "stroke": "$ink",
+                          "strokeWidth": 7.28,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "Rj7zD",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M42 17a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 52,
+                          "height": 52
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Zgy4b",
+                  "name": "Quadro 6",
+                  "width": 72,
+                  "height": 72,
+                  "fill": "$canvas",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "DVefs",
+                      "name": "Marca",
+                      "width": 52,
+                      "height": 52,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "kToRS",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M18.44 40.35a33 33 0 1 0 21.91-21.91",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 52,
+                          "height": 52,
+                          "stroke": "$ink",
+                          "strokeWidth": 7.28,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "A3P91",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M18.67 26.67a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 52,
+                          "height": 52
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ENQrB",
+                  "name": "Quadro 7",
+                  "width": 72,
+                  "height": 72,
+                  "fill": "$canvas",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ahxyG",
+                      "name": "Marca",
+                      "width": 52,
+                      "height": 52,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "lrnzc",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M20.86 65.49a33 33 0 1 0 0-30.98",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 52,
+                          "height": 52,
+                          "stroke": "$ink",
+                          "strokeWidth": 7.28,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "HOMbx",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M9 50a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 52,
+                          "height": 52
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "jHQ8E",
+                  "name": "Quadro 8",
+                  "width": 72,
+                  "height": 72,
+                  "fill": "$canvas",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "LI4cp",
+                      "name": "Marca",
+                      "width": 52,
+                      "height": 52,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "SaQLp",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M40.35 81.56a33 33 0 1 0-21.91-21.91",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 52,
+                          "height": 52,
+                          "stroke": "$ink",
+                          "strokeWidth": 7.28,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "whOka",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M18.67 73.33a8 8 0 1 0 16 0 8 8 0 1 0-16 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 52,
+                          "height": 52
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "MsihR",
+      "x": 601,
+      "y": 967,
+      "name": "Cor · ícones salvos",
+      "fill": "$paper",
+      "layout": "vertical",
+      "gap": 40,
+      "padding": 48,
+      "children": [
+        {
+          "type": "frame",
+          "id": "nailU",
+          "name": "Cabeçalho",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "eTA04",
+              "name": "Eyebrow",
+              "fill": "$giro-red",
+              "content": "COR · ÍCONES SALVOS",
+              "fontFamily": "$font",
+              "fontSize": 12,
+              "fontWeight": "600",
+              "letterSpacing": 1.5
+            },
+            {
+              "type": "text",
+              "id": "jfp9M",
+              "name": "Título",
+              "fill": "$ink",
+              "content": "Vermelho da marca e amarelo Vivo",
+              "fontFamily": "$font",
+              "fontSize": 32,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "tpViL",
+              "name": "Conceito",
+              "fill": "$muted",
+              "textGrowth": "fixed-width",
+              "width": 880,
+              "content": "Somente os ícones salvos: 1A, 1A·6, 2C, 2C·3 e 2C·7 (1A·1 e 2C·1 são iguais a 1A e 2C). As formas são cópias exatas; só a cor muda. O corpo leva o vermelho e o destaque (feixe ou base) leva a luz. O amarelo Vivo só se sustenta sobre vermelho ou escuro.",
+              "lineHeight": 1.5,
+              "fontFamily": "$font",
+              "fontSize": 15
+            },
+            {
+              "type": "frame",
+              "id": "c3gcCg",
+              "name": "Paleta",
+              "gap": 20,
+              "padding": [
+                8,
+                0,
+                0,
+                0
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "D3TBV",
+                  "name": "Vermelho da marca",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 5,
+                      "id": "O0mGy0",
+                      "name": "Amostra",
+                      "fill": "$giro-red",
+                      "width": 20,
+                      "height": 20,
+                      "stroke": "$line",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "NDWyr",
+                      "name": "Vermelho da marca · #DC2",
+                      "fill": "$ink",
+                      "content": "Vermelho da marca · #DC2626",
+                      "fontFamily": "$font",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "H4Og2t",
+                  "name": "Amarelo Vivo",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 5,
+                      "id": "p2NBv",
+                      "name": "Amostra",
+                      "fill": "$giro-warning",
+                      "width": 20,
+                      "height": 20,
+                      "stroke": "$line",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "MT3sL",
+                      "name": "Amarelo Vivo · #F8D659",
+                      "fill": "$ink",
+                      "content": "Amarelo Vivo · #F8D659",
+                      "fontFamily": "$font",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "wvN8p",
+                  "name": "Tinta",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 5,
+                      "id": "f8Ug2",
+                      "name": "Amostra",
+                      "fill": "$ink",
+                      "width": 20,
+                      "height": 20,
+                      "stroke": "$line",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "aEuMN",
+                      "name": "Tinta · #121212",
+                      "fill": "$ink",
+                      "content": "Tinta · #121212",
+                      "fontFamily": "$font",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "kmNEA",
+          "name": "2C·7 · G com base",
+          "layout": "vertical",
+          "gap": 16,
+          "children": [
+            {
+              "type": "text",
+              "id": "Se8sz",
+              "name": "Nome",
+              "fill": "$ink",
+              "content": "2C·7 · G com base",
+              "fontFamily": "$font",
+              "fontSize": 18,
+              "fontWeight": "700"
+            },
+            {
+              "type": "frame",
+              "id": "AEDAO",
+              "name": "Combinações",
+              "gap": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "slNmt",
+                  "name": "Vermelho",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Anion",
+                      "name": "Palco",
+                      "width": 180,
+                      "height": 180,
+                      "fill": "$paper",
+                      "cornerRadius": 10,
+                      "stroke": "$line",
+                      "strokeWidth": 1,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g6lhvz",
+                          "name": "Marca",
+                          "width": 112,
+                          "height": 112,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "H3jLh",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 112,
+                              "height": 112,
+                              "stroke": "$giro-red",
+                              "strokeWidth": 22.4,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "j8UOpi",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$giro-red",
+                              "width": 112,
+                              "height": 112
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "sd0jn",
+                      "name": "Rótulo",
+                      "fill": "$ink",
+                      "content": "Vermelho",
+                      "fontFamily": "$font",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Zaj5S",
+                      "name": "Nota",
+                      "fill": "$muted",
+                      "content": "sobre branco",
+                      "fontFamily": "$font",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ndlMu",
+                  "name": "Vermelho + preto",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "CiIlb",
+                      "name": "Palco",
+                      "width": 180,
+                      "height": 180,
+                      "fill": "$paper",
+                      "cornerRadius": 10,
+                      "stroke": "$line",
+                      "strokeWidth": 1,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Nmon9",
+                          "name": "Marca",
+                          "width": 112,
+                          "height": 112,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "TBS67",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 112,
+                              "height": 112,
+                              "stroke": "$giro-red",
+                              "strokeWidth": 22.4,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "IrxR1",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$ink",
+                              "width": 112,
+                              "height": 112
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "RzasI",
+                      "name": "Rótulo",
+                      "fill": "$ink",
+                      "content": "Vermelho + preto",
+                      "fontFamily": "$font",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "N6mRee",
+                      "name": "Nota",
+                      "fill": "$muted",
+                      "content": "destaque em preto",
+                      "fontFamily": "$font",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Sdn8D",
+                  "name": "Bloco vermelho",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "U5roAl",
+                      "name": "Palco",
+                      "width": 180,
+                      "height": 180,
+                      "fill": "$paper",
+                      "cornerRadius": 10,
+                      "stroke": "$line",
+                      "strokeWidth": 1,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "gdxqD",
+                          "name": "Bloco",
+                          "width": 128,
+                          "height": 128,
+                          "fill": "$giro-red",
+                          "cornerRadius": 30,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "litC5",
+                              "name": "Marca",
+                              "width": 84,
+                              "height": 84,
+                              "layout": "none",
+                              "children": [
+                                {
+                                  "type": "path",
+                                  "id": "Md5Sf",
+                                  "x": 0,
+                                  "y": 0,
+                                  "name": "forma 1",
+                                  "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    100,
+                                    100
+                                  ],
+                                  "width": 84,
+                                  "height": 84,
+                                  "stroke": "$paper",
+                                  "strokeWidth": 16.8,
+                                  "strokeLinecap": "round"
+                                },
+                                {
+                                  "type": "path",
+                                  "id": "JKUbE",
+                                  "x": 0,
+                                  "y": 0,
+                                  "name": "forma 2",
+                                  "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    100,
+                                    100
+                                  ],
+                                  "fill": "$giro-warning",
+                                  "width": 84,
+                                  "height": 84
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "fmHb1",
+                      "name": "Rótulo",
+                      "fill": "$ink",
+                      "content": "Bloco vermelho",
+                      "fontFamily": "$font",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "gbUSy",
+                      "name": "Nota",
+                      "fill": "$muted",
+                      "content": "app / favicon",
+                      "fontFamily": "$font",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "u835So",
+                  "name": "Bloco escuro",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "GcA5d",
+                      "name": "Palco",
+                      "width": 180,
+                      "height": 180,
+                      "fill": "$paper",
+                      "cornerRadius": 10,
+                      "stroke": "$line",
+                      "strokeWidth": 1,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "urktU",
+                          "name": "Bloco",
+                          "width": 128,
+                          "height": 128,
+                          "fill": "$ink",
+                          "cornerRadius": 30,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Z6rEO",
+                              "name": "Marca",
+                              "width": 84,
+                              "height": 84,
+                              "layout": "none",
+                              "children": [
+                                {
+                                  "type": "path",
+                                  "id": "o2tniR",
+                                  "x": 0,
+                                  "y": 0,
+                                  "name": "forma 1",
+                                  "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    100,
+                                    100
+                                  ],
+                                  "width": 84,
+                                  "height": 84,
+                                  "stroke": "$paper",
+                                  "strokeWidth": 16.8,
+                                  "strokeLinecap": "round"
+                                },
+                                {
+                                  "type": "path",
+                                  "id": "BHtPX",
+                                  "x": 0,
+                                  "y": 0,
+                                  "name": "forma 2",
+                                  "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    100,
+                                    100
+                                  ],
+                                  "fill": "$giro-warning",
+                                  "width": 84,
+                                  "height": 84
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Y89PD",
+                      "name": "Rótulo",
+                      "fill": "$ink",
+                      "content": "Bloco escuro",
+                      "fontFamily": "$font",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "q2Z2Fp",
+                      "name": "Nota",
+                      "fill": "$muted",
+                      "content": "modo escuro",
+                      "fontFamily": "$font",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Q7wPm",
+                  "name": "Bloco Vivo",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "B6rVp",
+                      "name": "Palco",
+                      "width": 180,
+                      "height": 180,
+                      "fill": "$paper",
+                      "cornerRadius": 10,
+                      "stroke": "$line",
+                      "strokeWidth": 1,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Xa6jo",
+                          "name": "Bloco",
+                          "width": 128,
+                          "height": 128,
+                          "fill": "$giro-warning",
+                          "cornerRadius": 30,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "ayHPN",
+                              "name": "Marca",
+                              "width": 84,
+                              "height": 84,
+                              "layout": "none",
+                              "children": [
+                                {
+                                  "type": "path",
+                                  "id": "U2s23",
+                                  "x": 0,
+                                  "y": 0,
+                                  "name": "forma 1",
+                                  "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    100,
+                                    100
+                                  ],
+                                  "width": 84,
+                                  "height": 84,
+                                  "stroke": "$ink",
+                                  "strokeWidth": 16.8,
+                                  "strokeLinecap": "round"
+                                },
+                                {
+                                  "type": "path",
+                                  "id": "s1eRq",
+                                  "x": 0,
+                                  "y": 0,
+                                  "name": "forma 2",
+                                  "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    100,
+                                    100
+                                  ],
+                                  "fill": "$giro-red",
+                                  "width": 84,
+                                  "height": 84
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "orJ2O",
+                      "name": "Rótulo",
+                      "fill": "$ink",
+                      "content": "Bloco Vivo",
+                      "fontFamily": "$font",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "v4KYv",
+                      "name": "Nota",
+                      "fill": "$muted",
+                      "content": "atenção / alerta",
+                      "fontFamily": "$font",
+                      "fontSize": 12
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Ue2q6",
+              "name": "Aplicação",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Uz4ZT",
+                  "name": "Topbar · marca solta",
+                  "width": 440,
+                  "height": 64,
+                  "fill": "$paper",
+                  "cornerRadius": 10,
+                  "stroke": "$line",
+                  "strokeWidth": 1,
+                  "gap": 12,
+                  "padding": [
+                    0,
+                    20
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "CscUP",
+                      "name": "Marca",
+                      "width": 28,
+                      "height": 28,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "O9RLQQ",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 1",
+                          "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "width": 28,
+                          "height": 28,
+                          "stroke": "$giro-red",
+                          "strokeWidth": 5.6,
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "p4va9",
+                          "x": 0,
+                          "y": 0,
+                          "name": "forma 2",
+                          "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "$ink",
+                          "width": 28,
+                          "height": 28
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "XASvL",
+                      "name": "Wordmark",
+                      "fill": "$ink",
+                      "content": "GIRO",
+                      "fontFamily": "$font",
+                      "fontSize": 20,
+                      "fontWeight": "800",
+                      "letterSpacing": -0.5
+                    },
+                    {
+                      "type": "rectangle",
+                      "id": "QWenC",
+                      "name": "Divisor",
+                      "fill": "$line",
+                      "width": 1,
+                      "height": 20
+                    },
+                    {
+                      "type": "text",
+                      "id": "WWjyA",
+                      "name": "Unidade",
+                      "fill": "$muted",
+                      "content": "Guarita · 1º Batalhão",
+                      "fontFamily": "$font",
+                      "fontSize": 13
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "aGmss",
+                  "name": "Topbar · bloco vermelho",
+                  "width": 440,
+                  "height": 64,
+                  "fill": "$paper",
+                  "cornerRadius": 10,
+                  "stroke": "$line",
+                  "strokeWidth": 1,
+                  "gap": 12,
+                  "padding": [
+                    0,
+                    20
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Lk6rr",
+                      "name": "Bloco",
+                      "width": 32,
+                      "height": 32,
+                      "fill": "$giro-red",
+                      "cornerRadius": 8,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "m98wd",
+                          "name": "Marca",
+                          "width": 22,
+                          "height": 22,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "Ef35S",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 22,
+                              "height": 22,
+                              "stroke": "$paper",
+                              "strokeWidth": 4.4,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "QFT21",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$giro-warning",
+                              "width": 22,
+                              "height": 22
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "s0E74",
+                      "name": "Wordmark",
+                      "fill": "$ink",
+                      "content": "GIRO",
+                      "fontFamily": "$font",
+                      "fontSize": 20,
+                      "fontWeight": "800",
+                      "letterSpacing": -0.5
+                    },
+                    {
+                      "type": "rectangle",
+                      "id": "t1QCCl",
+                      "name": "Divisor",
+                      "fill": "$line",
+                      "width": 1,
+                      "height": 20
+                    },
+                    {
+                      "type": "text",
+                      "id": "a1Qvjp",
+                      "name": "Unidade",
+                      "fill": "$muted",
+                      "content": "Guarita · 1º Batalhão",
+                      "fontFamily": "$font",
+                      "fontSize": 13
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "U47gnv",
+                  "name": "Aba do navegador",
+                  "width": 220,
+                  "height": 40,
+                  "fill": "#E9EAEC",
+                  "cornerRadius": [
+                    10,
+                    10,
+                    0,
+                    0
+                  ],
+                  "gap": 8,
+                  "padding": [
+                    0,
+                    14
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ogk14",
+                      "name": "Favicon",
+                      "width": 16,
+                      "height": 16,
+                      "fill": "$giro-red",
+                      "cornerRadius": 4,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "GrM5q",
+                          "name": "Marca",
+                          "width": 12,
+                          "height": 12,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "rrAhx",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 1",
+                              "geometry": "M71.85 23.95a34 34 0 1 0 6.98 44.07",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "width": 12,
+                              "height": 12,
+                              "stroke": "$paper",
+                              "strokeWidth": 2.4,
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "VpUhQ",
+                              "x": 0,
+                              "y": 0,
+                              "name": "forma 2",
+                              "geometry": "M74.58 44.68a9 9 0 1 0 18 0 9 9 0 1 0-18 0",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "$giro-warning",
+                              "width": 12,
+                              "height": 12
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "F1v4dQ",
+                      "name": "Título da aba",
+                      "fill": "$ink",
+                      "content": "GIRO · Guarita",
+                      "fontFamily": "$font",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "muted": {
+      "type": "color",
+      "value": "#6B6C6B"
+    },
+    "font": {
+      "type": "string",
+      "value": "Inter"
+    },
+    "paper": {
+      "type": "color",
+      "value": "#FFFFFF"
+    },
+    "ink": {
+      "type": "color",
+      "value": "#121212"
+    },
+    "font-display": {
+      "type": "string",
+      "value": "Bebas Neue"
+    },
+    "giro-warning": {
+      "type": "color",
+      "value": "#F8D659"
+    },
+    "canvas": {
+      "type": "color",
+      "value": "#F4F5F4"
+    },
+    "line": {
+      "type": "color",
+      "value": "#E4E7EA"
+    },
+    "giro-red": {
+      "type": "color",
+      "value": "#DC2626"
+    }
+  },
+  "fileToken": "a5b3ed38-f3ed-4dbb-88a4-bbb47f9c829b"
+}

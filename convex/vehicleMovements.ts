@@ -24,9 +24,13 @@ async function enrichMovements(ctx: QueryCtx, movements: Doc<"vehicleMovements">
       const personnel = await ctx.db.get(movement.personnelId);
 
       let vehicleTypeName = "N/A";
+      let vehicleTypeDescription: string | null = null;
       if (vehicle) {
         const vehicleType = await ctx.db.get(vehicle.typeId);
-        if (vehicleType) vehicleTypeName = vehicleType.name;
+        if (vehicleType) {
+          vehicleTypeName = vehicleType.name;
+          vehicleTypeDescription = vehicleType.description;
+        }
       }
 
       const registeredByUser = movement.registeredByDeparture
@@ -52,6 +56,7 @@ async function enrichMovements(ctx: QueryCtx, movements: Doc<"vehicleMovements">
               operationalPrefix: vehicle.operationalPrefix,
               plate: vehicle.plate,
               type: vehicleTypeName,
+              typeDescription: vehicleTypeDescription,
             }
           : null,
         personnel: personnel
@@ -102,6 +107,8 @@ export const listRecent = query({
 export const listInTransit = query({
   args: {},
   handler: async (ctx) => {
+    if (!(await getAuthUserId(ctx))) throw new Error("Autenticação necessária");
+
     const movements = await ctx.db
       .query("vehicleMovements")
       .withIndex("by_status", (q) => q.eq("status", "em_transito"))
@@ -113,8 +120,37 @@ export const listInTransit = query({
 
 // Query: List shift movements (7am yesterday to 7am today OR 7am today to now)
 export const listShiftMovements = query({
-  args: {},
-  handler: async (ctx) => {
+  args: {
+    // Janela explícita do plantão (calculada no fuso do cliente); sem ela, usa o plantão atual
+    startMs: v.optional(v.number()),
+    endMs: v.optional(v.number()),
+  },
+  handler: async (ctx, { startMs, endMs }) => {
+    if (!(await getAuthUserId(ctx))) throw new Error("Autenticação necessária");
+
+    if (startMs !== undefined || endMs !== undefined) {
+      // A mudança de horário de verão pode estender um plantão para 25 horas.
+      const maxShiftDurationMs = 25 * 60 * 60 * 1000;
+      if (
+        startMs === undefined ||
+        endMs === undefined ||
+        !Number.isSafeInteger(startMs) ||
+        !Number.isSafeInteger(endMs) ||
+        endMs <= startMs ||
+        endMs - startMs > maxShiftDurationMs
+      ) {
+        throw new Error("Intervalo de plantão inválido");
+      }
+
+      const movements = await ctx.db
+        .query("vehicleMovements")
+        .withIndex("by_date", (q) =>
+          q.gte("departureTime", startMs).lt("departureTime", endMs)
+        )
+        .collect();
+      return await enrichMovements(ctx, movements);
+    }
+
     const now = new Date();
     const currentHour = now.getHours();
 
